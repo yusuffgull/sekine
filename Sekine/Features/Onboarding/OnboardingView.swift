@@ -6,6 +6,7 @@ struct OnboardingView: View {
     @EnvironmentObject private var notifications: NotificationManager
     @EnvironmentObject private var location: LocationManager
 
+    @StateObject private var directory = DiyanetDirectory()
     @State private var showSearch = false
     @State private var isResolving = false
     @State private var errorText: String?
@@ -98,8 +99,20 @@ struct OnboardingView: View {
         isResolving = true
         Task {
             do {
-                let loc = try await location.resolveCurrentLocation()
-                settings.location = loc
+                let resolved = try await location.resolveCurrentLocation()
+                // GPS'ten gelen il/ilçe'yi Diyanet listesiyle eşleştir → birebir vakit.
+                if let match = await directory.match(
+                    cityName: resolved.cityName, districtName: resolved.districtName) {
+                    settings.location = SavedLocation(
+                        name: "\(match.district.name.capitalized(with: Locale(identifier: "tr_TR"))), \(match.city.name.capitalized(with: Locale(identifier: "tr_TR")))",
+                        latitude: resolved.location.latitude,
+                        longitude: resolved.location.longitude,
+                        diyanetDistrictID: match.district.IlceID)
+                } else {
+                    // Eşleşme yoksa koordinatla devam (yaklaşık vakit); kullanıcı sonra ilçe seçebilir.
+                    settings.location = resolved.location
+                    errorText = "İlçeniz otomatik bulunamadı; yaklaşık vakit gösterilecek. İsterseniz 'Şehir / İlçe Ara' ile Diyanet ilçenizi seçin."
+                }
             } catch {
                 errorText = "Konum alınamadı. Ayarlar'dan konum iznini açın veya şehir arayın."
             }

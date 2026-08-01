@@ -7,13 +7,15 @@ import Foundation
 protocol PrayerTimeProvider: Sendable {
     var sourceIdentifier: String { get }
 
-    /// Verilen konum için bir yıllık planı üretir.
-    func fetchSchedule(
-        latitude: Double,
-        longitude: Double,
-        placeName: String,
-        year: Int
-    ) async throws -> PrayerSchedule
+    /// Bu sağlayıcı verilen konumu işleyebilir mi? (ör. Diyanet ilçe ID'si gerektirir)
+    func canHandle(_ location: SavedLocation) -> Bool
+
+    /// Verilen konum için mevcut plan penceresini üretir.
+    func fetchSchedule(for location: SavedLocation) async throws -> PrayerSchedule
+}
+
+extension PrayerTimeProvider {
+    func canHandle(_ location: SavedLocation) -> Bool { true }
 }
 
 enum PrayerProviderError: Error, LocalizedError {

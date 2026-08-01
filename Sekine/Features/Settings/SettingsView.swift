@@ -117,8 +117,7 @@ struct SettingsView: View {
                     .foregroundStyle(Palette.textSecondary)
             }
             if let source = store.schedule?.source {
-                LabeledContent("Vakit kaynağı",
-                    value: source == "aladhan-13" ? "Diyanet (Aladhan)" : "Yaklaşık (çevrimdışı)")
+                LabeledContent("Vakit kaynağı", value: Self.sourceLabel(source))
             }
         } header: {
             Text("Hakkında")
@@ -127,6 +126,14 @@ struct SettingsView: View {
 
     private func reschedule() {
         Task { await store.rescheduleNotifications(settings: settings) }
+    }
+
+    static func sourceLabel(_ source: String) -> String {
+        switch source {
+        case "diyanet": return "Diyanet (resmi)"
+        case "aladhan-13": return "Diyanet yöntemi (yaklaşık)"
+        default: return "Yaklaşık (çevrimdışı)"
+        }
     }
 
     static var appVersion: String {

@@ -80,6 +80,31 @@ final class PrayerTimeTests: XCTestCase {
                        "0 sn")
     }
 
+    func testDiyanetVakitParsing() {
+        var cal = Calendar(identifier: .gregorian)
+        let tz = TimeZone(identifier: "Europe/Istanbul")!
+        cal.timeZone = tz
+        let vakit = DiyanetVakit(
+            MiladiTarihKisa: "01.08.2026",
+            Imsak: "04:08", Gunes: "05:53", Ogle: "13:16",
+            Ikindi: "17:10", Aksam: "20:28", Yatsi: "22:05")
+        let day = vakit.toPrayerDay(calendar: cal, timeZone: tz)
+        XCTAssertNotNil(day)
+        XCTAssertEqual(day?.times.count, 6)
+        let maghrib = day?.time(for: .maghrib)
+        let comps = cal.dateComponents([.hour, .minute], from: maghrib ?? Date())
+        XCTAssertEqual(comps.hour, 20)
+        XCTAssertEqual(comps.minute, 28)
+        // İmsak güneşten önce olmalı (sıralama)
+        XCTAssertLessThan(day!.time(for: .fajr)!, day!.time(for: .sunrise)!)
+    }
+
+    func testDiyanetProviderRequiresDistrictID() {
+        let provider = DiyanetProvider()
+        XCTAssertFalse(provider.canHandle(SavedLocation(name: "x", latitude: 41, longitude: 29)))
+        XCTAssertTrue(provider.canHandle(SavedLocation(name: "x", latitude: 41, longitude: 29, diyanetDistrictID: "9541")))
+    }
+
     func testCacheRoundTrip() {
         let schedule = makeSchedule()
         PrayerCache.save(schedule)

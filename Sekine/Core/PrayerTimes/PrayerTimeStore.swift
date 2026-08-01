@@ -1,21 +1,21 @@
 import Foundation
 
-/// Uygulamanın vakit beyni: cache'i yükler, gerektiğinde indirir (Aladhan →
-/// fallback), diske yazar ve bildirimleri yeniden zamanlar.
+/// Uygulamanın vakit beyni: cache'i yükler, gerektiğinde indirir (Diyanet → Aladhan →
+/// lokal fallback zinciri), diske yazar ve bildirimleri yeniden zamanlar.
 @MainActor
 final class PrayerTimeStore: ObservableObject {
     @Published private(set) var schedule: PrayerSchedule?
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
 
-    private let primary: PrayerTimeProvider
-    private let fallback: PrayerTimeProvider
+    /// Öncelik sırası: birebir Diyanet → Aladhan (yaklaşık, konum) → lokal hesap (çevrimdışı).
+    private let providers: [PrayerTimeProvider]
     private let scheduler = RollingScheduler()
 
-    init(primary: PrayerTimeProvider = AladhanProvider(),
-         fallback: PrayerTimeProvider = LocalCalculationProvider()) {
-        self.primary = primary
-        self.fallback = fallback
+    init(providers: [PrayerTimeProvider] = [
+        DiyanetProvider(), AladhanProvider(), LocalCalculationProvider()
+    ]) {
+        self.providers = providers
         self.schedule = PrayerCache.load()
     }
 
@@ -27,7 +27,6 @@ final class PrayerTimeStore: ObservableObject {
 
     // MARK: - Veri yaşam döngüsü
 
-    /// Cache seçili konumu kapsıyorsa dokunmaz; değilse indirir. App açılışında çağrılır.
     func ensureData(for location: SavedLocation, settings: AppSettings) async {
         if needsRefresh(for: location) {
             await refresh(location: location, settings: settings)
@@ -36,38 +35,32 @@ final class PrayerTimeStore: ObservableObject {
         }
     }
 
-    /// Zorla yeniden indir (konum değişimi / kullanıcı yenilemesi).
     func refresh(location: SavedLocation, settings: AppSettings) async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
 
-        let year = Calendar(identifier: .gregorian).component(.year, from: Date())
-        do {
-            let result = try await primary.fetchSchedule(
-                latitude: location.latitude,
-                longitude: location.longitude,
-                placeName: location.name,
-                year: year)
-            apply(result)
-        } catch {
-            // Ağ hatası → yaklaşık lokal hesapla (uygulama boş kalmasın), kullanıcıyı bilgilendir.
-            if let local = try? await fallback.fetchSchedule(
-                latitude: location.latitude,
-                longitude: location.longitude,
-                placeName: location.name,
-                year: year) {
-                apply(local)
-                errorMessage = "Vakitler indirilemedi; yaklaşık hesaplama gösteriliyor. Bağlantı gelince güncellenecek."
-            } else {
-                errorMessage = (error as? PrayerProviderError)?.errorDescription
-                    ?? "Vakitler yüklenemedi."
+        var lastError: Error?
+        for provider in providers where provider.canHandle(location) {
+            do {
+                let result = try await provider.fetchSchedule(for: location)
+                apply(result)
+                // Diyanet dışı bir kaynağa düştüysek kullanıcıyı bilgilendir.
+                if result.source != "diyanet" {
+                    errorMessage = "Diyanet vakitleri alınamadı; yaklaşık vakitler gösteriliyor. Bağlantı gelince güncellenecek."
+                }
+                await rescheduleNotifications(settings: settings)
+                return
+            } catch {
+                lastError = error
+                continue
             }
         }
+        errorMessage = (lastError as? PrayerProviderError)?.errorDescription
+            ?? "Vakitler yüklenemedi. İnternet bağlantınızı kontrol edin."
         await rescheduleNotifications(settings: settings)
     }
 
-    /// Ayarlar (açık vakitler / ses) değişince bildirimleri yeniden kur.
     func rescheduleNotifications(settings: AppSettings) async {
         guard let schedule else { return }
         let enabled = Set(Prayer.ordered.filter { settings.isNotificationEnabled(for: $0) })
@@ -86,14 +79,17 @@ final class PrayerTimeStore: ObservableObject {
         PrayerCache.save(schedule)
     }
 
-    /// Yeniden indirme gerekiyor mu? (konum değişti, veri yok, ya da kapsam bitiyor)
+    /// Yeniden indirme gerekiyor mu? (konum değişti, kaynak yükseltilebilir, kapsam bitiyor)
     private func needsRefresh(for location: SavedLocation) -> Bool {
         guard let schedule else { return true }
         let sameLocation = abs(schedule.latitude - location.latitude) < 0.01
             && abs(schedule.longitude - location.longitude) < 0.01
         if !sameLocation { return true }
-        // Kapsam son 20 günden aza düştüyse tazele (yıl dönümü / uzun kullanım).
+        // Diyanet ID'si var ama cache Diyanet değilse, birebir veriye yükselt.
+        if location.diyanetDistrictID != nil, schedule.source != "diyanet" { return true }
+        // Diyanet ~1 aylık pencere döner; kapsam 12 günün altına düşünce tazele
+        // (bildirim penceresi ~12 gün → hep dolu kalsın).
         guard let lastDay = schedule.days.map(\.dayStart).max() else { return true }
-        return lastDay.timeIntervalSinceNow < 20 * 24 * 3600
+        return lastDay.timeIntervalSinceNow < 12 * 24 * 3600
     }
 }

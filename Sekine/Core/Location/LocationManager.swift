@@ -4,6 +4,13 @@ import CoreLocation
 /// Konum izni + GPS + ilçe adı çözümleme ve manuel arama.
 /// Konum yalnızca cihazda vakit hesabı için kullanılır; hiçbir sunucuya
 /// gönderilmez (Aladhan çağrısı hariç, o da yalnızca koordinat + tracking yok).
+/// GPS çözümlemesinin sonucu: koordinat + Diyanet eşleştirmesi için il/ilçe adı.
+struct ResolvedPlace {
+    var location: SavedLocation
+    var cityName: String?      // il (administrativeArea)
+    var districtName: String?  // ilçe (subAdministrativeArea/locality)
+}
+
 @MainActor
 final class LocationManager: NSObject, ObservableObject {
     @Published var authorizationStatus: CLAuthorizationStatus
@@ -12,7 +19,7 @@ final class LocationManager: NSObject, ObservableObject {
 
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
-    private var continuation: CheckedContinuation<SavedLocation, Error>?
+    private var continuation: CheckedContinuation<ResolvedPlace, Error>?
 
     override init() {
         self.authorizationStatus = CLLocationManager().authorizationStatus
@@ -25,8 +32,8 @@ final class LocationManager: NSObject, ObservableObject {
         manager.requestWhenInUseAuthorization()
     }
 
-    /// Mevcut konumu alıp ilçe adına çözer.
-    func resolveCurrentLocation() async throws -> SavedLocation {
+    /// Mevcut konumu alıp il/ilçe adına çözer.
+    func resolveCurrentLocation() async throws -> ResolvedPlace {
         isResolving = true
         defer { isResolving = false }
         return try await withCheckedThrowingContinuation { cont in
@@ -71,19 +78,20 @@ extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let loc = locations.first else { return }
         Task { @MainActor in
+            let coord = loc.coordinate
             do {
                 let placemarks = try await geocoder.reverseGeocodeLocation(loc)
-                let name = placemarks.first.map(Self.displayName) ?? "Konumum"
-                let result = SavedLocation(
-                    name: name,
-                    latitude: loc.coordinate.latitude,
-                    longitude: loc.coordinate.longitude)
+                let mark = placemarks.first
+                let name = mark.map(Self.displayName) ?? "Konumum"
+                let result = ResolvedPlace(
+                    location: SavedLocation(name: name, latitude: coord.latitude, longitude: coord.longitude),
+                    cityName: mark?.administrativeArea,
+                    districtName: mark?.subAdministrativeArea ?? mark?.locality)
                 continuation?.resume(returning: result)
             } catch {
-                let result = SavedLocation(
-                    name: "Konumum",
-                    latitude: loc.coordinate.latitude,
-                    longitude: loc.coordinate.longitude)
+                let result = ResolvedPlace(
+                    location: SavedLocation(name: "Konumum", latitude: coord.latitude, longitude: coord.longitude),
+                    cityName: nil, districtName: nil)
                 continuation?.resume(returning: result)
             }
             continuation = nil

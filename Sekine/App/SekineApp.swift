@@ -36,7 +36,8 @@ struct SekineApp: App {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-uiTestSeedIstanbul"),
            settings.location == nil {
-            settings.location = SavedLocation(name: "İstanbul", latitude: 41.0082, longitude: 28.9784)
+            settings.location = SavedLocation(name: "İstanbul", latitude: 41.0082,
+                                              longitude: 28.9784, diyanetDistrictID: "9541")
             settings.hasCompletedOnboarding = true
         }
         #endif

@@ -11,12 +11,12 @@ struct AladhanProvider: PrayerTimeProvider {
         self.session = session
     }
 
-    func fetchSchedule(
-        latitude: Double,
-        longitude: Double,
-        placeName: String,
-        year: Int
-    ) async throws -> PrayerSchedule {
+    func fetchSchedule(for location: SavedLocation) async throws -> PrayerSchedule {
+        let latitude = location.latitude
+        let longitude = location.longitude
+        let placeName = location.name
+        let year = Calendar(identifier: .gregorian).component(.year, from: Date())
+
         var comps = URLComponents(string: "https://api.aladhan.com/v1/calendar")!
         comps.queryItems = [
             .init(name: "latitude", value: String(latitude)),

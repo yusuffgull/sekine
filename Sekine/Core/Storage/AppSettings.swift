@@ -40,11 +40,21 @@ enum FontScale: String, CaseIterable, Identifiable {
     }
 }
 
-/// Seçili konum. Diyanet ilçe koordinatı → vakit hesabı.
+/// Seçili konum. Diyanet ilçe ID'si varsa vakitler birebir Diyanet resmi verisinden
+/// gelir; yoksa (ör. eşleşmeyen GPS) koordinatla Aladhan'a düşülür. lat/lng kıble ve
+/// fallback için her zaman tutulur.
 struct SavedLocation: Codable, Equatable {
     var name: String
     var latitude: Double
     var longitude: Double
+    var diyanetDistrictID: String?
+
+    init(name: String, latitude: Double, longitude: Double, diyanetDistrictID: String? = nil) {
+        self.name = name
+        self.latitude = latitude
+        self.longitude = longitude
+        self.diyanetDistrictID = diyanetDistrictID
+    }
 }
 
 /// Uygulama ayarları. App group defaults'ta saklanır (widget da okuyabilir).

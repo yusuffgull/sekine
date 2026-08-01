@@ -6,12 +6,12 @@ import Adhan
 struct LocalCalculationProvider: PrayerTimeProvider {
     let sourceIdentifier = "local-adhan"
 
-    func fetchSchedule(
-        latitude: Double,
-        longitude: Double,
-        placeName: String,
-        year: Int
-    ) async throws -> PrayerSchedule {
+    func fetchSchedule(for location: SavedLocation) async throws -> PrayerSchedule {
+        let latitude = location.latitude
+        let longitude = location.longitude
+        let placeName = location.name
+        let year = Calendar(identifier: .gregorian).component(.year, from: Date())
+
         let tz = TimeZone(identifier: "Europe/Istanbul") ?? .current
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = tz
