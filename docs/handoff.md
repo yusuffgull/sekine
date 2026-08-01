@@ -1,9 +1,24 @@
 # Handoff
 
-## CURRENT TASK
-v1 kod-tamam, GitHub'a push edildi, Diyanet doğruluğu çözüldü, App Store ekran görüntüleri
-hazır. Kalan TEK iş: App Store gönderimi — tamamı kullanıcının Apple hesabıyla interaktif
-yapılacak adımlar (Xcode'a Apple ID girişi, team, archive, ASC listing, submit).
+## CURRENT TASK — App Store Connect gönderimi (yarıda, kullanıcı molada)
+Signing TAMAM ve doğrulandı (Team ID 33L468BTR2 project.yml'de; imzalı Release cihaz
+build'i başarılı). Repo PUBLIC (support URL: https://github.com/yusuffgull/sekine).
+Kullanıcı App Store Connect'te "New App" oluşturma/sürüm doldurma aşamasında.
+
+### ASC'de kaldığı yer — devam adımları (kullanıcı, interaktif):
+1. App Information: Subtitle "Reklamsız, gizli namaz vakti"; Category Lifestyle (+Reference).
+2. 1.0 sürüm sayfası: Description + Keywords (docs/store-submission.md'de hazır),
+   Support URL = https://github.com/yusuffgull/sekine
+3. Screenshots (6.9"): store/screenshots/ içindeki 5 PNG.
+4. App Privacy = Data Not Collected · Pricing = Free · Age Rating = 4+.
+5. Xcode: hedef "Any iOS Device" → Product → Archive → Distribute → App Store Connect →
+   Upload. İşlenince sürüme build ekle → Submit for Review.
+   NOT: Xcode GUI varsayılan DerivedData (~/Library) kullanır → iCloud xattr sorunu YOK.
+   (CLI'dan device build yaparken -derivedDataPath'i iCloud'lu Documents DIŞINA ver.)
+
+### Açık işler:
+- Privacy Policy URL Apple ileride isteyebilir → repo'ya PRIVACY.md eklenebilir (yapılmadı).
+- Ödemeli Apple Developer Program üyeliği şart (Distribute'te App Store yoksa sebebi bu).
 
 ## DONE
 - Native SwiftUI (iOS 17+) tam uygulama: Onboarding, Home (canlı geri sayım), Aylık
