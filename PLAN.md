@@ -9,10 +9,11 @@
 - [x] Konum + ilçe arama
 - [x] WidgetKit widget (sonraki vakit + geri sayım)
 - [x] Uygulama ikonu + orijinal chime bildirim sesi
-- [x] Build + testler (7/7 geçti) + simülatörde görsel doğrulama (Onboarding, Home)
-- [ ] GitHub'a push
-- [ ] **Submit öncesi:** Aladhan method=13 vs Diyanet resmi vakit doğrulaması (İmsak/Fajr!)
-- [ ] Store hazırlığı: signing/team, gizlilik label, açıklama, ekran görüntüleri, ad kontrolü, TestFlight
+- [x] Build + testler (9/9 geçti) + simülatörde 5 ekran görsel doğrulama
+- [x] GitHub'a push (private `yusuffgull/sekine`)
+- [x] **Diyanet doğrulaması yapıldı** → birebir Diyanet kaynağına geçildi (DiyanetProvider)
+- [x] App Store 6.9" ekran görüntüleri (`store/screenshots/`)
+- [ ] Store gönderimi: signing/team, ASC listing, archive, submit (KULLANICI — interaktif Apple)
 
 ## Kalan genel işler / bilinen riskler
 - Monthly/Qibla/Settings ekranları derlendi ama simülatörde görsel doğrulanmadı (tab tap otomasyonu yok).

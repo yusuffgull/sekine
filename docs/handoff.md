@@ -1,33 +1,33 @@
 # Handoff
 
 ## CURRENT TASK
-v1 iOS uygulaması kod-tamam ve derleniyor. Sırada GitHub'a push ve App Store gönderim
-hazırlığı var. Kod yazımı gerektiren teknik iş kalmadı; kalanlar hesap/store işlemleri
-ve submit öncesi Diyanet doğruluk doğrulaması.
+v1 kod-tamam, GitHub'a push edildi, Diyanet doğruluğu çözüldü, App Store ekran görüntüleri
+hazır. Kalan TEK iş: App Store gönderimi — tamamı kullanıcının Apple hesabıyla interaktif
+yapılacak adımlar (Xcode'a Apple ID girişi, team, archive, ASC listing, submit).
 
 ## DONE
 - Native SwiftUI (iOS 17+) tam uygulama: Onboarding, Home (canlı geri sayım), Aylık
-  imsakiye, Kıble, Ayarlar, WidgetKit widget.
-- Kaynak-bağımsız vakit katmanı: AladhanProvider (method=13) + LocalCalculationProvider
-  (adhan-swift fallback) + cache (app group / Documents).
-- RollingScheduler: iOS 64-bildirim penceresini kayan şekilde tazeler; app açılışı +
-  BGAppRefresh + willPresent tetikleyicileri.
-- Reklamsız, backend'siz, tracking'siz. İkon + orijinal chime.caf sesi.
-- `xcodebuild build` başarılı; 7/7 unit test geçti; simülatörde Onboarding + Home gerçek
-  Aladhan verisiyle görsel doğrulandı (İstanbul vakitleri birebir).
+  imsakiye, Kıble, Ayarlar, WidgetKit widget. 5 ekran da simülatörde görsel doğrulandı.
+- **Vakit kaynağı = birebir Diyanet** (DiyanetProvider, ezanvakti/namazvakti.diyanet.gov.tr
+  mirror, il/ilçe ID bazlı). Doğrulama: Aladhan method=13 Akşam/Yatsı'da 1-2 dk erkendi →
+  Diyanet resmi veriye geçildi. Zincir: Diyanet → Aladhan → lokal (adhan-swift).
+- Konum: il/ilçe picker + GPS→ilçe eşleştirme. RollingScheduler (64-pencere) + 3 tetikleyici.
+- Reklamsız, backend'siz, tracking'siz. İkon + orijinal chime.caf.
+- `xcodebuild build` başarılı; 9/9 unit test geçti. GitHub'a push edildi (private).
+- App Store 6.9" ekran görüntüleri: `store/screenshots/` (1320x2868, 5 adet).
 
-## NEXT
-1. GitHub'a push (private repo `yusuffgull/sekine`) — kullanıcı onayı bekliyor.
-2. **Submit öncesi zorunlu:** Aladhan method=13 vaktini İstanbul/Ankara/İzmir için
-   Diyanet resmi sitesiyle karşılaştır (özellikle İmsak/Fajr). Sapma varsa Diyanet
-   resmi API sağlayıcısını ekle (mimari hazır, `PrayerTimeProvider`).
-3. Xcode'da DEVELOPMENT_TEAM ayarla (project.yml boş), app group provisioning'i etkinleştir.
-4. App Store adı "Sekine" müsaitlik kontrolü; gizlilik "nutrition label" (veri toplanmıyor);
-   açıklama/anahtar kelime/ekran görüntüleri; TestFlight → submit.
+## NEXT (hepsi kullanıcı — interaktif Apple işlemleri)
+1. Xcode'a Apple Developer hesabını ekle (Xcode → Settings → Accounts). Makinede henüz
+   imzalama kimliği YOK.
+2. `open Sekine.xcodeproj` → Sekine + SekineWidget hedeflerinde Team seç (Signing &
+   Capabilities). App Group `group.com.sekineapp.sekine` otomatik provision olur.
+3. App Store Connect'te uygulama oluştur ("Sekine" müsait değilse "Sekine - Namaz Vakti").
+   Gizlilik = Data Not Collected. Metinler `docs/store-submission.md`'de hazır.
+4. Product → Archive → Distribute → App Store Connect. TestFlight → Submit for Review.
 
 ## BLOCKERS
-Yok. (Store işlemleri kullanıcının Apple hesabıyla yapılacak; DEVELOPMENT_TEAM ve
-signing kullanıcı tarafında ayarlanmalı.)
+Kullanıcının Apple Developer hesabı Xcode'a girilmeli (şu an 0 imzalama kimliği). Bundle ID
+benzersizliği ASC'de doğrulanmalı.
 
 ## BEST AGENT NOW
 Claude — release/submission hazırlığı ve Diyanet doğruluk doğrulaması karar gerektirir.
