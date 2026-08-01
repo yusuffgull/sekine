@@ -1,0 +1,26 @@
+# PLAN
+
+## Faz 1 — v1 iOS (App Store'a ilk çıkış)
+- [x] Repo + XcodeGen proje iskeleti
+- [x] Diyanet doğruluk kararı (kaynak-bağımsız mimari; Aladhan method=13 default)
+- [x] Core veri katmanı (model, provider, cache, fallback) + testler
+- [x] RollingScheduler bildirim sistemi (64-pencere) + BG refresh + willPresent tazeleme
+- [x] UI: Onboarding, Home (canlı geri sayım), Monthly, Qibla, Settings
+- [x] Konum + ilçe arama
+- [x] WidgetKit widget (sonraki vakit + geri sayım)
+- [x] Uygulama ikonu + orijinal chime bildirim sesi
+- [x] Build + testler (7/7 geçti) + simülatörde görsel doğrulama (Onboarding, Home)
+- [ ] GitHub'a push
+- [ ] **Submit öncesi:** Aladhan method=13 vs Diyanet resmi vakit doğrulaması (İmsak/Fajr!)
+- [ ] Store hazırlığı: signing/team, gizlilik label, açıklama, ekran görüntüleri, ad kontrolü, TestFlight
+
+## Kalan genel işler / bilinen riskler
+- Monthly/Qibla/Settings ekranları derlendi ama simülatörde görsel doğrulanmadı (tab tap otomasyonu yok).
+- Qibla pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
+- Bildirim güvenilirliği gerçek cihazda uzun süreli test edilmeli (BG refresh davranışı).
+
+## Faz 1.1
+- [ ] StoreKit 2 aboneliği → tam ezan (peşpeşe bildirim)
+
+## Faz 2
+- [ ] Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini bulmacalar, Apple Watch

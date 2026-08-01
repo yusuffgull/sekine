@@ -1,0 +1,23 @@
+# Xcode / build
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.moved-aside
+
+# XcodeGen üretir; kaynak proje.yml'dir
+Sekine.xcodeproj/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+# macOS
+.DS_Store
+
+# Fastlane / store (varsa)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png

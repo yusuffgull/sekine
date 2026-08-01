@@ -1,0 +1,90 @@
+import XCTest
+import CoreLocation
+@testable import Sekine
+
+final class PrayerTimeTests: XCTestCase {
+
+    private func makeSchedule() -> PrayerSchedule {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "Europe/Istanbul")!
+        let day0 = cal.date(from: DateComponents(
+            timeZone: cal.timeZone, year: 2026, month: 8, day: 1, hour: 0))!
+        func t(_ p: Prayer, _ h: Int, _ m: Int) -> PrayerTime {
+            PrayerTime(prayer: p, date: cal.date(from: DateComponents(
+                timeZone: cal.timeZone, year: 2026, month: 8, day: 1, hour: h, minute: m))!)
+        }
+        let day = PrayerDay(dayStart: day0, times: [
+            t(.fajr, 4, 8), t(.sunrise, 5, 53), t(.dhuhr, 13, 15),
+            t(.asr, 17, 10), t(.maghrib, 20, 27), t(.isha, 22, 4)
+        ])
+        return PrayerSchedule(
+            placeName: "İstanbul", latitude: 41.0082, longitude: 28.9784,
+            timeZoneIdentifier: "Europe/Istanbul", source: "test",
+            fetchedAt: Date(), days: [day])
+    }
+
+    func testNextTimeReturnsUpcomingPrayer() {
+        let schedule = makeSchedule()
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = schedule.timeZone
+        let noonish = cal.date(from: DateComponents(
+            timeZone: schedule.timeZone, year: 2026, month: 8, day: 1, hour: 12))!
+        XCTAssertEqual(schedule.nextTime(after: noonish)?.prayer, .dhuhr)
+    }
+
+    func testCurrentTimeReturnsMostRecentPast() {
+        let schedule = makeSchedule()
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = schedule.timeZone
+        let afternoon = cal.date(from: DateComponents(
+            timeZone: schedule.timeZone, year: 2026, month: 8, day: 1, hour: 18))!
+        XCTAssertEqual(schedule.currentTime(at: afternoon)?.prayer, .asr)
+    }
+
+    func testDayContainingMatchesSameDay() {
+        let schedule = makeSchedule()
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = schedule.timeZone
+        let mid = cal.date(from: DateComponents(
+            timeZone: schedule.timeZone, year: 2026, month: 8, day: 1, hour: 15))!
+        XCTAssertNotNil(schedule.day(containing: mid))
+        XCTAssertEqual(schedule.day(containing: mid)?.times.count, 6)
+    }
+
+    func testPrayerOrderAndNames() {
+        XCTAssertEqual(Prayer.ordered.first, .fajr)
+        XCTAssertEqual(Prayer.ordered.last, .isha)
+        XCTAssertEqual(Prayer.fajr.displayName, "İmsak")
+        XCTAssertFalse(Prayer.sunrise.isNotifiable)
+        XCTAssertTrue(Prayer.dhuhr.isNotifiable)
+    }
+
+    func testQiblaBearingFromIstanbulIsSoutheast() {
+        // İstanbul'dan Kâbe güneydoğudadır (~150–160°).
+        let istanbul = CLLocationCoordinate2D(latitude: 41.0082, longitude: 28.9784)
+        let kaaba = CLLocationCoordinate2D(latitude: 21.4225, longitude: 39.8262)
+        let bearing = QiblaManager.bearing(from: istanbul, to: kaaba)
+        XCTAssertGreaterThan(bearing, 120)
+        XCTAssertLessThan(bearing, 180)
+    }
+
+    func testCountdownFormatter() {
+        let now = Date()
+        XCTAssertEqual(CountdownFormatter.string(from: now, to: now.addingTimeInterval(3720)),
+                       "1 sa 02 dk")
+        XCTAssertEqual(CountdownFormatter.string(from: now, to: now.addingTimeInterval(65)),
+                       "1 dk 05 sn")
+        XCTAssertEqual(CountdownFormatter.string(from: now, to: now.addingTimeInterval(5)),
+                       "5 sn")
+        XCTAssertEqual(CountdownFormatter.string(from: now, to: now.addingTimeInterval(-10)),
+                       "0 sn")
+    }
+
+    func testCacheRoundTrip() {
+        let schedule = makeSchedule()
+        PrayerCache.save(schedule)
+        let loaded = PrayerCache.load()
+        XCTAssertEqual(loaded?.placeName, "İstanbul")
+        XCTAssertEqual(loaded?.days.first?.times.count, 6)
+    }
+}
