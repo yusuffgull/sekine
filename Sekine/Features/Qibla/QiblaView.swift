@@ -68,12 +68,6 @@ struct QiblaView: View {
                 .foregroundStyle(Palette.gold)
                 .rotationEffect(.degrees(qibla.qiblaBearing - qibla.heading))
                 .animation(.easeInOut(duration: 0.2), value: qibla.heading)
-
-            Text("Kâbe")
-                .font(.caption2.bold())
-                .foregroundStyle(Palette.textSecondary)
-                .offset(y: -110)
-                .rotationEffect(.degrees(qibla.qiblaBearing - qibla.heading))
         }
         .frame(width: 260, height: 260)
     }
