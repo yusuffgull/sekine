@@ -1,9 +1,12 @@
 # Handoff
 
-## CURRENT TASK — App Store Connect gönderimi (yarıda, kullanıcı molada)
-Signing TAMAM ve doğrulandı (Team ID 33L468BTR2 project.yml'de; imzalı Release cihaz
-build'i başarılı). Repo PUBLIC (support URL: https://github.com/yusuffgull/sekine).
-Kullanıcı App Store Connect'te "New App" oluşturma/sürüm doldurma aşamasında.
+## CURRENT TASK — App Store gönderimi (build 2 YÜKLENDİ, review'a gönderme aşaması)
+Build 2 (iPhone-only fix'li) App Store Connect'e başarıyla yüklendi. Apple "processing"
+yapıyor. Kalan: processing bitince build'i sürüme ekle + zorunlu bölümleri (App Privacy,
+Age Rating, Pricing) tamamla + Submit for Review.
+Apple ID: 6796900944. Signing Team: 33L468BTR2. Repo PUBLIC.
+Metadata (Name "Sekine - Namaz Vakti", subtitle, description, keywords, support URL) girildi.
+90474 hatası çözüldü → TARGETED_DEVICE_FAMILY=1 (app+widget iPhone-only), build 2.
 
 ### ASC'de kaldığı yer — devam adımları (kullanıcı, interaktif):
 1. App Information: Subtitle "Reklamsız, gizli namaz vakti"; Category Lifestyle (+Reference).
