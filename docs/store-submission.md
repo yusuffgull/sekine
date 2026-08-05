@@ -24,6 +24,10 @@ En büyük 1-yıldız riski budur. Göndermeden önce:
 - **Kategori:** Yaşam Tarzı (veya Referans)
 - **Yaş sınırı:** 4+
 
+## 2b. Zorunlu URL'ler (App Information)
+- **Privacy Policy URL:** https://github.com/yusuffgull/sekine/blob/main/PRIVACY.md
+- **Support URL:** https://github.com/yusuffgull/sekine
+
 ## 3. Gizlilik "Nutrition Label" (App Privacy)
 - **Veri toplama: YOK.** "Data Not Collected" seç. (Backend yok, analytics yok, reklam yok.)
 - Konum yalnızca cihazda kullanılır, toplanmaz/gönderilmez → beyan gerekmez.

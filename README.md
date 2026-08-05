@@ -48,6 +48,12 @@ xcodebuild -project Sekine.xcodeproj -scheme Sekine \
 - **Faz 2**: Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini bulmacalar,
   Apple Watch.
 
+## Destek & Gizlilik
+
+- **Destek:** Soru ve geri bildirim için gull.yusuff@gmail.com
+- **Gizlilik Politikası:** [PRIVACY.md](PRIVACY.md) — Sekine hiçbir kişisel veri toplamaz,
+  saklamaz veya paylaşmaz.
+
 ## Lisans
 
 MIT — bkz. `LICENSE`.
