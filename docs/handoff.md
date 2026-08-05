@@ -1,12 +1,21 @@
 # Handoff
 
-## CURRENT TASK — App Store gönderimi (build 2 YÜKLENDİ, review'a gönderme aşaması)
-Build 2 (iPhone-only fix'li) App Store Connect'e başarıyla yüklendi. Apple "processing"
-yapıyor. Kalan: processing bitince build'i sürüme ekle + zorunlu bölümleri (App Privacy,
-Age Rating, Pricing) tamamla + Submit for Review.
-Apple ID: 6796900944. Signing Team: 33L468BTR2. Repo PUBLIC.
-Metadata (Name "Sekine - Namaz Vakti", subtitle, description, keywords, support URL) girildi.
-90474 hatası çözüldü → TARGETED_DEVICE_FAMILY=1 (app+widget iPhone-only), build 2.
+## CURRENT TASK — GÖNDERİLDİ ✅ (App Store review'da)
+v1 App Store'a gönderildi: 5 Ağustos 2026 21:08, durum **Waiting for Review**, build 1.0 (3),
+gece-hilali ikonuyla. Apple incelemesi bekleniyor (~24-48s). Yapılacak bir şey kalmadı;
+review sonucuna göre (Approved → yayında / Rejected → düzeltme) hareket edilir.
+Apple ID: 6796900944. Team: 33L468BTR2. Repo PUBLIC.
+
+### Gönderim sırasında çözülen sorunlar (ileride tekrarında referans):
+- 90474 (iPad orientation) → TARGETED_DEVICE_FAMILY=1 her hedefte (XcodeGen proje base'i
+  target ayarını ezmiyor, TARGET seviyesine yazılmalı). Build 2.
+- codesign "resource fork/detritus" → DerivedData'yı iCloud'lu ~/Documents DIŞINA ver.
+- ASC "Username/Password required" → App Review'da "Sign-in required" kutusu kapatılmalı.
+- İkon: even-odd hilal "çift hilal" görünüyordu → clip-ile-tek-hilal C3 konsepti, build 3.
+
+### Sonraki (kullanıcı isterse):
+- Faz 1.1: StoreKit 2 aboneliği + tam ezan (peşpeşe bildirim). PremiumGate hazır.
+- Faz 2: Android (Kotlin), globalleşme, ayet paylaşımı, dini bulmacalar.
 
 ### ASC'de kaldığı yer — devam adımları (kullanıcı, interaktif):
 1. App Information: Subtitle "Reklamsız, gizli namaz vakti"; Category Lifestyle (+Reference).
