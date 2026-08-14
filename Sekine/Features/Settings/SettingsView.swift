@@ -78,6 +78,11 @@ struct SettingsView: View {
                 set: { settings.silentNotifications = $0; reschedule() }
             ))
 
+            Toggle("Odak modunda da uyar", isOn: Binding(
+                get: { settings.breakThroughFocus },
+                set: { settings.breakThroughFocus = $0; reschedule() }
+            ))
+
             Picker("Önceden Hatırlat", selection: Binding(
                 get: { settings.preReminderMinutes },
                 set: { settings.preReminderMinutes = $0; reschedule() }
@@ -91,7 +96,7 @@ struct SettingsView: View {
         } header: {
             Text("Bildirimler")
         } footer: {
-            Text("Vakit bildirimleri çevrimdışı çalışır ve uygulamayı açmasanız da düzenli olarak yenilenir. iOS bildirim sesi 30 saniye ile sınırlıdır; tam ezan yakında eklenecektir.")
+            Text("\"Odak modunda da uyar\" açıkken bildirimler Rahatsız Etmeyin, Uyku ve Odak modlarını delerek ulaşır; kapalıyken bu modlarda sessize alınır. Vakit bildirimleri çevrimdışı çalışır ve uygulamayı açmasanız da düzenli olarak yenilenir. iOS bildirim sesi 30 saniye ile sınırlıdır; tam ezan yakında eklenecektir.")
         }
     }
 

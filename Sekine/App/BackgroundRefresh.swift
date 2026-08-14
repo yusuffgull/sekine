@@ -48,7 +48,8 @@ enum BackgroundRefresh {
             enabledPrayers: enabled,
             sound: sound,
             silent: defaults.bool(forKey: "settings.silent"),
-            preReminderMinutes: defaults.object(forKey: "settings.preReminder") as? Int ?? 0)
+            preReminderMinutes: defaults.object(forKey: "settings.preReminder") as? Int ?? 0,
+            breakThroughFocus: defaults.bool(forKey: "settings.breakThroughFocus"))
 
         await RollingScheduler().reschedule(from: schedule, config: config)
     }

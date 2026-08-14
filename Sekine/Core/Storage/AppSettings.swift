@@ -80,6 +80,7 @@ final class AppSettings: ObservableObject {
         self.fontScale = FontScale(rawValue: defaults.string(forKey: Keys.fontScale) ?? "") ?? .normal
         self.notificationSound = defaults.string(forKey: Keys.sound) ?? NotificationSound.default.rawValue
         self.silentNotifications = defaults.bool(forKey: Keys.silent)
+        self.breakThroughFocus = defaults.bool(forKey: Keys.breakThroughFocus)
         self.hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarded)
         self.preReminderMinutes = defaults.object(forKey: Keys.preReminder) as? Int ?? 0
     }
@@ -116,6 +117,11 @@ final class AppSettings: ObservableObject {
 
     @Published var silentNotifications: Bool {
         didSet { defaults.set(silentNotifications, forKey: Keys.silent) }
+    }
+
+    /// Açıkken bildirimler Odak/Uyku/Rahatsız Etmeyin'i deler (opt-in, varsayılan kapalı).
+    @Published var breakThroughFocus: Bool {
+        didSet { defaults.set(breakThroughFocus, forKey: Keys.breakThroughFocus) }
     }
 
     /// Vakitten kaç dakika önce hatırlatma (0 = yalnızca vakit girişinde).
@@ -155,6 +161,7 @@ final class AppSettings: ObservableObject {
         static let fontScale = "settings.fontScale"
         static let sound = "settings.sound"
         static let silent = "settings.silent"
+        static let breakThroughFocus = "settings.breakThroughFocus"
         static let preReminder = "settings.preReminder"
         static let onboarded = "settings.onboarded"
     }
