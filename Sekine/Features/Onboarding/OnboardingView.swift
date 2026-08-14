@@ -34,6 +34,7 @@ struct OnboardingView: View {
                     promise("checkmark.seal.fill", "Reklamsız", "Hiçbir reklam yok, hiçbir dikkat dağıtıcı yok.")
                     promise("lock.shield.fill", "Gizli", "Verileriniz cihazınızdan çıkmaz. Takip yok.")
                     promise("checkmark.circle.fill", "Diyanet uyumlu", "Diyanet'e göre vakitler, çevrimdışı çalışır.")
+                    promise("apps.iphone", "Ana ekran widget'ı", "Sonraki vakti ve geri sayımı ana ekranından takip edin.")
                 }
                 .padding(.horizontal, 8)
 
@@ -111,7 +112,7 @@ struct OnboardingView: View {
                 } else {
                     // Eşleşme yoksa koordinatla devam (yaklaşık vakit); kullanıcı sonra ilçe seçebilir.
                     settings.location = resolved.location
-                    errorText = "İlçeniz otomatik bulunamadı; yaklaşık vakit gösterilecek. İsterseniz 'Şehir / İlçe Ara' ile Diyanet ilçenizi seçin."
+                    errorText = "İlçeniz otomatik bulunamadı; yaklaşık vakit gösterilecek. İsterseniz 'Şehir / İlçe Ara' ile ilçenizi seçin."
                 }
             } catch {
                 errorText = "Konum alınamadı. Ayarlar'dan konum iznini açın veya şehir arayın."
