@@ -1,10 +1,15 @@
 # Handoff
 
-## CURRENT TASK — v1.1 UX düzeltmeleri (14 Ağustos 2026)
-v1 App Store'da yayınlandı (build 1.0 (3)). Sonrası: kullanıcı geri bildirimiyle 7 maddelik
-UX düzeltme turu **tamamlandı**, main'e merge edildi (henüz PUSH EDİLMEDİ, onay bekliyor).
-Build/versiyon HENÜZ bump edilmedi — yeni App Store gönderimi kararı verilince
-MARKETING_VERSION 1.1 + CURRENT_PROJECT_VERSION 4 yapılmalı.
+## CURRENT TASK — Faz 1.2 kodu tamam, CİHAZ TESTİ bekliyor (14 Ağustos 2026)
+v1.1 App Store review'da (build 1.1(4), push'landı). Faz 1.2 (güvenilirlik+tamamlama)
+KODU main'de tamamlandı, build+10/10 test+simülatör görsel doğrulandı:
+- Time-Sensitive entitlement (Odak/Uyku/DND deler), kilit ekranı/StandBy widget'ları
+  (circular/rectangular/inline), Hicri tarih (Home), Kıble saati (Qibla) — Diyanet verisi.
+Sıradaki: KULLANICI gerçek cihazda test eder (bildirim güvenilirliği, kilit ekranı widget,
+kıble pusulası). Testler geçince v1.2/build5 bump → v1.1 onaylandıktan sonra Submit.
+Faz 1.2 henüz PUSH EDİLMEDİ (reliability+hicri/qibla merge'leri local main'de).
+
+### v1.1 (build 4) — REVIEW'DA, push'landı:
 
 ### Bu turda yapılanlar (hepsi build+test doğrulandı, 10/10 test, simülatör görsel):
 1. Bildirim metinleri: tüm vakitlere tutarlı temenni; Güneş bildirimi zaten kapalıydı
