@@ -21,6 +21,15 @@
 - Qibla pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
 - Bildirim güvenilirliği gerçek cihazda uzun süreli test edilmeli (BG refresh davranışı).
 
+## v1.1 — yayın sonrası UX düzeltmeleri (14 Ağu 2026, main'de, push bekliyor)
+- [x] Bildirim metinleri: tutarlı temenni; ölü Güneş metni temizlendi
+- [x] Onboarding hatasından "Diyanet" çıkarıldı
+- [x] Yazı boyutu tüm ekranlara uygulandı (Monthly XL satır atlaması dahil düzeltildi)
+- [x] Aylık otomatik yükleme + sınırlı ay gezinme + net boş-durum
+- [x] Widget tanıtımı (onboarding + Ayarlar bölümü)
+- [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
+- [ ] Push + (gönderim kararında) versiyon 1.1 / build 4 bump
+
 ## Faz 1.1
 - [ ] StoreKit 2 aboneliği → tam ezan (peşpeşe bildirim)
 

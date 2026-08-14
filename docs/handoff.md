@@ -1,9 +1,34 @@
 # Handoff
 
-## CURRENT TASK — ONAYLANDI & RELEASE ✅ (14 Ağustos 2026)
-v1 Apple review'ı **geçti** → durum "1.0 Ready for Distribution". Kullanıcı Release'e bastı;
-uygulama App Store'da yayına giriyor (yayının store'da görünmesi birkaç saat sürebilir).
-Build 1.0 (3), gece-hilali ikonuyla. Faz 1 tamamlandı — yapılacak bir şey kalmadı.
+## CURRENT TASK — v1.1 UX düzeltmeleri (14 Ağustos 2026)
+v1 App Store'da yayınlandı (build 1.0 (3)). Sonrası: kullanıcı geri bildirimiyle 7 maddelik
+UX düzeltme turu **tamamlandı**, main'e merge edildi (henüz PUSH EDİLMEDİ, onay bekliyor).
+Build/versiyon HENÜZ bump edilmedi — yeni App Store gönderimi kararı verilince
+MARKETING_VERSION 1.1 + CURRENT_PROJECT_VERSION 4 yapılmalı.
+
+### Bu turda yapılanlar (hepsi build+test doğrulandı, 10/10 test, simülatör görsel):
+1. Bildirim metinleri: tüm vakitlere tutarlı temenni; Güneş bildirimi zaten kapalıydı
+   (isNotifiable=false), ölü metin temizlendi.
+2. Onboarding "ilçe bulunamadı" hatasından "Diyanet" kelimesi çıkarıldı.
+3. Yazı boyutu artık TÜM ekranlarda: Home/Qibla zaten SekineFont; köke DynamicTypeSize
+   (Settings/Onboarding/Search), Monthly sabit hücreler çarpan + lineLimit(1)+
+   minimumScaleFactor (XL'de satır atlamasın). DEBUG hook: -uiTestFontScale.
+4. Aylık: konum varsa OTOMATİK yüklenir; ay gezinme yüklü veriyle sınırlı (chevron
+   disable); "ana ekrandan yükleyin" mesajı kaldırıldı, net boş-durum kondu.
+5. Widget tanıtımı: Onboarding'de 4. vaat satırı + Ayarlar'da "Widget" bölümü (kurulum
+   yönergesi).
+6. **İl/ilçe verisi (önemli):** kaynak = ezanvakti.emushaf.net (Diyanet aynası). Aynada
+   bazı isimler ASCII-hasarlı (Arnavutkoy) ve İstanbul'da ~20 idari ilçe yok (Üsküdar,
+   Ataşehir…) çünkü Diyanet onları merkez İstanbul (9541) altında veriyor.
+   Çözüm: bundle'lı `Sekine/Core/Location/LocationOverrides.json` → 434 GÖRÜNEN-ad
+   düzeltmesi (aynı IlceID → aynı vakit, kanıtlanabilir güvenli) + İstanbul eksik
+   ilçeleri 9541'e alias. Üretim scripti: emushaf ↔ yetkili il/ilçe (sh4dowb gist)
+   normalize-eşleştirme; her fix orijinalle AYNI normalize kimliğine sahip.
+   KARAR (kullanıcı onayı): toptan "tüm illere ilçe ekleme" YAPILMADI — Antalya/Muğla
+   gibi coğrafi geniş illerde eksik ilçeyi merkeze bağlamak yanlış vakit riski taşır.
+   Diğer illerde eksik ilçe talebi gelirse il-bazlı doğrulanarak eklenmeli.
+
+### Faz 1 gönderim referansı (App Store):
 Apple ID: 6796900944. Team: 33L468BTR2. Repo PUBLIC.
 
 ### Gönderim sırasında çözülen sorunlar (ileride tekrarında referans):
@@ -43,18 +68,14 @@ Apple ID: 6796900944. Team: 33L468BTR2. Repo PUBLIC.
 - `xcodebuild build` başarılı; 9/9 unit test geçti. GitHub'a push edildi (private).
 - App Store 6.9" ekran görüntüleri: `store/screenshots/` (1320x2868, 5 adet).
 
-## NEXT (hepsi kullanıcı — interaktif Apple işlemleri)
-1. Xcode'a Apple Developer hesabını ekle (Xcode → Settings → Accounts). Makinede henüz
-   imzalama kimliği YOK.
-2. `open Sekine.xcodeproj` → Sekine + SekineWidget hedeflerinde Team seç (Signing &
-   Capabilities). App Group `group.com.sekineapp.sekine` otomatik provision olur.
-3. App Store Connect'te uygulama oluştur ("Sekine" müsait değilse "Sekine - Namaz Vakti").
-   Gizlilik = Data Not Collected. Metinler `docs/store-submission.md`'de hazır.
-4. Product → Archive → Distribute → App Store Connect. TestFlight → Submit for Review.
+## NEXT
+1. v1.1 UX düzeltmelerini **push et** (kullanıcı onayı bekleniyor; şu an sadece local main'de).
+2. Yeni gönderim kararı verilince: project.yml'de MARKETING_VERSION 1.1 + CURRENT_PROJECT_VERSION 4,
+   `xcodegen generate`, Archive → Distribute → Submit for Review.
+3. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
 
 ## BLOCKERS
-Kullanıcının Apple Developer hesabı Xcode'a girilmeli (şu an 0 imzalama kimliği). Bundle ID
-benzersizliği ASC'de doğrulanmalı.
+Yok (push onayı hariç).
 
 ## BEST AGENT NOW
-Claude — release/submission hazırlığı ve Diyanet doğruluk doğrulaması karar gerektirir.
+Claude — ürün/veri kararı gerektiren işler sürüyor.
