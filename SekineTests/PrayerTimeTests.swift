@@ -23,6 +23,31 @@ final class PrayerTimeTests: XCTestCase {
             fetchedAt: Date(), days: [day])
     }
 
+    // MARK: - İl/ilçe ad düzeltmesi + alias (bundle'lı override)
+
+    func testDistrictNameFixAndIstanbulAliases() {
+        // emushaf'ın İstanbul için döndürdüğü (eksik/ASCII-hasarlı) örnek alt küme.
+        let dtos = [
+            DiyanetDistrictDTO(IlceAdi: "ARNAVUTKOY", IlceID: "9535"),
+            DiyanetDistrictDTO(IlceAdi: "İSTANBUL", IlceID: "9541"),
+            DiyanetDistrictDTO(IlceAdi: "ÇEKMEKÖY", IlceID: "9539"),
+        ]
+        let result = DiyanetDirectory.applyingOverrides(dtos, cityID: "539")
+        let byName = Dictionary(grouping: result, by: \.name).mapValues { $0.first! }
+
+        // ASCII-hasarlı ad doğru Türkçe'ye düzeldi.
+        XCTAssertNotNil(byName["Arnavutköy"], "Arnavutköy adı düzelmeli")
+        XCTAssertEqual(byName["Arnavutköy"]?.IlceID, "9535", "ID (vakit) değişmemeli")
+        // Zaten doğru olan ad korunur.
+        XCTAssertNotNil(byName["Çekmeköy"])
+        // Eksik idari ilçeler alias olarak eklendi ve merkez (İstanbul) ID'sine bağlı.
+        XCTAssertEqual(byName["Üsküdar"]?.IlceID, "9541", "Üsküdar merkez ID'ye bağlanmalı")
+        XCTAssertEqual(byName["Ataşehir"]?.IlceID, "9541")
+        XCTAssertEqual(byName["Kadıköy"]?.IlceID, "9541")
+        // Liste kimlikleri benzersiz (alias'lar aynı IlceID'yi paylaşsa da).
+        XCTAssertEqual(Set(result.map(\.id)).count, result.count, "id çakışması olmamalı")
+    }
+
     func testNextTimeReturnsUpcomingPrayer() {
         let schedule = makeSchedule()
         var cal = Calendar(identifier: .gregorian)

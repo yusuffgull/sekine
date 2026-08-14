@@ -7,11 +7,37 @@ struct DiyanetCity: Decodable, Identifiable, Hashable {
     var name: String { SehirAdi }
 }
 
-struct DiyanetDistrict: Decodable, Identifiable, Hashable {
+struct DiyanetDistrict: Identifiable, Hashable {
+    /// Diyanet vakit ID'si (alias ilçeler merkez ID'sine işaret eder).
+    let IlceID: String
+    /// Görüntülenecek düzeltilmiş Türkçe ad.
+    let name: String
+    /// Alias'lar aynı IlceID'yi paylaşabildiği için liste kimliği ada göre benzersizdir.
+    var id: String { "\(IlceID)|\(name)" }
+}
+
+/// API ham cevabı (ad düzeltmesi/alias uygulanmadan önce).
+struct DiyanetDistrictDTO: Decodable {
     let IlceAdi: String
     let IlceID: String
-    var id: String { IlceID }
-    var name: String { IlceAdi }
+}
+
+/// Bundle'lı yerel düzeltme tablosu: emushaf verisindeki ASCII-hasarlı ilçe adlarını
+/// doğru Türkçe'ye çevirir ve eksik idari ilçeleri (yalnızca vakitleri birebir aynı
+/// olan metropoller) merkez ID'sine bağlar. Sadece GÖRÜNEN ad + seçilebilirlik etkilenir;
+/// IlceID (dolayısıyla vakit) değişmez.
+private struct LocationOverrides: Decodable {
+    let nameFixes: [String: String]
+    let aliasesByCity: [String: [Alias]]
+    struct Alias: Decodable { let name: String; let targetID: String }
+
+    static let shared: LocationOverrides = {
+        guard let url = Bundle.main.url(forResource: "LocationOverrides", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let decoded = try? JSONDecoder().decode(LocationOverrides.self, from: data)
+        else { return LocationOverrides(nameFixes: [:], aliasesByCity: [:]) }
+        return decoded
+    }()
 }
 
 /// Diyanet il/ilçe dizini (picker için). Listeler nadiren değişir → bellek + disk cache.
@@ -34,9 +60,26 @@ final class DiyanetDirectory: ObservableObject {
         if let cached = districtCache[cityID] { return cached }
         let url = URL(string: "\(DiyanetProvider.baseURL)/ilceler/\(cityID)")!
         let (data, _) = try await URLSession.shared.data(from: url)
-        let list = try JSONDecoder().decode([DiyanetDistrict].self, from: data)
-            .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+        let dtos = try JSONDecoder().decode([DiyanetDistrictDTO].self, from: data)
+        let list = Self.applyingOverrides(dtos, cityID: cityID)
         districtCache[cityID] = list
+        return list
+    }
+
+    /// Ad düzeltmesi + eksik ilçe alias'larını uygular, ada göre sıralar. Saf (ağsız) →
+    /// birim testi yapılabilir. Sadece görünen ad/seçilebilirlik; IlceID değişmez.
+    nonisolated static func applyingOverrides(_ dtos: [DiyanetDistrictDTO], cityID: String) -> [DiyanetDistrict] {
+        let overrides = LocationOverrides.shared
+        var list = dtos.map { dto in
+            DiyanetDistrict(
+                IlceID: dto.IlceID,
+                name: overrides.nameFixes[dto.IlceID]
+                    ?? dto.IlceAdi.capitalized(with: Locale(identifier: "tr_TR")))
+        }
+        if let aliases = overrides.aliasesByCity[cityID] {
+            list += aliases.map { DiyanetDistrict(IlceID: $0.targetID, name: $0.name) }
+        }
+        list.sort { $0.name.localizedCompare($1.name) == .orderedAscending }
         return list
     }
 
