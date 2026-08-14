@@ -14,6 +14,7 @@ struct SettingsView: View {
                 locationSection
                 notificationSection
                 appearanceSection
+                widgetSection
                 aboutSection
             }
             .navigationTitle("Ayarlar")
@@ -91,6 +92,28 @@ struct SettingsView: View {
             Text("Bildirimler")
         } footer: {
             Text("Vakit bildirimleri çevrimdışı çalışır ve uygulamayı açmasanız da düzenli olarak yenilenir. iOS bildirim sesi 30 saniye ile sınırlıdır; tam ezan yakında eklenecektir.")
+        }
+    }
+
+    // MARK: Widget
+    private var widgetSection: some View {
+        Section {
+            Label {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Ana ekran widget'ı")
+                        .foregroundStyle(Palette.textPrimary)
+                    Text("Sonraki vakti ve geri sayımı uygulamayı açmadan görün.")
+                        .font(.footnote)
+                        .foregroundStyle(Palette.textSecondary)
+                }
+            } icon: {
+                Image(systemName: "apps.iphone")
+                    .foregroundStyle(Palette.accent)
+            }
+        } header: {
+            Text("Widget")
+        } footer: {
+            Text("Eklemek için: ana ekranda boş bir alana basılı tutun → sol üstteki **+** → **Sekine** → widget'ı seçip ekleyin.")
         }
     }
 

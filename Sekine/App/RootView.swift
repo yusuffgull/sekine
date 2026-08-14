@@ -11,6 +11,8 @@ struct RootView: View {
                 OnboardingView()
             }
         }
+        // Yazı boyutu ayarı tüm ekranları (varsayılan fontlar dahil) etkiler.
+        .dynamicTypeSize(settings.fontScale.dynamicTypeSize)
     }
 }
 

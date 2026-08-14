@@ -40,6 +40,11 @@ struct SekineApp: App {
                                               longitude: 28.9784, diyanetDistrictID: "9541")
             settings.hasCompletedOnboarding = true
         }
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-uiTestFontScale"), i + 1 < args.count,
+           let scale = FontScale(rawValue: args[i + 1]) {
+            settings.fontScale = scale
+        }
         #endif
         await notifications.refreshStatus()
         if let loc = settings.location {

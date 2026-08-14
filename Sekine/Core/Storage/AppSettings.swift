@@ -30,12 +30,22 @@ enum FontScale: String, CaseIterable, Identifiable {
         case .extraLarge: return "Çok Büyük"
         }
     }
-    /// Ana ekran geri sayım/başlık gibi öğelere uygulanan çarpan.
+    /// Özel (sabit punto) SekineFont öğelerine uygulanan çarpan.
     var multiplier: CGFloat {
         switch self {
         case .normal: return 1.0
         case .large: return 1.15
         case .extraLarge: return 1.3
+        }
+    }
+
+    /// Varsayılan SwiftUI fontlarını (Form, liste, başlık) ölçekler. Kökte
+    /// uygulanır → Ayarlar/Onboarding/Aylık dahil tüm ekranları etkiler.
+    var dynamicTypeSize: DynamicTypeSize {
+        switch self {
+        case .normal: return .large      // sistem varsayılanı
+        case .large: return .xLarge
+        case .extraLarge: return .xxLarge
         }
     }
 }
