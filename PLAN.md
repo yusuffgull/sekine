@@ -30,14 +30,13 @@
 - [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
 - [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
-## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz, çekirdek sözü güçlendir) — SIRADAKİ
-- [ ] **Time-Sensitive Notifications entitlement** (`com.apple.developer.usernotifications.time-sensitive`)
-      → İmsak/vakit bildirimleri Odak/Uyku/Rahatsız Etmeyin modunu delsin. Şu an
-      `.timeSensitive` kodda var ama entitlement yok → sessizce `.active`'e düşüyor.
-      EN YÜKSEK öncelik: çekirdek söz "güvenilir bildirim"i doğrudan etkiliyor.
-- [ ] Kilit ekranı + StandBy widget'ları (accessoryCircular/Rectangular/inline)
-- [ ] Orta boy widget: 5 vaktin tümü tek bakışta
-- [ ] Gerçek cihazda uzun süreli bildirim/BG-refresh güvenilirlik testi
+## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz) — DEVAM EDİYOR (feat/reliability-widgets)
+- [x] **Time-Sensitive Notifications entitlement** eklendi → bildirimler Odak/Uyku/DND'yi deler.
+      (Gerçek cihaz arşivinde Automatic Signing capability'yi profile ekler.)
+- [x] Kilit ekranı + StandBy widget'ları: accessoryCircular/Rectangular/inline eklendi
+- [x] Orta boy widget zaten 5 vaktin tümünü gösteriyordu (doğrulandı)
+- [ ] Gerçek cihazda uzun süreli bildirim/BG-refresh güvenilirlik testi (kullanıcı, cihaz)
+- [ ] Kilit ekranı widget'larının gerçek cihazda görsel doğrulaması (kullanıcı)
 - [ ] Hicri tarih gösterimi (Home başlık) + kerahat/güneş bilgisi
 - [ ] Kıble gerçek cihaz (magnetometre) doğrulaması
 
