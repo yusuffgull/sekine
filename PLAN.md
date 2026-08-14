@@ -21,17 +21,31 @@
 - Qibla pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
 - Bildirim güvenilirliği gerçek cihazda uzun süreli test edilmeli (BG refresh davranışı).
 
-## v1.1 — yayın sonrası UX düzeltmeleri (14 Ağu 2026, main'de, push bekliyor)
-- [x] Bildirim metinleri: tutarlı temenni; ölü Güneş metni temizlendi
+## v1.1 — yayın sonrası UX düzeltmeleri (14 Ağu 2026, REVIEW'DA)
+- [x] Bildirim metinleri sadeleştirildi ("Akşam vakti girdi.", temenni yok)
 - [x] Onboarding hatasından "Diyanet" çıkarıldı
 - [x] Yazı boyutu tüm ekranlara uygulandı (Monthly XL satır atlaması dahil düzeltildi)
 - [x] Aylık otomatik yükleme + sınırlı ay gezinme + net boş-durum
 - [x] Widget tanıtımı (onboarding + Ayarlar bölümü)
 - [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
-- [ ] Push + (gönderim kararında) versiyon 1.1 / build 4 bump
+- [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
-## Faz 1.1
-- [ ] StoreKit 2 aboneliği → tam ezan (peşpeşe bildirim)
+## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz, çekirdek sözü güçlendir) — SIRADAKİ
+- [ ] **Time-Sensitive Notifications entitlement** (`com.apple.developer.usernotifications.time-sensitive`)
+      → İmsak/vakit bildirimleri Odak/Uyku/Rahatsız Etmeyin modunu delsin. Şu an
+      `.timeSensitive` kodda var ama entitlement yok → sessizce `.active`'e düşüyor.
+      EN YÜKSEK öncelik: çekirdek söz "güvenilir bildirim"i doğrudan etkiliyor.
+- [ ] Kilit ekranı + StandBy widget'ları (accessoryCircular/Rectangular/inline)
+- [ ] Orta boy widget: 5 vaktin tümü tek bakışta
+- [ ] Gerçek cihazda uzun süreli bildirim/BG-refresh güvenilirlik testi
+- [ ] Hicri tarih gösterimi (Home başlık) + kerahat/güneş bilgisi
+- [ ] Kıble gerçek cihaz (magnetometre) doğrulaması
 
-## Faz 2
-- [ ] Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini bulmacalar, Apple Watch
+## Faz 2 — Monetizasyon (ücretsiz deneyim sağlamlaşınca)
+- [ ] StoreKit 2 aboneliği → tam ezan sesi (peşpeşe bildirim), ezan ses seçenekleri
+- [ ] PremiumGate zaten hazır; paywall + restore
+
+## Faz 3 — Platform genişleme
+- [ ] Apple Watch native app (complication + standalone bildirim)
+- [ ] Android (Kotlin, ayrı repo)
+- [ ] Globalleşme (i18n, dünya konumları), ayet paylaşımı, dini içerik
