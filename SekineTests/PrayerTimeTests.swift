@@ -112,7 +112,8 @@ final class PrayerTimeTests: XCTestCase {
         let vakit = DiyanetVakit(
             MiladiTarihKisa: "01.08.2026",
             Imsak: "04:08", Gunes: "05:53", Ogle: "13:16",
-            Ikindi: "17:10", Aksam: "20:28", Yatsi: "22:05")
+            Ikindi: "17:10", Aksam: "20:28", Yatsi: "22:05",
+            HicriTarihUzun: "18 Safer 1448", KibleSaati: "12:17")
         let day = vakit.toPrayerDay(calendar: cal, timeZone: tz)
         XCTAssertNotNil(day)
         XCTAssertEqual(day?.times.count, 6)
@@ -122,6 +123,11 @@ final class PrayerTimeTests: XCTestCase {
         XCTAssertEqual(comps.minute, 28)
         // İmsak güneşten önce olmalı (sıralama)
         XCTAssertLessThan(day!.time(for: .fajr)!, day!.time(for: .sunrise)!)
+        // Hicri tarih + kıble saati ayrıştırıldı mı
+        XCTAssertEqual(day?.hicriDate, "18 Safer 1448")
+        let qc = cal.dateComponents([.hour, .minute], from: day?.qiblaTime ?? Date())
+        XCTAssertEqual(qc.hour, 12)
+        XCTAssertEqual(qc.minute, 17)
     }
 
     func testDiyanetProviderRequiresDistrictID() {

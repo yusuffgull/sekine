@@ -2,7 +2,12 @@ import SwiftUI
 
 struct QiblaView: View {
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var store: PrayerTimeStore
     @StateObject private var qibla = QiblaManager()
+
+    private static let hmFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "HH:mm"; return f
+    }()
 
     var body: some View {
         NavigationStack {
@@ -36,6 +41,21 @@ struct QiblaView: View {
                             .foregroundStyle(Palette.textSecondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 32)
+                    }
+
+                    if let qiblaTime = store.today?.qiblaTime {
+                        VStack(spacing: 2) {
+                            Label("Kıble saati \(Self.hmFormatter.string(from: qiblaTime))",
+                                  systemImage: "sun.max.fill")
+                                .font(SekineFont.caption(settings.fontScale))
+                                .foregroundStyle(Palette.gold)
+                            Text("Bu saatte güneşe döndüğünüzde tam kıbleye bakarsınız.")
+                                .font(SekineFont.caption(settings.fontScale))
+                                .foregroundStyle(Palette.textSecondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.horizontal, 32)
+                        .padding(.top, 4)
                     }
                     Spacer()
                 }
