@@ -89,11 +89,12 @@ struct RollingScheduler {
     private func bodyText(for prayer: Prayer) -> String {
         switch prayer {
         case .fajr: return "İmsak vakti girdi. Hayırlı sabahlar."
-        case .dhuhr: return "Öğle vakti girdi."
-        case .asr: return "İkindi vakti girdi."
-        case .maghrib: return "Akşam vakti girdi."
-        case .isha: return "Yatsı vakti girdi."
-        case .sunrise: return "Güneş doğdu."
+        case .dhuhr: return "Öğle vakti girdi. Vaktin hayırlı olsun."
+        case .asr: return "İkindi vakti girdi. Vaktin hayırlı olsun."
+        case .maghrib: return "Akşam vakti girdi. Vaktin hayırlı olsun."
+        case .isha: return "Yatsı vakti girdi. Hayırlı geceler."
+        // Güneş namaz vakti değildir; isNotifiable=false → bildirimi hiç planlanmaz.
+        case .sunrise: return ""
         }
     }
 }
