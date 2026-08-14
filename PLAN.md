@@ -13,7 +13,8 @@
 - [x] GitHub'a push (private `yusuffgull/sekine`)
 - [x] **Diyanet doğrulaması yapıldı** → birebir Diyanet kaynağına geçildi (DiyanetProvider)
 - [x] App Store 6.9" ekran görüntüleri (`store/screenshots/`)
-- [ ] Store gönderimi: signing/team, ASC listing, archive, submit (KULLANICI — interaktif Apple)
+- [x] Store gönderimi: signing/team, ASC listing, archive, submit (KULLANICI — interaktif Apple)
+- [x] **Apple review geçildi** → 1.0 "Ready for Distribution"; kullanıcı Release'e bastı
 
 ## Kalan genel işler / bilinen riskler
 - Monthly/Qibla/Settings ekranları derlendi ama simülatörde görsel doğrulanmadı (tab tap otomasyonu yok).

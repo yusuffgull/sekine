@@ -1,9 +1,9 @@
 # Handoff
 
-## CURRENT TASK — GÖNDERİLDİ ✅ (App Store review'da)
-v1 App Store'a gönderildi: 5 Ağustos 2026 21:08, durum **Waiting for Review**, build 1.0 (3),
-gece-hilali ikonuyla. Apple incelemesi bekleniyor (~24-48s). Yapılacak bir şey kalmadı;
-review sonucuna göre (Approved → yayında / Rejected → düzeltme) hareket edilir.
+## CURRENT TASK — ONAYLANDI & RELEASE ✅ (14 Ağustos 2026)
+v1 Apple review'ı **geçti** → durum "1.0 Ready for Distribution". Kullanıcı Release'e bastı;
+uygulama App Store'da yayına giriyor (yayının store'da görünmesi birkaç saat sürebilir).
+Build 1.0 (3), gece-hilali ikonuyla. Faz 1 tamamlandı — yapılacak bir şey kalmadı.
 Apple ID: 6796900944. Team: 33L468BTR2. Repo PUBLIC.
 
 ### Gönderim sırasında çözülen sorunlar (ileride tekrarında referans):
