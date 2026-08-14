@@ -30,15 +30,17 @@
 - [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
 - [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
-## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz) — DEVAM EDİYOR (feat/reliability-widgets)
+## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz) — KOD TAMAM (cihaz testi bekliyor)
 - [x] **Time-Sensitive Notifications entitlement** eklendi → bildirimler Odak/Uyku/DND'yi deler.
       (Gerçek cihaz arşivinde Automatic Signing capability'yi profile ekler.)
 - [x] Kilit ekranı + StandBy widget'ları: accessoryCircular/Rectangular/inline eklendi
 - [x] Orta boy widget zaten 5 vaktin tümünü gösteriyordu (doğrulandı)
+- [x] Hicri tarih (Home) + Kıble saati (Qibla) — Diyanet resmi verisinden (HicriTarihUzun,
+      KibleSaati). Kerahat için ayrı Diyanet verisi YOK → uydurulmadı, eklenmedi.
 - [ ] Gerçek cihazda uzun süreli bildirim/BG-refresh güvenilirlik testi (kullanıcı, cihaz)
 - [ ] Kilit ekranı widget'larının gerçek cihazda görsel doğrulaması (kullanıcı)
-- [ ] Hicri tarih gösterimi (Home başlık) + kerahat/güneş bilgisi
-- [ ] Kıble gerçek cihaz (magnetometre) doğrulaması
+- [ ] Kıble pusulası gerçek cihaz (magnetometre) doğrulaması (kullanıcı)
+- Tümü doğrulanınca: versiyon 1.2 / build 5 bump → Archive → Submit (v1.1 onaylandıktan sonra)
 
 ## Faz 2 — Monetizasyon (ücretsiz deneyim sağlamlaşınca)
 - [ ] StoreKit 2 aboneliği → tam ezan sesi (peşpeşe bildirim), ezan ses seçenekleri
