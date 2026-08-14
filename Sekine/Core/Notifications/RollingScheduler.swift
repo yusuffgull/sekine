@@ -6,6 +6,8 @@ struct SchedulerConfig {
     var sound: NotificationSound
     var silent: Bool
     var preReminderMinutes: Int
+    /// Kullanıcı onayıyla Odak/Uyku/DND'yi delme (opt-in).
+    var breakThroughFocus: Bool
 }
 
 /// iOS aynı anda EN FAZLA 64 zamanlanmış yerel bildirim tutar. Rakiplerin
@@ -76,7 +78,8 @@ struct RollingScheduler {
         if let sound = config.sound.unSound(silent: config.silent) {
             content.sound = sound
         }
-        content.interruptionLevel = .timeSensitive
+        // Opt-in: yalnızca kullanıcı onay verdiyse Odak/Uyku/DND'yi del.
+        content.interruptionLevel = config.breakThroughFocus ? .timeSensitive : .active
 
         let components = cal.dateComponents(
             [.year, .month, .day, .hour, .minute], from: time.date)

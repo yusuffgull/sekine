@@ -68,7 +68,8 @@ final class PrayerTimeStore: ObservableObject {
             enabledPrayers: enabled,
             sound: NotificationSound(rawValue: settings.notificationSound) ?? .default,
             silent: settings.silentNotifications,
-            preReminderMinutes: settings.preReminderMinutes)
+            preReminderMinutes: settings.preReminderMinutes,
+            breakThroughFocus: settings.breakThroughFocus)
         await scheduler.reschedule(from: schedule, config: config)
     }
 

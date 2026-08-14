@@ -31,8 +31,9 @@
 - [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
 ## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz) — KOD TAMAM (cihaz testi bekliyor)
-- [x] **Time-Sensitive Notifications entitlement** eklendi → bildirimler Odak/Uyku/DND'yi deler.
-      (Gerçek cihaz arşivinde Automatic Signing capability'yi profile ekler.)
+- [x] **Time-Sensitive Notifications entitlement** + **"Odak modunda da uyar" opt-in toggle**
+      (Ayarlar). Varsayılan KAPALI → kullanıcı istemezse Odak/Uyku'yu delmez. Onay verirse
+      `.timeSensitive`, aksi halde `.active`. (Cihaz arşivinde Automatic Signing capability'yi ekler.)
 - [x] Kilit ekranı + StandBy widget'ları: accessoryCircular/Rectangular/inline eklendi
 - [x] Orta boy widget zaten 5 vaktin tümünü gösteriyordu (doğrulandı)
 - [x] Hicri tarih (Home) + Kıble saati (Qibla) — Diyanet resmi verisinden (HicriTarihUzun,
