@@ -59,8 +59,67 @@ struct SekineWidgetEntryView: View {
     var body: some View {
         switch family {
         case .systemSmall: small
+        case .accessoryCircular: accessoryCircular
+        case .accessoryRectangular: accessoryRectangular
+        case .accessoryInline: accessoryInline
         default: medium
         }
+    }
+
+    // MARK: Kilit ekranı / StandBy (accessory) görünümleri
+
+    private var accessoryInline: some View {
+        // Saat yanında tek satır: "İkindi 17:03"
+        Label {
+            if let name = entry.nextPrayer?.displayName, let d = entry.nextDate {
+                Text("\(name) \(Self.hm(d))")
+            } else {
+                Text("Namaz vakti")
+            }
+        } icon: {
+            Image(systemName: entry.nextPrayer?.systemImage ?? "moon.stars.fill")
+        }
+    }
+
+    private var accessoryCircular: some View {
+        ZStack {
+            AccessoryWidgetBackground()
+            VStack(spacing: 1) {
+                Image(systemName: entry.nextPrayer?.systemImage ?? "moon.stars.fill")
+                    .font(.system(size: 13))
+                if let d = entry.nextDate {
+                    Text(Self.hm(d)).font(.system(size: 13, weight: .semibold).monospacedDigit())
+                }
+            }
+        }
+        .widgetAccentable()
+    }
+
+    private var accessoryRectangular: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            if let name = entry.nextPrayer?.displayName, let d = entry.nextDate {
+                Label(name, systemImage: entry.nextPrayer?.systemImage ?? "moon.stars.fill")
+                    .font(.headline)
+                    .widgetAccentable()
+                HStack(spacing: 6) {
+                    Text(Self.hm(d)).font(.subheadline.bold().monospacedDigit())
+                    Text(d, style: .timer)
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Text("Namaz vakti").font(.headline)
+                Text("Konum seçin").font(.caption).foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private static func hm(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = "HH:mm"
+        return f.string(from: date)
     }
 
     private var small: some View {
@@ -122,7 +181,10 @@ struct SekineWidget: Widget {
         }
         .configurationDisplayName("Namaz Vakti")
         .description("Sonraki vakit ve geri sayım.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([
+            .systemSmall, .systemMedium,
+            .accessoryCircular, .accessoryRectangular, .accessoryInline
+        ])
     }
 }
 
