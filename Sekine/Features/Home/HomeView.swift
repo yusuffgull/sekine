@@ -47,6 +47,11 @@ struct HomeView: View {
             Text(Self.dateFormatter.string(from: Date()))
                 .font(SekineFont.caption(settings.fontScale))
                 .foregroundStyle(Palette.textSecondary)
+            if let hicri = store.today?.hicriDate {
+                Text(hicri)
+                    .font(SekineFont.caption(settings.fontScale))
+                    .foregroundStyle(Palette.textSecondary.opacity(0.8))
+            }
         }
         .padding(.top, 8)
     }

@@ -12,6 +12,18 @@ struct PrayerDay: Codable, Hashable, Identifiable, Sendable {
     /// O günün yerel 00:00'ı (gün eşleştirmesi için).
     let dayStart: Date
     let times: [PrayerTime]
+    /// Diyanet resmi Hicri tarihi, ör. "26 Safer 1448" (yalnızca Diyanet kaynağında).
+    let hicriDate: String?
+    /// Güneş-kıble hizalanma anı (Diyanet "Kıble Saati"); kıbleyi güneşle bulmak için.
+    let qiblaTime: Date?
+
+    // Optional alanlar → eski cache (bu alanlar yokken) geriye dönük uyumlu decode olur.
+    init(dayStart: Date, times: [PrayerTime], hicriDate: String? = nil, qiblaTime: Date? = nil) {
+        self.dayStart = dayStart
+        self.times = times
+        self.hicriDate = hicriDate
+        self.qiblaTime = qiblaTime
+    }
 
     var id: Date { dayStart }
 
