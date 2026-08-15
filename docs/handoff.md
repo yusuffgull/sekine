@@ -1,13 +1,41 @@
 # Handoff
 
-## CURRENT TASK — Faz 1.2 kodu tamam, CİHAZ TESTİ bekliyor (14 Ağustos 2026)
-v1.1 App Store review'da (build 1.1(4), push'landı). Faz 1.2 (güvenilirlik+tamamlama)
-KODU main'de tamamlandı, build+10/10 test+simülatör görsel doğrulandı:
-- Time-Sensitive entitlement (Odak/Uyku/DND deler), kilit ekranı/StandBy widget'ları
-  (circular/rectangular/inline), Hicri tarih (Home), Kıble saati (Qibla) — Diyanet verisi.
-Sıradaki: KULLANICI gerçek cihazda test eder (bildirim güvenilirliği, kilit ekranı widget,
-kıble pusulası). Testler geçince v1.2/build5 bump → v1.1 onaylandıktan sonra Submit.
-Faz 1.2 henüz PUSH EDİLMEDİ (reliability+hicri/qibla merge'leri local main'de).
+## CURRENT TASK — Faz 2 (gelir modeli) neredeyse tamam, PUSH EDİLDİ (15 Ağustos 2026)
+v1.2 arşivlendi (App Store Connect'te, henüz submit edilmedi — v1.1 review'ının sonucu
+bekleniyor). Bu oturumda Faz 2 (Ömürlük Premium + Bağış, StoreKit 2, backend'siz)
+neredeyse tamamlandı ve main'e push'landı (7f5a2b3..60c9ecd):
+- Faz A: StoreKit 2 altyapısı (Store, Paywall, Ayarlar Premium+Destekle).
+- Faz B: Tam ezan mekanizması (premium ses gate + in-app AdhanPlayer).
+- Faz C1: Premium renk temaları (Zümrüt free + 4 premium).
+- Faz C2: Çınar'ın tasarımı → ücretsiz alternatif app ikonu.
+- Faz D: Ücretsiz "Zikir" sekmesi (tesbih + Esmaül Hüsna 100 + 12 dua) — bilgi ücretsiz ilkesi.
+- Faz E1: Çoklu konum (premium yer imleri).
+- Faz E2: Vakit-başına özel ses (premium).
+- Faz E3: Premium widget accent teması.
+KALAN: **Faz E4 — Apple Watch uygulaması** (büyük, yeni watchOS target) — kullanıcının
+Claude token limiti sıfırlanınca AYRI oturumda yapılacak.
+
+### Gelir için kullanıcının yapması gerekenler (kod dışı, henüz yapılmadı):
+1. Vergi dairesinden **GVK Mükerrer 20/B istisna belgesi** al (şahıs şirketi GEREKMEZ,
+   Türkiye'de App Store geliri için özel muafiyet — ~6,5M TL/yıl 2026 limiti).
+2. Bankada **20/B özel ticari hesap** aç, IBAN'ı vergi dairesine bildir.
+3. ASC **Paid Applications Agreement** (o hesap + W-8BEN formu).
+4. ASC'de IAP ürünlerini oluştur (kodla birebir ID): `com.sekineapp.sekine.premium.lifetime`
+   (Non-Consumable), `...tip.small/medium/large` (Consumable).
+5. **Ezan ses dosyaları** (lisanslı/orijinal, telifli olamaz): `ezan.caf` (≤30sn bildirim
+   tonu) + `ezan-full.m4a` (in-app tam ezan) → `Sekine/Resources/Audio/`. Eklenince
+   otomatik aktifleşir.
+6. AB'de satış istenirse (opsiyonel): şu an **non-trader** — trader'a geçip DSA belge
+   adımını tamamlamak gerekir (bkz. App Store Connect Business/Agreements).
+
+### Repo görünürlüğü: PUBLIC kalmalı
+Support URL + Privacy Policy URL repo'ya bağlı (ASC gereksinimi); private yapılırsa
+App Store'daki linkler kırılır. Karar: bilinçli olarak public bırakıldı.
+
+### AB erişilebilirliği: 27 AB ülkesinde "Cannot Sell" idi
+Sebep: DSA Trader Status tamamlanmamıştı. Kullanıcı "non-trader" seçti (Cancel edilmedi,
+belge yüklenmedi) → non-trader modunda AB dahil global erişilebilirlik açılmalı (birkaç
+saat içinde). Doğrulanmadı — kullanıcı sonradan kontrol etmeli.
 
 ### v1.1 (build 4) — REVIEW'DA, push'landı:
 
