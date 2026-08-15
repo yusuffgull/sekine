@@ -9,6 +9,7 @@ struct SettingsView: View {
 
     @State private var showSearch = false
     @State private var showPaywall = false
+    @State private var currentIcon = AppIconOption.current
 
     var body: some View {
         NavigationStack {
@@ -18,6 +19,7 @@ struct SettingsView: View {
                 notificationSection
                 extraRemindersSection
                 appearanceSection
+                appIconSection
                 widgetSection
                 donateSection
                 aboutSection
@@ -246,6 +248,41 @@ struct SettingsView: View {
                 Text(String(format: "%02d:00", h)).tag(h)
             }
         }
+    }
+
+    // MARK: Uygulama İkonu
+    @ViewBuilder private var appIconSection: some View {
+        if UIApplication.shared.supportsAlternateIcons {
+            Section {
+                ForEach(AppIconOption.allCases) { option in
+                    Button {
+                        setAppIcon(option)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(option.displayName).foregroundStyle(Palette.textPrimary)
+                                if let sub = option.subtitle {
+                                    Text(sub).font(.footnote).foregroundStyle(Palette.textSecondary)
+                                }
+                            }
+                            Spacer()
+                            if currentIcon == option {
+                                Image(systemName: "checkmark").foregroundStyle(Palette.accent)
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text("Uygulama İkonu")
+            }
+        }
+    }
+
+    private func setAppIcon(_ option: AppIconOption) {
+        guard UIApplication.shared.supportsAlternateIcons,
+              option != currentIcon else { return }
+        UIApplication.shared.setAlternateIconName(option.alternateName) { _ in }
+        currentIcon = option
     }
 
     // MARK: Widget
