@@ -56,6 +56,21 @@ struct SekineWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family
     var entry: SekineEntry
 
+    /// Premium: seçili renk temasının accent'i; değilse varsayılan Zümrüt. (Premium perk.)
+    private var accentColor: Color {
+        let defaults = UserDefaults(suiteName: AppGroup.identifier) ?? .standard
+        let theme = defaults.bool(forKey: "settings.isPremium") ? ColorTheme.current : .zumrut
+        return Color(UIColor { trait in
+            Self.uiColor(trait.userInterfaceStyle == .dark ? theme.accent.1 : theme.accent.0)
+        })
+    }
+
+    private static func uiColor(_ v: UInt) -> UIColor {
+        UIColor(red: CGFloat((v >> 16) & 0xFF) / 255,
+                green: CGFloat((v >> 8) & 0xFF) / 255,
+                blue: CGFloat(v & 0xFF) / 255, alpha: 1)
+    }
+
     var body: some View {
         switch family {
         case .systemSmall: small
@@ -127,7 +142,7 @@ struct SekineWidgetEntryView: View {
             if let name = entry.nextPrayer?.displayName {
                 Label(name, systemImage: entry.nextPrayer?.systemImage ?? "moon")
                     .font(.caption.bold())
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(accentColor)
             }
             if let d = entry.nextDate {
                 Text(d, style: .time).font(.title2.bold())
@@ -148,7 +163,7 @@ struct SekineWidgetEntryView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("SONRAKİ").font(.caption2.bold()).foregroundStyle(.secondary)
                 if let name = entry.nextPrayer?.displayName, let d = entry.nextDate {
-                    Text(name).font(.headline).foregroundStyle(.tint)
+                    Text(name).font(.headline).foregroundStyle(accentColor)
                     Text(d, style: .time).font(.title.bold())
                     Text(d, style: .timer).font(.caption).foregroundStyle(.secondary)
                 } else {
