@@ -4,6 +4,8 @@ import UserNotifications
 struct SchedulerConfig {
     var enabledPrayers: Set<Prayer>
     var sound: NotificationSound
+    /// Premium: vakit-başına özel ses (yoksa `sound`).
+    var perPrayerSounds: [Prayer: NotificationSound] = [:]
     var silent: Bool
     var preReminderMinutes: Int
     /// Kullanıcı onayıyla Odak/Uyku/DND'yi delme (opt-in).
@@ -114,7 +116,8 @@ struct RollingScheduler {
             content.title = "\(time.prayer.displayName) Vakti"
             content.body = bodyText(for: time.prayer)
         }
-        if let sound = config.sound.unSound(silent: config.silent) {
+        let prayerSound = config.perPrayerSounds[time.prayer] ?? config.sound
+        if let sound = prayerSound.unSound(silent: config.silent) {
             content.sound = sound
         }
         // Opt-in: yalnızca kullanıcı onay verdiyse Odak/Uyku/DND'yi del.

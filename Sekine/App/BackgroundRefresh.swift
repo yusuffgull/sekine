@@ -59,12 +59,19 @@ enum BackgroundRefresh {
         let enabled = Set(Prayer.ordered.filter { $0.isNotifiable && !disabled.contains($0) })
 
         let sound = NotificationSound(rawValue: defaults.string(forKey: "settings.sound") ?? "") ?? .default
+        var perPrayer: [Prayer: NotificationSound] = [:]
+        if let raw = defaults.dictionary(forKey: "settings.perPrayerSounds") as? [String: String] {
+            for (k, v) in raw {
+                if let p = Prayer(rawValue: k), let s = NotificationSound(rawValue: v) { perPrayer[p] = s }
+            }
+        }
         func flag(_ key: String, default def: Bool) -> Bool {
             defaults.object(forKey: key) as? Bool ?? def
         }
         let config = SchedulerConfig(
             enabledPrayers: enabled,
             sound: sound,
+            perPrayerSounds: perPrayer,
             silent: defaults.bool(forKey: "settings.silent"),
             preReminderMinutes: defaults.object(forKey: "settings.preReminder") as? Int ?? 0,
             breakThroughFocus: defaults.bool(forKey: "settings.breakThroughFocus"),

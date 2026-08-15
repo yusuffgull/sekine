@@ -17,6 +17,7 @@ struct SettingsView: View {
                 premiumSection
                 locationSection
                 notificationSection
+                perPrayerSoundSection
                 extraRemindersSection
                 appearanceSection
                 appIconSection
@@ -203,6 +204,40 @@ struct SettingsView: View {
             Text("Bildirimler")
         } footer: {
             Text("\"Odak modunda da uyar\" açıkken bildirimler Rahatsız Etmeyin, Uyku ve Odak modlarını delerek ulaşır; kapalıyken bu modlarda sessize alınır. Vakit bildirimleri çevrimdışı çalışır ve uygulamayı açmasanız da düzenli olarak yenilenir. iOS bildirim sesi 30 saniye ile sınırlıdır; tam ezan yakında eklenecektir.")
+        }
+    }
+
+    // MARK: Vakit-başına Ses (premium)
+    @ViewBuilder private var perPrayerSoundSection: some View {
+        if iap.isPremium {
+            Section {
+                ForEach(Prayer.ordered.filter(\.isNotifiable)) { prayer in
+                    Picker(prayer.displayName, selection: Binding(
+                        get: { settings.perPrayerSounds[prayer]?.rawValue ?? "" },
+                        set: { newVal in
+                            if newVal.isEmpty { settings.perPrayerSounds[prayer] = nil }
+                            else { settings.perPrayerSounds[prayer] = NotificationSound(rawValue: newVal) }
+                            reschedule()
+                        }
+                    )) {
+                        Text("Genel").tag("")
+                        ForEach(NotificationSound.allCases) { s in
+                            Text(s.displayName).tag(s.rawValue)
+                        }
+                    }
+                }
+            } header: {
+                Text("Vakit-başına Ses")
+            } footer: {
+                Text("Her vakit için ayrı bildirim sesi seçebilirsiniz. 'Genel' seçiliyken yukarıdaki Bildirim Sesi kullanılır.")
+            }
+        } else {
+            Section {
+                Button { showPaywall = true } label: {
+                    Label("Vakit-başına özel ses (Premium)", systemImage: "bell.badge.fill")
+                        .foregroundStyle(Palette.gold)
+                }
+            }
         }
     }
 
