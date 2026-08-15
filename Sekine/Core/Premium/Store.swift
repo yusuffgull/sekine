@@ -65,6 +65,9 @@ final class Store: ObservableObject, PremiumProviding {
             }
         }
         isPremium = owned
+        // Widget ve arka plan görevlerinin premium'u görebilmesi için paylaş.
+        (UserDefaults(suiteName: AppGroup.identifier) ?? .standard)
+            .set(owned, forKey: "settings.isPremium")
     }
 
     /// Satın alma. Başarılıysa true. (Bağışlar entitlement vermez; sadece finish edilir.)

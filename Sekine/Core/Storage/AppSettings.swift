@@ -77,6 +77,7 @@ final class AppSettings: ObservableObject {
         self.location = Self.loadLocation(defaults)
         self.disabledPrayers = Self.loadDisabledPrayers(defaults)
         self.theme = AppTheme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .system
+        self.colorTheme = ColorTheme(rawValue: defaults.string(forKey: Keys.colorTheme) ?? "") ?? .zumrut
         self.fontScale = FontScale(rawValue: defaults.string(forKey: Keys.fontScale) ?? "") ?? .normal
         self.notificationSound = defaults.string(forKey: Keys.sound) ?? NotificationSound.default.rawValue
         self.silentNotifications = defaults.bool(forKey: Keys.silent)
@@ -111,6 +112,11 @@ final class AppSettings: ObservableObject {
 
     @Published var theme: AppTheme {
         didSet { defaults.set(theme.rawValue, forKey: Keys.theme) }
+    }
+
+    /// Premium renk teması (accent/gold). app-group'a yazılır → Palette okur.
+    @Published var colorTheme: ColorTheme {
+        didSet { defaults.set(colorTheme.rawValue, forKey: Keys.colorTheme) }
     }
 
     @Published var fontScale: FontScale {
@@ -187,6 +193,7 @@ final class AppSettings: ObservableObject {
         static let location = "settings.location"
         static let disabledPrayers = "settings.disabledPrayers"
         static let theme = "settings.theme"
+        static let colorTheme = "settings.colorTheme"
         static let fontScale = "settings.fontScale"
         static let sound = "settings.sound"
         static let silent = "settings.silent"

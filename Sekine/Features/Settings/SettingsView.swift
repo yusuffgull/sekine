@@ -244,6 +244,21 @@ struct SettingsView: View {
             Picker("Tema", selection: $settings.theme) {
                 ForEach(AppTheme.allCases) { Text($0.displayName).tag($0) }
             }
+            Picker("Renk Teması", selection: Binding(
+                get: { settings.colorTheme },
+                set: { newValue in
+                    if newValue.isPremium, !iap.isPremium {
+                        showPaywall = true
+                        return
+                    }
+                    settings.colorTheme = newValue
+                }
+            )) {
+                ForEach(ColorTheme.allCases) { theme in
+                    Text(theme.displayName + (theme.isPremium && !iap.isPremium ? " 🔒" : ""))
+                        .tag(theme)
+                }
+            }
             Picker("Yazı Boyutu", selection: $settings.fontScale) {
                 ForEach(FontScale.allCases) { Text($0.displayName).tag($0) }
             }
