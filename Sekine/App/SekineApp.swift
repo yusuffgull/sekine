@@ -8,6 +8,7 @@ struct SekineApp: App {
     @StateObject private var store = PrayerTimeStore()
     @StateObject private var notifications = NotificationManager()
     @StateObject private var location = LocationManager()
+    @StateObject private var iap = Store()
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -18,6 +19,7 @@ struct SekineApp: App {
                 .environmentObject(store)
                 .environmentObject(notifications)
                 .environmentObject(location)
+                .environmentObject(iap)
                 .tint(Palette.accent)
                 .preferredColorScheme(settings.theme.colorScheme)
                 .task { await bootstrap() }

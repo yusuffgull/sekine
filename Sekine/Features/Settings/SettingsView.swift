@@ -5,17 +5,21 @@ struct SettingsView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var store: PrayerTimeStore
     @EnvironmentObject private var notifications: NotificationManager
+    @EnvironmentObject private var iap: Store
 
     @State private var showSearch = false
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
             Form {
+                premiumSection
                 locationSection
                 notificationSection
                 extraRemindersSection
                 appearanceSection
                 widgetSection
+                donateSection
                 aboutSection
             }
             .navigationTitle("Ayarlar")
@@ -25,7 +29,64 @@ struct SettingsView: View {
                     Task { await store.refresh(location: place, settings: settings) }
                 }
             }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView()
+            }
             .task { await notifications.refreshStatus() }
+        }
+    }
+
+    // MARK: Premium
+    @ViewBuilder private var premiumSection: some View {
+        Section {
+            if iap.isPremium {
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Premium aktif").foregroundStyle(Palette.textPrimary)
+                        Text("Desteğiniz için teşekkürler.")
+                            .font(.footnote).foregroundStyle(Palette.textSecondary)
+                    }
+                } icon: {
+                    Image(systemName: "checkmark.seal.fill").foregroundStyle(Palette.accent)
+                }
+            } else {
+                Button {
+                    showPaywall = true
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Sekine Premium").foregroundStyle(Palette.textPrimary)
+                            Text("Tam ezan, temalar ve daha fazlası — tek seferlik.")
+                                .font(.footnote).foregroundStyle(Palette.textSecondary)
+                        }
+                    } icon: {
+                        Image(systemName: "star.circle.fill").foregroundStyle(Palette.gold)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: Destekle
+    @ViewBuilder private var donateSection: some View {
+        if !iap.tipProducts.isEmpty {
+            Section {
+                ForEach(iap.tipProducts, id: \.id) { product in
+                    Button {
+                        Task { await iap.purchase(product) }
+                    } label: {
+                        HStack {
+                            Text(product.displayName).foregroundStyle(Palette.textPrimary)
+                            Spacer()
+                            Text(product.displayPrice).foregroundStyle(Palette.accent)
+                        }
+                    }
+                }
+            } header: {
+                Text("Destekle")
+            } footer: {
+                Text("Uygulamayı reklamsız ve gizli tutmamıza destek olabilirsiniz. Bağış hiçbir özelliği kilitlemez.")
+            }
         }
     }
 
