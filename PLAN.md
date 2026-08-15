@@ -30,6 +30,20 @@
 - [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
 - [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
+## Faz 2 — Gelir modeli (Ömürlük Premium + Bağış) — DEVAM EDİYOR
+- [x] Faz A: StoreKit 2 altyapısı — Store (ürün/satın alma/restore/entitlement), Paywall,
+      Ayarlar Premium + Destekle bölümleri, PremiumProviding bağlandı. Yerel .storekit test config.
+- [x] Faz B: Tam ezan mekanizması — premium "Ezan" bildirim tonu (kilitli→paywall) +
+      AdhanPlayer (in-app tam ezan) + Home "Ezanı Çal" (premium, ses varsa görünür).
+- [ ] Faz C: Premium temalar + alternatif uygulama ikonları (düşük efor).
+- [ ] Faz D: İçerik paketleri (tesbih, Esmaül Hüsna, dua/zikir).
+- [ ] Faz E: Çoklu konum, vakit-başına ses, premium widget, Apple Watch.
+- KULLANICI KAPILARI (kod dışı): (1) ASC Paid Applications Agreement (banka+vergi),
+  (2) IAP satınca trader status'e geç, (3) IAP product'ları ASC'de oluştur (kodla eşleşen ID),
+  (4) ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) lisanslı/orijinal eklenmeli.
+- NOT: StoreKit satın alma akışı simülatörde .storekit config scheme'e seçilerek denenir
+  (headless xcodebuild'de SKTestSession güvenilir değil); kod standart StoreKit 2.
+
 ## Faz 1.3 — Bildirim güvenilirliği + yeni türler (ücretsiz) — KOD TAMAM
 - [x] Güvenilirlik: iki-geçişli bütçe (ana vakit ön-hatırlatmadan önce), didReceive
       tazelemesi, gece BGProcessingTask.
