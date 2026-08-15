@@ -49,6 +49,10 @@ struct SekineApp: App {
            let scale = FontScale(rawValue: args[i + 1]) {
             settings.fontScale = scale
         }
+        if let i = args.firstIndex(of: "-uiTestColorTheme"), i + 1 < args.count,
+           let theme = ColorTheme(rawValue: args[i + 1]) {
+            settings.colorTheme = theme
+        }
         #endif
         await notifications.refreshStatus()
         if let loc = settings.location {

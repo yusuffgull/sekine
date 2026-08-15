@@ -26,6 +26,7 @@ struct SettingsView: View {
             .sheet(isPresented: $showSearch) {
                 LocationSearchSheet { place in
                     settings.location = place
+                    if iap.isPremium { settings.addSavedLocation(place) }
                     Task { await store.refresh(location: place, settings: settings) }
                 }
             }
@@ -92,12 +93,43 @@ struct SettingsView: View {
 
     // MARK: Konum
     private var locationSection: some View {
-        Section("Konum") {
+        Section {
             HStack {
                 Image(systemName: "mappin.circle.fill").foregroundStyle(Palette.accent)
                 Text(settings.location?.name ?? "Seçilmedi")
                 Spacer()
                 Button("Değiştir") { showSearch = true }
+            }
+
+            // Premium: kayıtlı konumlar arasında hızlı geçiş.
+            if iap.isPremium {
+                ForEach(settings.savedLocations) { loc in
+                    Button {
+                        settings.location = loc
+                        Task { await store.refresh(location: loc, settings: settings) }
+                    } label: {
+                        HStack {
+                            Image(systemName: settings.location?.id == loc.id
+                                  ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(Palette.accent)
+                            Text(loc.name).foregroundStyle(Palette.textPrimary)
+                        }
+                    }
+                }
+                .onDelete { settings.savedLocations.remove(atOffsets: $0) }
+            } else if settings.location != nil {
+                Button {
+                    showPaywall = true
+                } label: {
+                    Label("Kayıtlı konumlar (Premium)", systemImage: "bookmark.fill")
+                        .foregroundStyle(Palette.gold)
+                }
+            }
+        } header: {
+            Text("Konum")
+        } footer: {
+            if iap.isPremium {
+                Text("Değiştir'den eklediğiniz konumlar burada kaydedilir; dokunarak hızlıca geçiş yapabilirsiniz.")
             }
         }
     }
@@ -243,6 +275,21 @@ struct SettingsView: View {
         Section("Görünüm") {
             Picker("Tema", selection: $settings.theme) {
                 ForEach(AppTheme.allCases) { Text($0.displayName).tag($0) }
+            }
+            Picker("Renk Teması", selection: Binding(
+                get: { settings.colorTheme },
+                set: { newValue in
+                    if newValue.isPremium, !iap.isPremium {
+                        showPaywall = true
+                        return
+                    }
+                    settings.colorTheme = newValue
+                }
+            )) {
+                ForEach(ColorTheme.allCases) { theme in
+                    Text(theme.displayName + (theme.isPremium && !iap.isPremium ? " 🔒" : ""))
+                        .tag(theme)
+                }
             }
             Picker("Yazı Boyutu", selection: $settings.fontScale) {
                 ForEach(FontScale.allCases) { Text($0.displayName).tag($0) }

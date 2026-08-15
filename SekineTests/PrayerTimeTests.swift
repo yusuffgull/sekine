@@ -86,6 +86,18 @@ final class PrayerTimeTests: XCTestCase {
         }
     }
 
+    func testSpiritualContentLoads() {
+        // Esmaül Hüsna: Allah + 99 isim = 100
+        XCTAssertEqual(SpiritualContent.esmaulHusna.count, 100)
+        XCTAssertEqual(SpiritualContent.esmaulHusna.first?.name, "Allah")
+        XCTAssertEqual(SpiritualContent.esmaulHusna.last?.name, "Es-Sabûr")
+        // Dualar dolu ve alanları eksiksiz
+        XCTAssertGreaterThanOrEqual(SpiritualContent.duas.count, 10)
+        XCTAssertTrue(SpiritualContent.duas.allSatisfy {
+            !$0.title.isEmpty && !$0.reading.isEmpty && !$0.meaning.isEmpty && !$0.source.isEmpty
+        })
+    }
+
     func testNextTimeReturnsUpcomingPrayer() {
         let schedule = makeSchedule()
         var cal = Calendar(identifier: .gregorian)

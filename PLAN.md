@@ -35,9 +35,14 @@
       Ayarlar Premium + Destekle bölümleri, PremiumProviding bağlandı. Yerel .storekit test config.
 - [x] Faz B: Tam ezan mekanizması — premium "Ezan" bildirim tonu (kilitli→paywall) +
       AdhanPlayer (in-app tam ezan) + Home "Ezanı Çal" (premium, ses varsa görünür).
-- [ ] Faz C: Premium temalar + alternatif uygulama ikonları (düşük efor).
-- [ ] Faz D: İçerik paketleri (tesbih, Esmaül Hüsna, dua/zikir).
-- [ ] Faz E: Çoklu konum, vakit-başına ses, premium widget, Apple Watch.
+- [x] Faz C1: Premium renk temaları (Zümrüt free + 4 premium, gating). C2 (alt ikonlar) →
+      tasarım assetı bekliyor (ertelendi).
+- [x] Faz D: Ücretsiz "Zikir" sekmesi — tesbih + Esmaül Hüsna (100) + dualar (12).
+- [x] Faz E1: Çoklu konum (premium yer imleri + hızlı geçiş; ücretsiz tek konum).
+- [ ] Faz E2: Vakit-başına özel ses (premium).
+- [ ] Faz E3: Premium widget stilleri (premium).
+- [ ] Faz E4: Apple Watch uygulaması (premium, büyük — ayrı oturum).
+- [ ] Faz C2: Alternatif app ikonları (tasarım assetı gerekince).
 - KULLANICI KAPILARI (kod dışı): (1) ASC Paid Applications Agreement (banka+vergi),
   (2) IAP satınca trader status'e geç, (3) IAP product'ları ASC'de oluştur (kodla eşleşen ID),
   (4) ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) lisanslı/orijinal eklenmeli.

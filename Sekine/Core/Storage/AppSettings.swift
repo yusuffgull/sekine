@@ -53,11 +53,13 @@ enum FontScale: String, CaseIterable, Identifiable {
 /// Seçili konum. Diyanet ilçe ID'si varsa vakitler birebir Diyanet resmi verisinden
 /// gelir; yoksa (ör. eşleşmeyen GPS) koordinatla Aladhan'a düşülür. lat/lng kıble ve
 /// fallback için her zaman tutulur.
-struct SavedLocation: Codable, Equatable {
+struct SavedLocation: Codable, Equatable, Identifiable {
     var name: String
     var latitude: Double
     var longitude: Double
     var diyanetDistrictID: String?
+
+    var id: String { "\(name)|\(latitude)|\(longitude)" }
 
     init(name: String, latitude: Double, longitude: Double, diyanetDistrictID: String? = nil) {
         self.name = name
@@ -75,8 +77,10 @@ final class AppSettings: ObservableObject {
     init() {
         self.defaults = UserDefaults(suiteName: AppGroup.identifier) ?? .standard
         self.location = Self.loadLocation(defaults)
+        self.savedLocations = Self.loadSavedLocations(defaults)
         self.disabledPrayers = Self.loadDisabledPrayers(defaults)
         self.theme = AppTheme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .system
+        self.colorTheme = ColorTheme(rawValue: defaults.string(forKey: Keys.colorTheme) ?? "") ?? .zumrut
         self.fontScale = FontScale(rawValue: defaults.string(forKey: Keys.fontScale) ?? "") ?? .normal
         self.notificationSound = defaults.string(forKey: Keys.sound) ?? NotificationSound.default.rawValue
         self.silentNotifications = defaults.bool(forKey: Keys.silent)
@@ -101,6 +105,21 @@ final class AppSettings: ObservableObject {
         }
     }
 
+    /// Premium: kayıtlı konum yer imleri (hızlı geçiş için). Ücretsizde kullanılmaz.
+    @Published var savedLocations: [SavedLocation] {
+        didSet {
+            if let data = try? JSONEncoder().encode(savedLocations) {
+                defaults.set(data, forKey: Keys.savedLocations)
+            }
+        }
+    }
+
+    /// Yer imi ekle (varsa tekrar eklemez).
+    func addSavedLocation(_ loc: SavedLocation) {
+        guard !savedLocations.contains(where: { $0.id == loc.id }) else { return }
+        savedLocations.append(loc)
+    }
+
     /// Bildirimi KAPALI olan vakitler (varsayılan: hepsi açık, güneş hariç).
     @Published var disabledPrayers: Set<Prayer> {
         didSet {
@@ -111,6 +130,11 @@ final class AppSettings: ObservableObject {
 
     @Published var theme: AppTheme {
         didSet { defaults.set(theme.rawValue, forKey: Keys.theme) }
+    }
+
+    /// Premium renk teması (accent/gold). app-group'a yazılır → Palette okur.
+    @Published var colorTheme: ColorTheme {
+        didSet { defaults.set(colorTheme.rawValue, forKey: Keys.colorTheme) }
     }
 
     @Published var fontScale: FontScale {
@@ -178,6 +202,13 @@ final class AppSettings: ObservableObject {
         return try? JSONDecoder().decode(SavedLocation.self, from: data)
     }
 
+    private static func loadSavedLocations(_ d: UserDefaults) -> [SavedLocation] {
+        guard let data = d.data(forKey: Keys.savedLocations),
+              let list = try? JSONDecoder().decode([SavedLocation].self, from: data)
+        else { return [] }
+        return list
+    }
+
     private static func loadDisabledPrayers(_ d: UserDefaults) -> Set<Prayer> {
         let raw = d.stringArray(forKey: Keys.disabledPrayers) ?? []
         return Set(raw.compactMap(Prayer.init(rawValue:)))
@@ -185,8 +216,10 @@ final class AppSettings: ObservableObject {
 
     private enum Keys {
         static let location = "settings.location"
+        static let savedLocations = "settings.savedLocations"
         static let disabledPrayers = "settings.disabledPrayers"
         static let theme = "settings.theme"
+        static let colorTheme = "settings.colorTheme"
         static let fontScale = "settings.fontScale"
         static let sound = "settings.sound"
         static let silent = "settings.silent"
