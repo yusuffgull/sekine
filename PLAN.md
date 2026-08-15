@@ -39,10 +39,10 @@
       tasarım assetı bekliyor (ertelendi).
 - [x] Faz D: Ücretsiz "Zikir" sekmesi — tesbih + Esmaül Hüsna (100) + dualar (12).
 - [x] Faz E1: Çoklu konum (premium yer imleri + hızlı geçiş; ücretsiz tek konum).
-- [ ] Faz E2: Vakit-başına özel ses (premium).
-- [ ] Faz E3: Premium widget stilleri (premium).
-- [ ] Faz E4: Apple Watch uygulaması (premium, büyük — ayrı oturum).
-- [ ] Faz C2: Alternatif app ikonları (tasarım assetı gerekince).
+- [x] Faz E2: Vakit-başına özel ses (premium).
+- [x] Faz E3: Premium widget accent'i (seçili temayı widget'a yansıtır).
+- [x] Faz C2: Alternatif app ikonu — Çınar'ın tasarımı ücretsiz seçenek (asset-katalog alt ikon).
+- [ ] Faz E4: Apple Watch uygulaması (premium, büyük — token limiti sıfırlanınca ayrı oturum).
 - KULLANICI KAPILARI (kod dışı): (1) ASC Paid Applications Agreement (banka+vergi),
   (2) IAP satınca trader status'e geç, (3) IAP product'ları ASC'de oluştur (kodla eşleşen ID),
   (4) ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) lisanslı/orijinal eklenmeli.
