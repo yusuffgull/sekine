@@ -7,6 +7,7 @@ import UserNotifications
 enum NotificationSound: String, CaseIterable, Identifiable {
     case `default`
     case chime
+    case ezan   // Premium: kısa ezan tonu (≤30 sn). Ses dosyası: ezan.caf.
 
     var id: String { rawValue }
 
@@ -14,6 +15,15 @@ enum NotificationSound: String, CaseIterable, Identifiable {
         switch self {
         case .default: return "Varsayılan"
         case .chime: return "Hafif Çıngırak"
+        case .ezan: return "Ezan"
+        }
+    }
+
+    /// Premium (ücretli) ses mi? Ücretsiz kullanıcı seçemez.
+    var isPremiumSound: Bool {
+        switch self {
+        case .default, .chime: return false
+        case .ezan: return true
         }
     }
 
@@ -22,6 +32,7 @@ enum NotificationSound: String, CaseIterable, Identifiable {
         switch self {
         case .default: return nil
         case .chime: return "chime.caf"
+        case .ezan: return "ezan.caf"
         }
     }
 

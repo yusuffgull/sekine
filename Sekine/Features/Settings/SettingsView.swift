@@ -128,10 +128,20 @@ struct SettingsView: View {
 
             Picker("Bildirim Sesi", selection: Binding(
                 get: { settings.notificationSound },
-                set: { settings.notificationSound = $0; reschedule() }
+                set: { newValue in
+                    // Premium ses ve kullanıcı premium değilse → paywall, seçimi uygulama.
+                    if let sound = NotificationSound(rawValue: newValue),
+                       sound.isPremiumSound, !iap.isPremium {
+                        showPaywall = true
+                        return
+                    }
+                    settings.notificationSound = newValue
+                    reschedule()
+                }
             )) {
                 ForEach(NotificationSound.allCases) { sound in
-                    Text(sound.displayName).tag(sound.rawValue)
+                    Text(sound.displayName + (sound.isPremiumSound && !iap.isPremium ? " 🔒" : ""))
+                        .tag(sound.rawValue)
                 }
             }
 
