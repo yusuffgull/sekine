@@ -37,6 +37,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sekineapp.sekine
         TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Cinar
         INFOPLIST_KEY_CFBundleDisplayName: Sekine
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait

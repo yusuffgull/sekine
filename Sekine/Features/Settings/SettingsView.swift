@@ -9,6 +9,7 @@ struct SettingsView: View {
 
     @State private var showSearch = false
     @State private var showPaywall = false
+    @State private var currentIcon = AppIconOption.current
 
     var body: some View {
         NavigationStack {
@@ -16,8 +17,10 @@ struct SettingsView: View {
                 premiumSection
                 locationSection
                 notificationSection
+                perPrayerSoundSection
                 extraRemindersSection
                 appearanceSection
+                appIconSection
                 widgetSection
                 donateSection
                 aboutSection
@@ -204,6 +207,40 @@ struct SettingsView: View {
         }
     }
 
+    // MARK: Vakit-başına Ses (premium)
+    @ViewBuilder private var perPrayerSoundSection: some View {
+        if iap.isPremium {
+            Section {
+                ForEach(Prayer.ordered.filter(\.isNotifiable)) { prayer in
+                    Picker(prayer.displayName, selection: Binding(
+                        get: { settings.perPrayerSounds[prayer]?.rawValue ?? "" },
+                        set: { newVal in
+                            if newVal.isEmpty { settings.perPrayerSounds[prayer] = nil }
+                            else { settings.perPrayerSounds[prayer] = NotificationSound(rawValue: newVal) }
+                            reschedule()
+                        }
+                    )) {
+                        Text("Genel").tag("")
+                        ForEach(NotificationSound.allCases) { s in
+                            Text(s.displayName).tag(s.rawValue)
+                        }
+                    }
+                }
+            } header: {
+                Text("Vakit-başına Ses")
+            } footer: {
+                Text("Her vakit için ayrı bildirim sesi seçebilirsiniz. 'Genel' seçiliyken yukarıdaki Bildirim Sesi kullanılır.")
+            }
+        } else {
+            Section {
+                Button { showPaywall = true } label: {
+                    Label("Vakit-başına özel ses (Premium)", systemImage: "bell.badge.fill")
+                        .foregroundStyle(Palette.gold)
+                }
+            }
+        }
+    }
+
     // MARK: Ek Hatırlatmalar
     private var extraRemindersSection: some View {
         Section {
@@ -246,6 +283,41 @@ struct SettingsView: View {
                 Text(String(format: "%02d:00", h)).tag(h)
             }
         }
+    }
+
+    // MARK: Uygulama İkonu
+    @ViewBuilder private var appIconSection: some View {
+        if UIApplication.shared.supportsAlternateIcons {
+            Section {
+                ForEach(AppIconOption.allCases) { option in
+                    Button {
+                        setAppIcon(option)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(option.displayName).foregroundStyle(Palette.textPrimary)
+                                if let sub = option.subtitle {
+                                    Text(sub).font(.footnote).foregroundStyle(Palette.textSecondary)
+                                }
+                            }
+                            Spacer()
+                            if currentIcon == option {
+                                Image(systemName: "checkmark").foregroundStyle(Palette.accent)
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text("Uygulama İkonu")
+            }
+        }
+    }
+
+    private func setAppIcon(_ option: AppIconOption) {
+        guard UIApplication.shared.supportsAlternateIcons,
+              option != currentIcon else { return }
+        UIApplication.shared.setAlternateIconName(option.alternateName) { _ in }
+        currentIcon = option
     }
 
     // MARK: Widget

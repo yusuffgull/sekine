@@ -83,6 +83,7 @@ final class AppSettings: ObservableObject {
         self.colorTheme = ColorTheme(rawValue: defaults.string(forKey: Keys.colorTheme) ?? "") ?? .zumrut
         self.fontScale = FontScale(rawValue: defaults.string(forKey: Keys.fontScale) ?? "") ?? .normal
         self.notificationSound = defaults.string(forKey: Keys.sound) ?? NotificationSound.default.rawValue
+        self.perPrayerSounds = Self.loadPerPrayerSounds(defaults)
         self.silentNotifications = defaults.bool(forKey: Keys.silent)
         self.breakThroughFocus = defaults.bool(forKey: Keys.breakThroughFocus)
         // Ek hatırlatmalar: anahtar yoksa AÇIK varsay (nazik içerik).
@@ -145,6 +146,20 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(notificationSound, forKey: Keys.sound) }
     }
 
+    /// Premium: vakit-başına özel bildirim sesi (yoksa genel `notificationSound`).
+    @Published var perPrayerSounds: [Prayer: NotificationSound] {
+        didSet {
+            let raw = Dictionary(uniqueKeysWithValues:
+                perPrayerSounds.map { ($0.key.rawValue, $0.value.rawValue) })
+            defaults.set(raw, forKey: Keys.perPrayerSounds)
+        }
+    }
+
+    /// Bir vakit için efektif ses (vakit-başına varsa o, yoksa genel).
+    func sound(for prayer: Prayer) -> NotificationSound {
+        perPrayerSounds[prayer] ?? (NotificationSound(rawValue: notificationSound) ?? .default)
+    }
+
     @Published var silentNotifications: Bool {
         didSet { defaults.set(silentNotifications, forKey: Keys.silent) }
     }
@@ -202,6 +217,15 @@ final class AppSettings: ObservableObject {
         return try? JSONDecoder().decode(SavedLocation.self, from: data)
     }
 
+    private static func loadPerPrayerSounds(_ d: UserDefaults) -> [Prayer: NotificationSound] {
+        let raw = d.dictionary(forKey: Keys.perPrayerSounds) as? [String: String] ?? [:]
+        var out: [Prayer: NotificationSound] = [:]
+        for (k, v) in raw {
+            if let p = Prayer(rawValue: k), let s = NotificationSound(rawValue: v) { out[p] = s }
+        }
+        return out
+    }
+
     private static func loadSavedLocations(_ d: UserDefaults) -> [SavedLocation] {
         guard let data = d.data(forKey: Keys.savedLocations),
               let list = try? JSONDecoder().decode([SavedLocation].self, from: data)
@@ -222,6 +246,7 @@ final class AppSettings: ObservableObject {
         static let colorTheme = "settings.colorTheme"
         static let fontScale = "settings.fontScale"
         static let sound = "settings.sound"
+        static let perPrayerSounds = "settings.perPrayerSounds"
         static let silent = "settings.silent"
         static let breakThroughFocus = "settings.breakThroughFocus"
         static let fridayReminder = "settings.fridayReminder"

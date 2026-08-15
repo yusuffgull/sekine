@@ -67,6 +67,7 @@ final class PrayerTimeStore: ObservableObject {
         let config = SchedulerConfig(
             enabledPrayers: enabled,
             sound: NotificationSound(rawValue: settings.notificationSound) ?? .default,
+            perPrayerSounds: settings.perPrayerSounds,
             silent: settings.silentNotifications,
             preReminderMinutes: settings.preReminderMinutes,
             breakThroughFocus: settings.breakThroughFocus,
