@@ -27,6 +27,8 @@ struct MainTabView: View {
                 .tabItem { Label("Aylık", systemImage: "calendar") }.tag("monthly")
             QiblaView()
                 .tabItem { Label("Kıble", systemImage: "location.north.line") }.tag("qibla")
+            SpiritualView()
+                .tabItem { Label("Zikir", systemImage: "circle.grid.cross") }.tag("spiritual")
             SettingsView()
                 .tabItem { Label("Ayarlar", systemImage: "gearshape") }.tag("settings")
         }
