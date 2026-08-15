@@ -51,6 +51,7 @@ targets:
           - processing
         BGTaskSchedulerPermittedIdentifiers:
           - com.sekineapp.sekine.refresh
+          - com.sekineapp.sekine.nightly
         CFBundleLocalizations:
           - tr
           - en

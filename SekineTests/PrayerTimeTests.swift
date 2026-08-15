@@ -48,6 +48,27 @@ final class PrayerTimeTests: XCTestCase {
         XCTAssertEqual(Set(result.map(\.id)).count, result.count, "id çakışması olmamalı")
     }
 
+    func testExtraNotificationsContent() {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "Europe/Istanbul")!
+        let d = cal.date(from: DateComponents(
+            timeZone: cal.timeZone, year: 2026, month: 8, day: 25))!
+
+        // dateKey biçimi
+        XCTAssertEqual(ExtraNotifications.dateKey(d, cal), "2026-08-25")
+        // Dini gün eşleşmesi (bundle: Mevlid 2026-08-25)
+        XCTAssertEqual(ExtraNotifications.religiousDay(on: d, calendar: cal)?.name, "Mevlid Kandili")
+        // Günün ayeti dolu geliyor
+        XCTAssertNotNil(ExtraNotifications.verse(on: d, calendar: cal))
+        // Ardışık günlerde içerik döner (liste >1)
+        if ExtraNotifications.dailyVerses.count > 1 {
+            let next = cal.date(byAdding: .day, value: 1, to: d)!
+            XCTAssertNotEqual(
+                ExtraNotifications.verse(on: d, calendar: cal),
+                ExtraNotifications.verse(on: next, calendar: cal))
+        }
+    }
+
     func testNextTimeReturnsUpcomingPrayer() {
         let schedule = makeSchedule()
         var cal = Calendar(identifier: .gregorian)

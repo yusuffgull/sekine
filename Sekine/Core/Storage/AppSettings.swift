@@ -81,6 +81,12 @@ final class AppSettings: ObservableObject {
         self.notificationSound = defaults.string(forKey: Keys.sound) ?? NotificationSound.default.rawValue
         self.silentNotifications = defaults.bool(forKey: Keys.silent)
         self.breakThroughFocus = defaults.bool(forKey: Keys.breakThroughFocus)
+        // Ek hatırlatmalar: anahtar yoksa AÇIK varsay (nazik içerik).
+        self.fridayReminder = defaults.object(forKey: Keys.fridayReminder) as? Bool ?? true
+        self.specialDayGreetings = defaults.object(forKey: Keys.specialDayGreetings) as? Bool ?? true
+        self.dailyVerse = defaults.object(forKey: Keys.dailyVerse) as? Bool ?? true
+        self.dailyVerseHour = defaults.object(forKey: Keys.dailyVerseHour) as? Int ?? 8
+        self.fridayReminderHour = defaults.object(forKey: Keys.fridayReminderHour) as? Int ?? 9
         self.hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarded)
         self.preReminderMinutes = defaults.object(forKey: Keys.preReminder) as? Int ?? 0
     }
@@ -124,6 +130,29 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(breakThroughFocus, forKey: Keys.breakThroughFocus) }
     }
 
+    // MARK: Ek hatırlatmalar (nazik içerik → varsayılan AÇIK, kullanıcı kapatabilir)
+
+    /// Cuma günü hatırlatması (Kehf/salavat).
+    @Published var fridayReminder: Bool {
+        didSet { defaults.set(fridayReminder, forKey: Keys.fridayReminder) }
+    }
+    /// Kandil & bayram tebrikleri.
+    @Published var specialDayGreetings: Bool {
+        didSet { defaults.set(specialDayGreetings, forKey: Keys.specialDayGreetings) }
+    }
+    /// Günlük ayet/dua bildirimi.
+    @Published var dailyVerse: Bool {
+        didSet { defaults.set(dailyVerse, forKey: Keys.dailyVerse) }
+    }
+    /// Günlük ayet/dua bildiriminin saati (0–23).
+    @Published var dailyVerseHour: Int {
+        didSet { defaults.set(dailyVerseHour, forKey: Keys.dailyVerseHour) }
+    }
+    /// Cuma hatırlatmasının saati (0–23).
+    @Published var fridayReminderHour: Int {
+        didSet { defaults.set(fridayReminderHour, forKey: Keys.fridayReminderHour) }
+    }
+
     /// Vakitten kaç dakika önce hatırlatma (0 = yalnızca vakit girişinde).
     @Published var preReminderMinutes: Int {
         didSet { defaults.set(preReminderMinutes, forKey: Keys.preReminder) }
@@ -162,6 +191,11 @@ final class AppSettings: ObservableObject {
         static let sound = "settings.sound"
         static let silent = "settings.silent"
         static let breakThroughFocus = "settings.breakThroughFocus"
+        static let fridayReminder = "settings.fridayReminder"
+        static let specialDayGreetings = "settings.specialDayGreetings"
+        static let dailyVerse = "settings.dailyVerse"
+        static let dailyVerseHour = "settings.dailyVerseHour"
+        static let fridayReminderHour = "settings.fridayReminderHour"
         static let preReminder = "settings.preReminder"
         static let onboarded = "settings.onboarded"
     }
