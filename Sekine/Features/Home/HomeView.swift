@@ -3,6 +3,10 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var store: PrayerTimeStore
+    @EnvironmentObject private var iap: Store
+    @EnvironmentObject private var adhan: AdhanPlayer
+
+    @State private var showPaywall = false
 
     var body: some View {
         ZStack {
@@ -26,6 +30,7 @@ struct HomeView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
+                    adhanButton
                 }
                 .padding()
             }
@@ -35,6 +40,7 @@ struct HomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
     }
 
     private var header: some View {
@@ -54,6 +60,25 @@ struct HomeView: View {
             }
         }
         .padding(.top, 8)
+    }
+
+    /// Tam ezan çal (premium). Ezan ses dosyası bundle'da yoksa hiç gösterilmez.
+    @ViewBuilder private var adhanButton: some View {
+        if AdhanPlayer.isAvailable {
+            Button {
+                if iap.isPremium {
+                    if adhan.isPlaying { adhan.stop() } else { adhan.play() }
+                } else {
+                    showPaywall = true
+                }
+            } label: {
+                Label(adhan.isPlaying ? "Ezanı Durdur" : "Ezanı Çal",
+                      systemImage: adhan.isPlaying ? "stop.circle.fill" : "play.circle.fill")
+                    .font(SekineFont.row(settings.fontScale))
+                    .foregroundStyle(iap.isPremium ? Palette.accent : Palette.gold)
+            }
+            .padding(.top, 4)
+        }
     }
 
     // MARK: Sonraki vakit + canlı geri sayım

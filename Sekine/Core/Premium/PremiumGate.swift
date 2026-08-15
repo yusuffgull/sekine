@@ -1,13 +1,13 @@
 import Foundation
 
-/// Ücretli özellik kapısı. v1: her zaman false (uygulama tamamen ücretsiz + reklamsız).
-/// v1.1: StoreKit 2 aboneliği ile "tam ezan" (peşpeşe bildirim) açılır — bu protokol
-/// uygulamanın geri kalanına dokunmadan gerçek bir mağaza uygulamasıyla değiştirilir.
-protocol PremiumProviding: Sendable {
+/// Ücretli özellik kapısı. Gerçek uygulaması `Store` (StoreKit 2). Bu protokol,
+/// önizleme/test'te sahte bir kapı (FreeTierGate) enjekte edebilmek için tutulur.
+@MainActor
+protocol PremiumProviding {
     var isPremium: Bool { get }
 }
 
-/// v1 varsayılanı.
+/// Önizleme/test varsayılanı (her zaman ücretsiz).
 struct FreeTierGate: PremiumProviding {
     var isPremium: Bool { false }
 }
