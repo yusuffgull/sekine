@@ -68,6 +68,7 @@ struct DiyanetVakit: Decodable {
     let Aksam: String
     let Yatsi: String
     let HicriTarihUzun: String?  // "26 Safer 1448"
+    let HicriTarihKisa: String?  // "26.2.1448" (gün.ay.yıl)
     let KibleSaati: String?      // "HH:mm" — güneş-kıble hizalanma anı
 
     func toPrayerDay(calendar cal: Calendar, timeZone tz: TimeZone) -> PrayerDay? {
@@ -95,10 +96,21 @@ struct DiyanetVakit: Decodable {
               let dayStart = cal.date(from: DateComponents(
                   timeZone: tz, year: yyyy, month: mm, day: dd, hour: 0, minute: 0))
         else { return nil }
+        // "26.2.1448" → ay=2, gün=26
+        var hMonth: Int?
+        var hDay: Int?
+        if let parts = HicriTarihKisa?.split(separator: ".").compactMap({ Int($0) }),
+           parts.count == 3 {
+            hDay = parts[0]
+            hMonth = parts[1]
+        }
+
         return PrayerDay(
             dayStart: dayStart,
             times: times.sorted { $0.date < $1.date },
             hicriDate: HicriTarihUzun,
+            hicriMonth: hMonth,
+            hicriDay: hDay,
             qiblaTime: KibleSaati.flatMap(makeDate))
     }
 }

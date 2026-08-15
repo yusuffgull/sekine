@@ -14,14 +14,20 @@ struct PrayerDay: Codable, Hashable, Identifiable, Sendable {
     let times: [PrayerTime]
     /// Diyanet resmi Hicri tarihi, ör. "26 Safer 1448" (yalnızca Diyanet kaynağında).
     let hicriDate: String?
+    /// Hicri ay (1–12) ve gün (1–30) — dini günleri tespit etmek için (Diyanet kaynağı).
+    let hicriMonth: Int?
+    let hicriDay: Int?
     /// Güneş-kıble hizalanma anı (Diyanet "Kıble Saati"); kıbleyi güneşle bulmak için.
     let qiblaTime: Date?
 
     // Optional alanlar → eski cache (bu alanlar yokken) geriye dönük uyumlu decode olur.
-    init(dayStart: Date, times: [PrayerTime], hicriDate: String? = nil, qiblaTime: Date? = nil) {
+    init(dayStart: Date, times: [PrayerTime], hicriDate: String? = nil,
+         hicriMonth: Int? = nil, hicriDay: Int? = nil, qiblaTime: Date? = nil) {
         self.dayStart = dayStart
         self.times = times
         self.hicriDate = hicriDate
+        self.hicriMonth = hicriMonth
+        self.hicriDay = hicriDay
         self.qiblaTime = qiblaTime
     }
 

@@ -22,4 +22,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         await BackgroundRefresh.rescheduleFromCache()
         return [.banner, .sound, .list]
     }
+
+    /// Kullanıcı bir bildirime dokunduğunda da pencereyi tazele (ek tetikleyici).
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        await BackgroundRefresh.rescheduleFromCache()
+    }
 }

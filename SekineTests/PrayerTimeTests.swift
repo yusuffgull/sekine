@@ -48,6 +48,44 @@ final class PrayerTimeTests: XCTestCase {
         XCTAssertEqual(Set(result.map(\.id)).count, result.count, "id çakışması olmamalı")
     }
 
+    func testExtraNotificationsContent() {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "Europe/Istanbul")!
+        let d = cal.date(from: DateComponents(
+            timeZone: cal.timeZone, year: 2026, month: 8, day: 25))!
+
+        // dateKey biçimi
+        XCTAssertEqual(ExtraNotifications.dateKey(d, cal), "2026-08-25")
+
+        // Sabit Hicri eşleşme: Mevlid = 12 Rebiülevvel (ay 3, gün 12)
+        let mevlid = ExtraNotifications.holyDay(hijriMonth: 3, hijriDay: 12, weekday: nil)
+        XCTAssertEqual(mevlid?.name, "Mevlid Kandili")
+        XCTAssertEqual(mevlid?.isEve, true)
+
+        // Regaib: Recep (7) ilk Cuması → gün ≤ 7 ve Cuma (weekday 6)
+        XCTAssertEqual(
+            ExtraNotifications.holyDay(hijriMonth: 7, hijriDay: 3, weekday: 6)?.name,
+            "Regaib Kandili")
+        // Recep 3 ama Perşembe (weekday 5) → Regaib değil
+        XCTAssertNil(ExtraNotifications.holyDay(hijriMonth: 7, hijriDay: 3, weekday: 5))
+        // Bayram gündüz: Kurban = 10 Zilhicce (ay 12, gün 10), eve=false
+        XCTAssertEqual(ExtraNotifications.holyDay(hijriMonth: 12, hijriDay: 10, weekday: nil)?.isEve, false)
+
+        // Özel günde temalı ayet gösterilir
+        XCTAssertEqual(
+            ExtraNotifications.verse(on: d, calendar: cal, holyDay: mevlid)?.source,
+            "Enbiyâ 21/107")
+        // Normal günde (holyDay nil) rotasyon dolu gelir
+        XCTAssertNotNil(ExtraNotifications.verse(on: d, calendar: cal, holyDay: nil))
+        // Ardışık günlerde rotasyon değişir (liste >1)
+        if ExtraNotifications.dailyVerses.count > 1 {
+            let next = cal.date(byAdding: .day, value: 1, to: d)!
+            XCTAssertNotEqual(
+                ExtraNotifications.verse(on: d, calendar: cal, holyDay: nil),
+                ExtraNotifications.verse(on: next, calendar: cal, holyDay: nil))
+        }
+    }
+
     func testNextTimeReturnsUpcomingPrayer() {
         let schedule = makeSchedule()
         var cal = Calendar(identifier: .gregorian)
@@ -113,7 +151,7 @@ final class PrayerTimeTests: XCTestCase {
             MiladiTarihKisa: "01.08.2026",
             Imsak: "04:08", Gunes: "05:53", Ogle: "13:16",
             Ikindi: "17:10", Aksam: "20:28", Yatsi: "22:05",
-            HicriTarihUzun: "18 Safer 1448", KibleSaati: "12:17")
+            HicriTarihUzun: "18 Safer 1448", HicriTarihKisa: "18.2.1448", KibleSaati: "12:17")
         let day = vakit.toPrayerDay(calendar: cal, timeZone: tz)
         XCTAssertNotNil(day)
         XCTAssertEqual(day?.times.count, 6)
@@ -125,6 +163,8 @@ final class PrayerTimeTests: XCTestCase {
         XCTAssertLessThan(day!.time(for: .fajr)!, day!.time(for: .sunrise)!)
         // Hicri tarih + kıble saati ayrıştırıldı mı
         XCTAssertEqual(day?.hicriDate, "18 Safer 1448")
+        XCTAssertEqual(day?.hicriMonth, 2)
+        XCTAssertEqual(day?.hicriDay, 18)
         let qc = cal.dateComponents([.hour, .minute], from: day?.qiblaTime ?? Date())
         XCTAssertEqual(qc.hour, 12)
         XCTAssertEqual(qc.minute, 17)

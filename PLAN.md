@@ -30,6 +30,18 @@
 - [x] İl/ilçe: 434 Türkçe ad düzeltmesi + İstanbul eksik ilçeleri (bundle override)
 - [x] Versiyon 1.1 (4) bump, push, Archive → Submit for Review (kullanıcı)
 
+## Faz 1.3 — Bildirim güvenilirliği + yeni türler (ücretsiz) — KOD TAMAM
+- [x] Güvenilirlik: iki-geçişli bütçe (ana vakit ön-hatırlatmadan önce), didReceive
+      tazelemesi, gece BGProcessingTask.
+- [x] Cuma hatırlatması (haftalık repeating), varsayılan AÇIK.
+- [x] Kandil & bayram tebrikleri — Diyanet Hicri feed'inden TÜRETİLİR (HolyDays.json,
+      Hicri-ay/gün eşleşmesi; Regaib = Recep ilk Cuma). Yıllık bakım yok. Varsayılan AÇIK.
+- [x] Günlük ayet/dua — özel günde temalı ayet, normalde 40'lık anlamlı rotasyon
+      (DailyVerses.json). Varsayılan AÇIK. Ayarlarda saat seçilebilir.
+- [x] Ayarlar "Ek Hatırlatmalar" bölümü (toggle + saat picker). Odak-delme opt-in kalır.
+- Not: bildirim içeriği/idrak-zamanı (kandil eve, bayram sabah) cihazda gözlemlenip
+  ince ayar yapılabilir; içerik JSON'ları kolayca güncellenir.
+
 ## Faz 1.2 — Güvenilirlik & tamamlama (ücretsiz) — KOD TAMAM (cihaz testi bekliyor)
 - [x] **Time-Sensitive Notifications entitlement** + **"Odak modunda da uyar" opt-in toggle**
       (Ayarlar). Varsayılan KAPALI → kullanıcı istemezse Odak/Uyku'yu delmez. Onay verirse

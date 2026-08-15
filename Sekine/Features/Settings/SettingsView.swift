@@ -13,6 +13,7 @@ struct SettingsView: View {
             Form {
                 locationSection
                 notificationSection
+                extraRemindersSection
                 appearanceSection
                 widgetSection
                 aboutSection
@@ -97,6 +98,50 @@ struct SettingsView: View {
             Text("Bildirimler")
         } footer: {
             Text("\"Odak modunda da uyar\" açıkken bildirimler Rahatsız Etmeyin, Uyku ve Odak modlarını delerek ulaşır; kapalıyken bu modlarda sessize alınır. Vakit bildirimleri çevrimdışı çalışır ve uygulamayı açmasanız da düzenli olarak yenilenir. iOS bildirim sesi 30 saniye ile sınırlıdır; tam ezan yakında eklenecektir.")
+        }
+    }
+
+    // MARK: Ek Hatırlatmalar
+    private var extraRemindersSection: some View {
+        Section {
+            Toggle("Cuma hatırlatması", isOn: Binding(
+                get: { settings.fridayReminder },
+                set: { settings.fridayReminder = $0; reschedule() }
+            ))
+            if settings.fridayReminder {
+                hourPicker("Cuma saati", selection: Binding(
+                    get: { settings.fridayReminderHour },
+                    set: { settings.fridayReminderHour = $0; reschedule() }
+                ))
+            }
+
+            Toggle("Kandil & bayram tebrikleri", isOn: Binding(
+                get: { settings.specialDayGreetings },
+                set: { settings.specialDayGreetings = $0; reschedule() }
+            ))
+
+            Toggle("Günlük ayet/dua", isOn: Binding(
+                get: { settings.dailyVerse },
+                set: { settings.dailyVerse = $0; reschedule() }
+            ))
+            if settings.dailyVerse {
+                hourPicker("Ayet/dua saati", selection: Binding(
+                    get: { settings.dailyVerseHour },
+                    set: { settings.dailyVerseHour = $0; reschedule() }
+                ))
+            }
+        } header: {
+            Text("Ek Hatırlatmalar")
+        } footer: {
+            Text("Cuma hatırlatması, kandil-bayram tebrikleri ve günlük ayet/dua bildirimleri. İstemediğinizi buradan kapatabilirsiniz.")
+        }
+    }
+
+    private func hourPicker(_ title: String, selection: Binding<Int>) -> some View {
+        Picker(title, selection: selection) {
+            ForEach(0..<24, id: \.self) { h in
+                Text(String(format: "%02d:00", h)).tag(h)
+            }
         }
     }
 
