@@ -5,6 +5,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.sekineapp.sekine.refresh</string>
+		<string>com.sekineapp.sekine.nightly</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>tr</string>

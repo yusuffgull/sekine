@@ -1,35 +1,56 @@
 import Foundation
 
-/// Diyanet resmi dini günü (idrak günü). `date` = yyyy-MM-dd (o günün akşamına tebrik kurulur).
-struct ReligiousDay: Decodable, Hashable {
-    let date: String
+/// Sabit Hicri tarihli dini gün. Diyanet feed'inin Hicri ayı+günüyle eşleşir → yıllık
+/// bakım/güncelleme gerekmez, her zaman Diyanet takvimiyle birebir.
+/// `hijriDay == 0` = Regaib işareti (Recep'in ilk Cuması, koda gömülü kuralla).
+/// `eve == true` kandil (idrak akşamı), `false` bayram/gündüz. `verse` varsa o gün
+/// "günün ayeti" bu olur (bağlam duyarlı).
+struct HolyDay: Decodable, Hashable {
+    let hijriMonth: Int
+    let hijriDay: Int
     let name: String
     let greeting: String
+    let eve: Bool?
+    let verse: String?
+    let verseSource: String?
+
+    var isEve: Bool { eve ?? true }
 }
 
-/// Günlük ayet/dua içeriği (Diyanet meali / bilinen kısa dua). `source` = referans.
+/// Normal günlerde gösterilecek anlamlı ayet/dua (rotasyon).
 struct DailyVerse: Decodable, Hashable {
     let text: String
     let source: String
 }
 
-/// Ek bildirim içeriğinin bundle'lı kaynağı (dini günler + günlük ayet/dua).
-/// Saf/ağsız → hem app hem widget/BG tarafında, hem de birim testinde kullanılabilir.
+/// Ek bildirim içeriğinin bundle'lı, saf (ağsız) kaynağı.
 enum ExtraNotifications {
-    static let religiousDays: [String: ReligiousDay] = {
-        let list: [ReligiousDay] = load("ReligiousDays")
-        return Dictionary(list.map { ($0.date, $0) }, uniquingKeysWith: { a, _ in a })
-    }()
+    /// Recep = 7. Hicri ay (Regaib bu ayın ilk Cumasında).
+    static let recepMonth = 7
 
+    static let holyDays: [HolyDay] = load("HolyDays")
     static let dailyVerses: [DailyVerse] = load("DailyVerses")
 
-    /// Verilen güne denk gelen dini gün (varsa).
-    static func religiousDay(on date: Date, calendar cal: Calendar) -> ReligiousDay? {
-        religiousDays[dateKey(date, cal)]
+    /// Verilen günün Hicri ay/gün (+ Regaib için hafta günü) bilgisiyle dini günü döner.
+    /// weekday: Gregoryen (Pazar=1 … Cuma=6).
+    static func holyDay(hijriMonth month: Int?, hijriDay day: Int?, weekday: Int?) -> HolyDay? {
+        guard let month, let day else { return nil }
+        if let fixed = holyDays.first(where: { $0.hijriMonth == month && $0.hijriDay == day }) {
+            return fixed
+        }
+        // Regaib: Recep'in ilk Cuması (gün ≤ 7 ve Cuma).
+        if month == recepMonth, day <= 7, weekday == 6,
+           let regaib = holyDays.first(where: { $0.hijriMonth == recepMonth && $0.hijriDay == 0 }) {
+            return regaib
+        }
+        return nil
     }
 
-    /// Günün ayet/dua içeriği (yıl-günü index'iyle döner → her gün değişir).
-    static func verse(on date: Date, calendar cal: Calendar) -> DailyVerse? {
+    /// Günün ayeti: özel günse o güne temalı ayet; değilse anlamlı rotasyon (yıl-günü index'i).
+    static func verse(on date: Date, calendar cal: Calendar, holyDay: HolyDay?) -> DailyVerse? {
+        if let holyDay, let text = holyDay.verse, let source = holyDay.verseSource {
+            return DailyVerse(text: text, source: source)
+        }
         guard !dailyVerses.isEmpty else { return nil }
         let dayOfYear = cal.ordinality(of: .day, in: .year, for: date) ?? 1
         return dailyVerses[(dayOfYear - 1) % dailyVerses.count]

@@ -160,23 +160,28 @@ struct RollingScheduler {
         return UNNotificationRequest(identifier: "friday-weekly", content: content, trigger: trigger)
     }
 
-    /// Penceredeki dini günler için idrak akşamına tebrik bildirimi.
+    /// Penceredeki dini günler (Diyanet Hicri tarihinden tespit) için tebrik bildirimi.
+    /// Kandiller idrak akşamına (idrak gününün eve'si), bayram/gündüz olanlar sabaha kurulur.
     private func religiousRequests(
         from schedule: PrayerSchedule, now: Date, cal: Calendar, config: SchedulerConfig
     ) -> [UNNotificationRequest] {
         var out: [UNNotificationRequest] = []
         for day in schedule.days {
-            guard let special = ExtraNotifications.religiousDay(on: day.dayStart, calendar: cal)
+            let weekday = cal.component(.weekday, from: day.dayStart)
+            guard let holy = ExtraNotifications.holyDay(
+                hijriMonth: day.hicriMonth, hijriDay: day.hicriDay, weekday: weekday)
             else { continue }
-            // İdrak akşamı: o günün akşam (maghrib) vakti; yoksa 20:00.
-            let fire = day.time(for: .maghrib)
-                ?? cal.date(bySettingHour: 20, minute: 0, second: 0, of: day.dayStart)
-                ?? day.dayStart
-            guard fire > now else { continue }
+
+            // Kandil "gece": idrak akşamı = eşleşen günün bir önceki akşamı (~20:00),
+            //   çünkü Hicri gün maghrib'de başlar. Bayram/gündüz: o günün sabahı (~08:00).
+            let fire: Date? = holy.isEve
+                ? cal.date(byAdding: .hour, value: -4, to: day.dayStart)
+                : cal.date(byAdding: .hour, value: 8, to: day.dayStart)
+            guard let fire, fire > now else { continue }
 
             let content = UNMutableNotificationContent()
-            content.title = special.name
-            content.body = special.greeting
+            content.title = holy.name
+            content.body = holy.greeting
             if let sound = config.sound.unSound(silent: config.silent) {
                 content.sound = sound
             }
@@ -185,12 +190,14 @@ struct RollingScheduler {
             let comps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: fire)
             let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
             out.append(UNNotificationRequest(
-                identifier: "religious-\(special.date)", content: content, trigger: trigger))
+                identifier: "holy-\(ExtraNotifications.dateKey(day.dayStart, cal))",
+                content: content, trigger: trigger))
         }
         return out
     }
 
     /// Sonraki `limit` gün için, belirlenen saatte günlük ayet/dua bildirimi.
+    /// Özel günse o güne temalı ayet, değilse anlamlı rotasyon gösterilir.
     private func verseRequests(
         from schedule: PrayerSchedule, now: Date, cal: Calendar,
         config: SchedulerConfig, limit: Int
@@ -198,9 +205,12 @@ struct RollingScheduler {
         var out: [UNNotificationRequest] = []
         for day in schedule.days.sorted(by: { $0.dayStart < $1.dayStart }) {
             if out.count >= limit { break }
+            let weekday = cal.component(.weekday, from: day.dayStart)
+            let holy = ExtraNotifications.holyDay(
+                hijriMonth: day.hicriMonth, hijriDay: day.hicriDay, weekday: weekday)
             guard let fire = cal.date(bySettingHour: config.dailyVerseHour, minute: 0, second: 0,
                                       of: day.dayStart), fire > now,
-                  let verse = ExtraNotifications.verse(on: day.dayStart, calendar: cal)
+                  let verse = ExtraNotifications.verse(on: day.dayStart, calendar: cal, holyDay: holy)
             else { continue }
 
             let content = UNMutableNotificationContent()

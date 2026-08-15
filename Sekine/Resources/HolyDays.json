@@ -1,0 +1,45 @@
+[
+  { "hijriMonth": 1, "hijriDay": 1, "eve": false, "name": "Hicri Yılbaşı",
+    "greeting": "Yeni hicri yılınız hayırlara vesile olsun.",
+    "verse": "Şüphesiz Allah katında ayların sayısı, gökleri ve yeri yarattığı günden beri on ikidir.", "verseSource": "Tevbe 9/36" },
+
+  { "hijriMonth": 1, "hijriDay": 10, "eve": false, "name": "Aşure Günü",
+    "greeting": "Aşure gününüz mübarek olsun.",
+    "verse": "Sonunda 'Ey Nûh! Bizden bir esenlik ve bereketle in!' denildi.", "verseSource": "Hûd 11/48" },
+
+  { "hijriMonth": 3, "hijriDay": 12, "eve": true, "name": "Mevlid Kandili",
+    "greeting": "Mevlid Kandiliniz mübarek olsun. Peygamber Efendimiz'e salât ve selam olsun.",
+    "verse": "Biz seni ancak âlemlere rahmet olarak gönderdik.", "verseSource": "Enbiyâ 21/107" },
+
+  { "hijriMonth": 7, "hijriDay": 0, "eve": true, "name": "Regaib Kandili",
+    "greeting": "Regaib Kandiliniz mübarek olsun. Üç aylar hayırlara vesile olsun.",
+    "verse": "Bana dua edin, duanıza karşılık vereyim.", "verseSource": "Mü'min 40/60" },
+
+  { "hijriMonth": 7, "hijriDay": 27, "eve": true, "name": "Miraç Kandili",
+    "greeting": "Miraç Kandiliniz mübarek olsun.",
+    "verse": "Kulunu bir gece Mescid-i Harâm'dan Mescid-i Aksâ'ya götüren Allah'ın şânı ne yücedir!", "verseSource": "İsrâ 17/1" },
+
+  { "hijriMonth": 8, "hijriDay": 15, "eve": true, "name": "Berat Kandili",
+    "greeting": "Berat Kandiliniz mübarek olsun. Rabbimiz günahlarımızı bağışlasın.",
+    "verse": "Biz onu mübarek bir gecede indirdik. Şüphesiz biz insanları uyarmaktayız.", "verseSource": "Duhân 44/3" },
+
+  { "hijriMonth": 9, "hijriDay": 1, "eve": true, "name": "Ramazan Başlıyor",
+    "greeting": "Ramazan-ı Şerif'iniz mübarek olsun.",
+    "verse": "Ramazan ayı, insanlara yol gösterici olarak Kur'an'ın indirildiği aydır.", "verseSource": "Bakara 2/185" },
+
+  { "hijriMonth": 9, "hijriDay": 27, "eve": true, "name": "Kadir Gecesi",
+    "greeting": "Kadir Geceniz mübarek olsun. Bu gece bin aydan hayırlıdır.",
+    "verse": "Kadir gecesi bin aydan daha hayırlıdır.", "verseSource": "Kadr 97/3" },
+
+  { "hijriMonth": 10, "hijriDay": 1, "eve": false, "name": "Ramazan Bayramı",
+    "greeting": "Ramazan Bayramınız mübarek olsun.",
+    "verse": "Size doğru yolu göstermesine karşılık Allah'ı yüceltmeniz ve şükretmeniz için.", "verseSource": "Bakara 2/185" },
+
+  { "hijriMonth": 12, "hijriDay": 9, "eve": false, "name": "Arefe Günü",
+    "greeting": "Arefe gününüz mübarek olsun.",
+    "verse": "Bugün sizin için dininizi kemale erdirdim.", "verseSource": "Mâide 5/3" },
+
+  { "hijriMonth": 12, "hijriDay": 10, "eve": false, "name": "Kurban Bayramı",
+    "greeting": "Kurban Bayramınız mübarek olsun.",
+    "verse": "Rabbin için namaz kıl ve kurban kes.", "verseSource": "Kevser 108/2" }
+]
