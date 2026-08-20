@@ -13,9 +13,8 @@ tasarım ilkeleri hâline geldi:
 - **Sıfır reklam, sıfır takip.** Hiçbir reklam/analytics SDK'sı yok.
 - **%100 çevrimdışı & gizli.** Vakitler ilk kurulumda bir kez indirilip cihazda
   saklanır; konumunuz cihazdan çıkmaz.
-- **Diyanet uyumlu.** Vakit kaynağı Aladhan `method=13` (Diyanet); mimari
-  kaynak-bağımsızdır, gerekirse Diyanet resmi API'sine geçilebilir (bkz.
-  `docs/decisions.md`).
+- **Diyanet uyumlu.** Vakit kaynağı birebir Diyanet (ezanvakti/namazvakti.diyanet.gov.tr
+  aynası), yedek Aladhan `method=13`; mimari kaynak-bağımsızdır (bkz. `docs/decisions.md`).
 - **Widget.** Ana ekranda sonraki vakit + geri sayım.
 
 ## Teknoloji
@@ -42,11 +41,10 @@ xcodebuild -project Sekine.xcodeproj -scheme Sekine \
 
 ## Yol Haritası
 
-- **v1** (bu sürüm): vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget.
-- **v1.1**: StoreKit 2 aboneliği → tam ezan (peşpeşe bildirim). Mimari hazır
-  (`Core/Premium/PremiumGate.swift`).
-- **Faz 2**: Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini bulmacalar,
-  Apple Watch.
+- **v1** (yayında): vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget.
+- **Faz 2** (neredeyse tamam): Ömürlük Premium + Bağış (StoreKit 2) — tam ezan, premium
+  temalar, çoklu konum; ücretsiz Zikir sekmesi; Apple Watch companion app.
+- **Faz 3**: Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini içerik.
 
 ## Destek & Gizlilik
 

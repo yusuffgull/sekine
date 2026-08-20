@@ -37,7 +37,11 @@ ve gelecek ilk 60'ı yeniden kurar. Tetikleyiciler: app foreground (`scenePhase`
 cache'ten okur; ağ gerektirmez.
 
 ## Genişleme noktaları
-- **Diyanet resmi kaynağı:** yeni bir `PrayerTimeProvider` uygulaması + `PrayerTimeStore`'da
-  `primary`'yi değiştir. Başka hiçbir yer değişmez.
-- **Abonelik (v1.1):** `PremiumProviding`'i StoreKit 2 ile uygula; tam ezan zamanlamasını
-  `RollingScheduler`'a peşpeşe bildirim olarak ekle.
+- **Vakit kaynağı değişimi:** yeni bir `PrayerTimeProvider` uygulaması + `PrayerTimeStore`'da
+  `primary`'yi değiştir. Başka hiçbir yer değişmez. (Zincir bugün: Diyanet → Aladhan →
+  lokal `adhan-swift` fallback.)
+- **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı (ömürlük
+  premium + bağış, abonelik değil); tam ezan `RollingScheduler`'a bildirim olarak eklendi.
+- **Apple Watch (Faz E4, tamamlandı):** `SekineWatch` hedefi, Core katmanını değişikliksiz
+  kullanıyor; iPhone↔Watch senkronizasyonu `WatchConnectivity` ile (`WatchSessionManager`,
+  her iki tarafta).
