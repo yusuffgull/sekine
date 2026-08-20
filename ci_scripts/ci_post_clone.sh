@@ -8,3 +8,5 @@ if ! command -v xcodegen >/dev/null 2>&1; then
 fi
 
 xcodegen generate
+
+xcodebuild -resolvePackageDependencies -project Sekine.xcodeproj -scheme Sekine
