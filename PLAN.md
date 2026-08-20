@@ -20,6 +20,9 @@
 - Monthly/Qibla/Settings ekranları derlendi ama simülatörde görsel doğrulanmadı (tab tap otomasyonu yok).
 - Qibla pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
 - Bildirim güvenilirliği gerçek cihazda uzun süreli test edilmeli (BG refresh davranışı).
+- [x] Xcode Cloud: `ci_scripts/ci_post_clone.sh` (xcodegen generate + resolve + defaults
+      fix) eklendi (20 Ağu 2026, bkz. `docs/decisions.md`). `project.yml`/`ci_scripts/`
+      değişen HER push'tan önce `./scripts/verify-xcode-cloud.sh` çalıştırılmalı.
 
 ## v1.1 — yayın sonrası UX düzeltmeleri (14 Ağu 2026, REVIEW'DA)
 - [x] Bildirim metinleri sadeleştirildi ("Akşam vakti girdi.", temenni yok)

@@ -1,5 +1,12 @@
 # Handoff
 
+## NOT (20 Ağu 2026) — Xcode Cloud build zinciri düzeltildi
+`Sekine.xcodeproj` gitignore'da olduğu için Xcode Cloud build'leri fail ediyordu (Build
+19-20). `ci_scripts/ci_post_clone.sh` eklendi, kök neden ve çözüm `docs/decisions.md`'de
+kayıtlı. **`project.yml` veya `ci_scripts/` her değiştiğinde push'tan önce
+`./scripts/verify-xcode-cloud.sh` çalıştır** — Xcode Cloud'un push→bekle→log-oku
+döngüsüne düşmemek için.
+
 ## CURRENT TASK — Faz E4 (Watch app) uygulanıyor, `feat/watch-app` branch'i (20 Ağustos 2026)
 Gelir zincirindeki idari engeller büyük ölçüde çözüldü (AB erişilebilirliği doğrulandı,
 Paid Apps Agreement imzalandı — bkz. aşağı). Ezan ses dosyası tedariki (lisans araştırması)
