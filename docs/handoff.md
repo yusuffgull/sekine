@@ -7,7 +7,7 @@ kullanıcı kararıyla ertelendi. Faz E4 (Apple Watch companion app) planı Opus
 geçirilip Sonnet ile uygulanmaya başlandı — detaylı plan: `evet-project-yml-i-inceleyip-watchos-eager-bubble.md`
 (`~/.claude/plans/`).
 
-### Faz E4 bu oturumda yapılanlar (Aşama 1-2 tamam, doğrulandı)
+### Faz E4 bu oturumda yapılanlar — Aşama 1, 2, 4 tamam; 3 kod-tamam; 6 uçtan uca DOĞRULANDI
 - `project.yml`: `SekineWatch` (watchOS app, standalone, `WKRunsIndependentlyOfCompanionApp:
   true`) + `SekineWatchComplications` (widget extension) hedefleri eklendi. Ana `Sekine`
   hedefine XcodeGen'in üretimde doğrulanmış `embed`/`copy` sözdizimiyle gömüldü.
@@ -17,39 +17,68 @@ geçirilip Sonnet ile uygulanmaya başlandı — detaylı plan: `evet-project-ym
 - Yeni watch-özel dosyalar: `SekineWatchApp.swift`, `WatchRootView.swift`,
   `WatchOnboardingView.swift` (il/ilçe seçici + GPS, DiyanetDirectory üzerinden),
   `WatchHomeView.swift`, `WatchQiblaView.swift`, `WatchPaywallView.swift`,
-  `WatchTesbihView.swift` (WKInterfaceDevice haptic), `WatchNotificationScheduler.swift`
-  (RollingScheduler'ı DEĞİŞTİRMEDEN kullanır, sadece Cuma/kandil/ayet bildirimlerini
-  kapatır — gerekçe: bu bildirimlerin kimlikleri konum değil ayar bazlı, iki cihaz
-  senkron değilse dedup garanti edilemez), `WatchBackgroundRefresh.swift`
+  `WatchTesbihView.swift` (WKInterfaceDevice haptic), `WatchBackgroundRefresh.swift`
   (`WKApplication.scheduleBackgroundRefresh`, BGTaskScheduler watchOS'ta yok).
-- **WatchConnectivity iki yönlü**: iPhone tarafı `Sekine/Core/WatchConnectivity/WatchSessionManager.swift`
+- **Komplikasyonlar (Aşama 4) gerçek kodla tamam**: `SekineWatchComplications.swift`
+  `SekineWidget.swift`'in accessory view'larından adapte edildi (circular/rectangular/
+  inline + watch'a özgü `accessoryCorner`), watch-lokal `PrayerCache`'ten okuyor.
+  `.appex` doğru şekilde `SekineWatch.app/PlugIns/` altına gömülmüş (dosya sistemi
+  seviyesinde kontrol edildi).
+- **Bildirimler (Aşama 3) — extra bildirimler için ayrı config dosyası YOK artık**:
+  ilk yazılan `WatchNotificationScheduler.swift` silindi. Gerekçe: `PrayerTimeStore.
+  ensureData/refresh` zaten kendi içinde tam settings-bazlı config ile bildirim
+  planlıyor; `WatchHomeView`'ın her göründüğünde çağırdığı `ensureData` bu ayrı dosyanın
+  kapattığı ekstraları (Cuma/kandil/ayet) sessizce yeniden açıyordu. Çözüm:
+  `AppSettings.disableCrossDeviceExtraNotifications()` — watch'ın kendi yerel
+  `AppSettings`'inde bu üç bayrağı KALICI kapatır (bootstrap'ta bir kez), böylece
+  `PrayerTimeStore`'un mevcut yolu tek doğru kaynak olarak kalıyor, çakışma riski
+  yapısal olarak ortadan kalktı.
+- **WatchConnectivity iki yönlü, UÇTAN UCA GERÇEK SİMÜLATÖR EŞLEŞTİRMESİYLE DOĞRULANDI**:
+  iPhone tarafı `Sekine/Core/WatchConnectivity/WatchSessionManager.swift`
   (`AppSettings`/`Store`'un `objectWillChange`'ini debounce ile dinleyip
-  `updateApplicationContext` gönderir — konfor değil, deterministik bildirim kimliği
-  eşleşmesi için doğruluk katmanı), watch tarafı `SekineWatch/Core/WatchSessionManager.swift`
-  (context'i uygular, konum değiştiyse bildirimleri yeniden planlar).
+  `updateApplicationContext` gönderir), watch tarafı `SekineWatch/Core/WatchSessionManager.swift`
+  (context'i uygular, konum değiştiyse `store.ensureData` ile gerçek veri çeker).
+  `xcrun simctl pair` ile Apple Watch Series 11 + iPhone 17 simülatörleri eşleştirildi;
+  iPhone'da gerçek konum seed'i (Ümraniye/İstanbul, gerçek Diyanet vakitleriyle) verilip
+  hiç yerel seed OLMAYAN taze bir Watch kurulumu açıldığında, watch **kendiliğinden**
+  onboarding'i atlayıp doğrudan paywall'a geçti — bu, context'in gerçekten iPhone'dan
+  Watch'a taşındığının davranışsal kanıtı (ekran görüntüsüyle belgelendi).
 - `SekineApp.swift`'e (iPhone) `watchSession.configure(...)` çağrısı eklendi.
 
-### Planın kaçırdığı, uygulama sırasında bulunan 2 gerçek sorun (düzeltildi)
+### Uygulama sırasında bulunan 3 gerçek sorun (hepsi düzeltildi)
 1. **`UNNotificationSound(named:)` watchOS'ta `unavailable`** — özel .caf bildirim sesi
    dosyaları watchOS'ta desteklenmiyor. `NotificationSound.swift` (paylaşılan dosya) içine
    `#if os(watchOS)` eklenip o platformda her zaman sistem varsayılanına düşülüyor. Bu
-   yüzden watch hedefinin `Sekine/Resources/Sounds`'a ihtiyacı kalmadı (project.yml'den
-   çıkarıldı).
-2. **Swift 6 strict concurrency**: `AppSettings` `@MainActor` izolasyonlu; `WatchNotificationScheduler.reschedule`
-   nonisolated bağlamdan senkron erişmeye çalışıyordu → fonksiyon `@MainActor` işaretlendi.
+   yüzden watch hedefinin `Sekine/Resources/Sounds`'a ihtiyacı kalmadı.
+2. **Swift 6 strict concurrency**: `AppSettings` `@MainActor` izolasyonlu; watch scheduler
+   yardımcı fonksiyonu nonisolated bağlamdan senkron erişmeye çalışıyordu (bu dosya sonradan
+   tamamen kaldırıldı, bkz. yukarı).
+3. **Bildirim izni her açılışta isteniyordu**: `bootstrap()` her `scenePhase == .active`'te
+   `requestAuthorization()` çağırıyordu → sistem izin diyaloğu her seferinde bloke ediyordu.
+   iOS app'in gerçek deseni (`OnboardingView.finish()`'te YALNIZCA BİR KEZ) watch'a da
+   uygulandı: izin artık yalnızca `WatchOnboardingView.finish(with:)`'te isteniyor,
+   `bootstrap()` sadece `refreshStatus()` çağırıyor.
 
-### Doğrulama (bu oturumda fiilen yapıldı)
-- `xcodebuild -scheme SekineWatch -destination 'platform=watchOS Simulator,...'` →
-  **BUILD SUCCEEDED**.
-- `xcodebuild -scheme Sekine ... test` → **12/12 test geçti**, iOS ana hedef + Watch
-  embedding + Widget embedding hepsi doğrulandı (regresyon yok).
-- Watch app watchOS 26.5 Simulator'a kuruldu, `simctl launch` ile açıldı, **crash yok**,
-  bootstrap akışı çalışıp doğru şekilde bildirim izni diyaloğu tetikledi (ekran görüntüsüyle
-  doğrulandı).
-- **Ortam kısıtı**: `xcrun simctl privacy` `notifications` servisini desteklemiyor
-  (yalnızca calendar/contacts/location/photos/media-library/microphone/motion/reminders/siri
-  var) → izin diyaloğunu headless geçip onboarding/Home ekranlarını görsel doğrulamak bu
-  ortamda mümkün olmadı. Gerçek cihazda veya Xcode GUI'sinden manuel test gerekiyor.
+### Doğrulama (bu oturumda fiilen yapıldı, hepsi gerçek simülatör/derleme kanıtlı)
+- `xcodebuild -scheme SekineWatch -destination 'platform=watchOS Simulator,...' clean build`
+  → **BUILD SUCCEEDED** (komplikasyon extension'ı dahil, temiz derleme).
+- `xcodebuild -scheme Sekine ... test` → **12/12 test geçti** (üç ayrı turda), iOS ana
+  hedef + Watch embedding + Widget embedding hepsi doğrulandı (regresyon yok).
+- Watch app watchOS 26.5 Simulator'a kuruldu, `-uiTestSeedIstanbul` debug argümanıyla
+  (iOS app'teki mevcut test hook deseniyle aynı) açıldı: onboarding doğru atlandı,
+  **WatchPaywallView doğru render oldu** (Türkçe metin, layout, StoreKit ürün yükleme
+  spinner'ı — ekran görüntüsüyle belgelendi), izin diyaloğu artık çıkmıyor.
+- `xcrun simctl pair` ile iPhone+Watch simülatör eşleştirmesi kurulup **WatchConnectivity
+  uçtan uca gerçek veriyle doğrulandı** (yukarıda detaylı).
+- **Ortam kısıtı (değişmedi)**: `xcrun simctl privacy` `notifications` servisini
+  desteklemiyor; StoreKit sandbox satın alma testi de headless güvenilir değil (proje
+  notlarında zaten böyle işaretliydi) → premium-kilitli ekranlar (Home/Kıble/Zikir) bu
+  ortamda görsel doğrulanamadı, yalnızca derleme + kod incelemesiyle doğrulandı. Kıble
+  pusulası ayrıca gerçek cihaz gerektiriyor (simülatör gerçek heading üretmiyor).
+- **Kalan**: Aşama 3'ün gerçek dedup testi (iki cihazda aynı anda ezan bildirimi tetikleyip
+  tek bildirim geldiğini görmek) — bu, gerçek zamanlanmış bildirim + iki cihaz + zaman
+  geçmesi gerektirdiğinden bu oturumda test edilmedi, TestFlight/gerçek cihaz aşamasına
+  kalıyor. Aşama 7 (ASC hazırlığı) tamamen kod dışı, kullanıcı aksiyonu gerektiriyor.
 
 ## ÖNCEKİ — Faz 2 (gelir modeli) neredeyse tamam, PUSH EDİLDİ (15 Ağustos 2026)
 v1.2 arşivlendi (App Store Connect'te, henüz submit edilmedi — v1.1 review'ının sonucu

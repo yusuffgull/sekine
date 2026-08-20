@@ -43,17 +43,20 @@
 - [x] Faz E3: Premium widget accent'i (seçili temayı widget'a yansıtır).
 - [x] Faz C2: Alternatif app ikonu — Çınar'ın tasarımı ücretsiz seçenek (asset-katalog alt ikon).
 - [~] Faz E4: Apple Watch uygulaması (premium, büyük) — DEVAM EDİYOR (20 Ağu 2026, `feat/watch-app`).
-      Aşama 1 (iskelet+embedding) ve Aşama 2 (gerçek veri katmanı: Diyanet/Aladhan/Local
-      zinciri, konum, onboarding, Home) kod olarak tamam ve watchOS Simulator'da gerçek
-      derleme+kurulum+açılışla doğrulandı (build başarılı, uygulama crash'siz açılıyor,
-      bildirim izni doğru tetikleniyor). Kalan: Aşama 3 (bağımsız bildirim + arka plan
-      yenileme — kod yazıldı, gerçek dedup testi yapılmadı), Aşama 4 (komplikasyonlar —
-      iskelet var, gerçek accessory view'lar yok), Aşama 5 (Kıble/Zikir — kod yazıldı,
-      gerçek cihazda test edilmedi), Aşama 6 (WatchConnectivity iki yönlü test),
-      Aşama 7 (ASC hazırlığı). Detaylı plan: `~/.claude/plans/evet-project-yml-i-inceleyip-watchos-eager-bubble.md`.
-      Bilinen ortam kısıtı: watchOS Simulator'da `notifications` izni `simctl privacy`
-      ile desteklenmiyor → tam interaktif walkthrough (onboarding tıklama) headless
-      yapılamadı, gerçek cihaz veya Xcode GUI'den manuel test gerekiyor.
+      Aşama 1 (iskelet+embedding), 2 (gerçek veri katmanı), 4 (komplikasyonlar — gerçek
+      accessory view'lar, `.appex` gömülü doğrulandı) kod+derleme+simülatörle tamam.
+      Aşama 3 (bağımsız bildirim) kod tamam — extra bildirimlerin watch'ta kalıcı kapatılması
+      yapısal olarak düzeltildi (`AppSettings.disableCrossDeviceExtraNotifications()`),
+      ama gerçek dedup (iki cihaz aynı anda bildirim alıp tek bildirim görmek) test
+      edilmedi. Aşama 5 (Kıble/Zikir) kod tamam, premium kilidi nedeniyle headless
+      ortamda görsel doğrulanamadı. **Aşama 6 (WatchConnectivity) `xcrun simctl pair`
+      ile gerçek iPhone+Watch simülatör eşleştirmesinde UÇTAN UCA doğrulandı** — watch
+      hiç yerel seed almadan, yalnızca iPhone'dan gelen context'le onboarding'i atlayıp
+      paywall'a geçti (ekran görüntüsü kanıtlı). Kalan: Aşama 7 (ASC hazırlığı, tamamen
+      kod dışı). Detaylı plan: `~/.claude/plans/evet-project-yml-i-inceleyip-watchos-eager-bubble.md`.
+      Bilinen ortam kısıtı: `simctl privacy` bildirim iznini desteklemiyor, StoreKit
+      sandbox satın alma headless güvenilir değil → premium-kilitli ekranlar (Home/Kıble/
+      Zikir) ve gerçek dedup testi gerçek cihaz/TestFlight aşamasına kalıyor.
 - KULLANICI KAPILARI (kod dışı):
   - [x] AB erişilebilirliği (non-trader, global) — doğrulandı (20 Ağu 2026).
   - [x] ASC Paid Applications Agreement — imzalandı (20 Ağu 2026, geçici banka hesabıyla;
