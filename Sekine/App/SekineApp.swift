@@ -10,6 +10,7 @@ struct SekineApp: App {
     @StateObject private var location = LocationManager()
     @StateObject private var iap = Store()
     @StateObject private var adhan = AdhanPlayer()
+    @StateObject private var watchSession = WatchSessionManager()
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -58,5 +59,6 @@ struct SekineApp: App {
         if let loc = settings.location {
             await store.ensureData(for: loc, settings: settings)
         }
+        watchSession.configure(settings: settings, iap: iap)
     }
 }
