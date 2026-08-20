@@ -10,8 +10,14 @@ import Combine
 @MainActor
 final class WatchSessionManager: NSObject, ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
+    private var isConfigured = false
 
+    /// `SekineApp.bootstrap()` her ön plana gelişte çağrılır — bu yüzden yalnızca ilk
+    /// çağrıda gerçekten kurulum yapılır (aksi halde her foreground'da yeni bir Combine
+    /// subscription eklenir ve önceki hiç iptal edilmeden sınırsız birikir).
     func configure(settings: AppSettings, iap: Store) {
+        guard !isConfigured else { return }
+        isConfigured = true
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
