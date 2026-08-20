@@ -37,12 +37,18 @@ enum NotificationSound: String, CaseIterable, Identifiable {
     }
 
     /// UNNotificationSound. Dosya bundle'da yoksa güvenli şekilde varsayılana döner.
+    /// watchOS özel bildirim sesi dosyalarını desteklemiyor (`init(named:)` unavailable) —
+    /// o platformda her zaman sistem varsayılanına düşülür.
     func unSound(silent: Bool) -> UNNotificationSound? {
         if silent { return nil }
+        #if os(watchOS)
+        return .default
+        #else
         guard let fileName,
               Bundle.main.url(forResource: (fileName as NSString).deletingPathExtension,
                               withExtension: (fileName as NSString).pathExtension) != nil
         else { return .default }
         return UNNotificationSound(named: UNNotificationSoundName(fileName))
+        #endif
     }
 }
