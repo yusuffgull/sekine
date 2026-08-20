@@ -42,10 +42,27 @@
 - [x] Faz E2: Vakit-başına özel ses (premium).
 - [x] Faz E3: Premium widget accent'i (seçili temayı widget'a yansıtır).
 - [x] Faz C2: Alternatif app ikonu — Çınar'ın tasarımı ücretsiz seçenek (asset-katalog alt ikon).
-- [ ] Faz E4: Apple Watch uygulaması (premium, büyük — token limiti sıfırlanınca ayrı oturum).
-- KULLANICI KAPILARI (kod dışı): (1) ASC Paid Applications Agreement (banka+vergi),
-  (2) IAP satınca trader status'e geç, (3) IAP product'ları ASC'de oluştur (kodla eşleşen ID),
-  (4) ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) lisanslı/orijinal eklenmeli.
+- [~] Faz E4: Apple Watch uygulaması (premium, büyük) — DEVAM EDİYOR (20 Ağu 2026, `feat/watch-app`).
+      Aşama 1 (iskelet+embedding) ve Aşama 2 (gerçek veri katmanı: Diyanet/Aladhan/Local
+      zinciri, konum, onboarding, Home) kod olarak tamam ve watchOS Simulator'da gerçek
+      derleme+kurulum+açılışla doğrulandı (build başarılı, uygulama crash'siz açılıyor,
+      bildirim izni doğru tetikleniyor). Kalan: Aşama 3 (bağımsız bildirim + arka plan
+      yenileme — kod yazıldı, gerçek dedup testi yapılmadı), Aşama 4 (komplikasyonlar —
+      iskelet var, gerçek accessory view'lar yok), Aşama 5 (Kıble/Zikir — kod yazıldı,
+      gerçek cihazda test edilmedi), Aşama 6 (WatchConnectivity iki yönlü test),
+      Aşama 7 (ASC hazırlığı). Detaylı plan: `~/.claude/plans/evet-project-yml-i-inceleyip-watchos-eager-bubble.md`.
+      Bilinen ortam kısıtı: watchOS Simulator'da `notifications` izni `simctl privacy`
+      ile desteklenmiyor → tam interaktif walkthrough (onboarding tıklama) headless
+      yapılamadı, gerçek cihaz veya Xcode GUI'den manuel test gerekiyor.
+- KULLANICI KAPILARI (kod dışı):
+  - [x] AB erişilebilirliği (non-trader, global) — doğrulandı (20 Ağu 2026).
+  - [x] ASC Paid Applications Agreement — imzalandı (20 Ağu 2026, geçici banka hesabıyla;
+        20/B hesabı gelince IBAN güncellenecek).
+  - [ ] 20/B istisna belgesi + özel ticari hesap (aciliyeti düşük).
+  - [ ] IAP product'ları ASC'de oluştur (kodla eşleşen ID) — bağımsız, hemen yapılabilir.
+  - [ ] Ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) — **ERTELENDİ** (20 Ağu 2026,
+        lisans araştırması kullanıcı kararıyla durduruldu; kod gate'i hazır, dosya
+        eklenince otomatik aktifleşir).
 - NOT: StoreKit satın alma akışı simülatörde .storekit config scheme'e seçilerek denenir
   (headless xcodebuild'de SKTestSession güvenilir değil); kod standart StoreKit 2.
 
