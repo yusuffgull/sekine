@@ -7,9 +7,11 @@ import WatchConnectivity
 @MainActor
 final class WatchSessionManager: NSObject, ObservableObject {
     private weak var settings: AppSettings?
+    private weak var store: PrayerTimeStore?
 
-    func configure(settings: AppSettings) {
+    func configure(settings: AppSettings, store: PrayerTimeStore) {
         self.settings = settings
+        self.store = store
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
@@ -28,8 +30,12 @@ final class WatchSessionManager: NSObject, ObservableObject {
             let locationChanged = settings.location?.diyanetDistrictID != incoming.diyanetDistrictID
                 || settings.location?.latitude != incoming.latitude
             settings.location = incoming
-            if locationChanged {
-                Task { await WatchNotificationScheduler.reschedule(settings: settings) }
+            settings.hasCompletedOnboarding = true
+            if locationChanged, let store {
+                // Yeni konum için gerçek veri çeker; PrayerTimeStore kendi içinde
+                // (extras zaten disableCrossDeviceExtraNotifications ile kapalı) bildirimleri
+                // de yeniden zamanlar.
+                Task { await store.ensureData(for: incoming, settings: settings) }
             }
         }
     }

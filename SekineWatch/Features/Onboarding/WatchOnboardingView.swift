@@ -3,6 +3,7 @@ import SwiftUI
 struct WatchOnboardingView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var location: LocationManager
+    @EnvironmentObject private var notifications: NotificationManager
 
     @StateObject private var directory = DiyanetDirectory()
     @State private var isResolving = false
@@ -45,8 +46,7 @@ struct WatchOnboardingView: View {
             .padding()
             .sheet(isPresented: $showPicker) {
                 WatchCityPickerView(directory: directory) { place in
-                    settings.location = place
-                    settings.hasCompletedOnboarding = true
+                    Task { await finish(with: place) }
                     showPicker = false
                 }
             }
@@ -65,11 +65,18 @@ struct WatchOnboardingView: View {
                 place.diyanetDistrictID = match.district.IlceID
                 place.name = match.district.name
             }
-            settings.location = place
-            settings.hasCompletedOnboarding = true
+            await finish(with: place)
         } catch {
             errorText = "Konum alınamadı. İl/ilçe seçerek devam edebilirsiniz."
         }
+    }
+
+    /// Bildirim izni yalnızca burada, kullanıcı bir konum seçip onboarding'i
+    /// bitirirken istenir — her açılışta değil (iOS OnboardingView.finish() ile aynı desen).
+    private func finish(with place: SavedLocation) async {
+        settings.location = place
+        settings.hasCompletedOnboarding = true
+        _ = await notifications.requestAuthorization()
     }
 }
 

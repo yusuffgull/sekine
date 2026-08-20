@@ -28,16 +28,26 @@ struct SekineWatchApp: App {
             }
         }
         .backgroundTask(.appRefresh(WatchBackgroundRefresh.refreshTaskID)) {
-            await WatchBackgroundRefresh.handle(settings: settings)
+            await WatchBackgroundRefresh.handle(store: store, settings: settings)
         }
     }
 
     private func bootstrap() async {
-        watchSession.configure(settings: settings)
-        _ = await notifications.requestAuthorization()
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedIstanbul"),
+           settings.location == nil {
+            settings.location = SavedLocation(name: "İstanbul", latitude: 41.0082,
+                                              longitude: 28.9784, diyanetDistrictID: "9541")
+            settings.hasCompletedOnboarding = true
+        }
+        #endif
+        settings.disableCrossDeviceExtraNotifications()
+        watchSession.configure(settings: settings, store: store)
+        // İzin isteme burada DEĞİL — yalnızca onboarding'i bitirirken bir kez istenir
+        // (bkz. WatchOnboardingView.finish), iOS'taki OnboardingView.finish() ile aynı desen.
+        await notifications.refreshStatus()
         if let loc = settings.location {
             await store.ensureData(for: loc, settings: settings)
-            await WatchNotificationScheduler.reschedule(settings: settings)
         }
     }
 }

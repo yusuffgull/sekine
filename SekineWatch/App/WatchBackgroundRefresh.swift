@@ -17,8 +17,13 @@ enum WatchBackgroundRefresh {
     }
 
     /// Cache + kayıtlı ayarlarla bildirimleri yeniden zamanlar (network yok).
-    static func handle(settings: AppSettings) async {
-        await WatchNotificationScheduler.reschedule(settings: settings)
+    /// `store` üzerinden PrayerTimeStore'un kendi `rescheduleNotifications`'ı kullanılır —
+    /// watch'ın extra bildirimleri (Cuma/kandil/ayet) zaten `AppSettings.forceDisableExtras()`
+    /// ile kalıcı kapatıldığından (bkz. SekineWatchApp.bootstrap), ayrı bir config
+    /// oluşturmaya gerek yok.
+    @MainActor
+    static func handle(store: PrayerTimeStore, settings: AppSettings) async {
+        await store.rescheduleNotifications(settings: settings)
         schedule()
     }
 }
