@@ -42,10 +42,30 @@
 - [x] Faz E2: Vakit-başına özel ses (premium).
 - [x] Faz E3: Premium widget accent'i (seçili temayı widget'a yansıtır).
 - [x] Faz C2: Alternatif app ikonu — Çınar'ın tasarımı ücretsiz seçenek (asset-katalog alt ikon).
-- [ ] Faz E4: Apple Watch uygulaması (premium, büyük — token limiti sıfırlanınca ayrı oturum).
-- KULLANICI KAPILARI (kod dışı): (1) ASC Paid Applications Agreement (banka+vergi),
-  (2) IAP satınca trader status'e geç, (3) IAP product'ları ASC'de oluştur (kodla eşleşen ID),
-  (4) ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) lisanslı/orijinal eklenmeli.
+- [~] Faz E4: Apple Watch uygulaması (premium, büyük) — DEVAM EDİYOR (20 Ağu 2026, `feat/watch-app`).
+      Aşama 1 (iskelet+embedding), 2 (gerçek veri katmanı), 4 (komplikasyonlar — gerçek
+      accessory view'lar, `.appex` gömülü doğrulandı) kod+derleme+simülatörle tamam.
+      Aşama 3 (bağımsız bildirim) kod tamam — extra bildirimlerin watch'ta kalıcı kapatılması
+      yapısal olarak düzeltildi (`AppSettings.disableCrossDeviceExtraNotifications()`),
+      ama gerçek dedup (iki cihaz aynı anda bildirim alıp tek bildirim görmek) test
+      edilmedi. Aşama 5 (Kıble/Zikir) kod tamam, premium kilidi nedeniyle headless
+      ortamda görsel doğrulanamadı. **Aşama 6 (WatchConnectivity) `xcrun simctl pair`
+      ile gerçek iPhone+Watch simülatör eşleştirmesinde UÇTAN UCA doğrulandı** — watch
+      hiç yerel seed almadan, yalnızca iPhone'dan gelen context'le onboarding'i atlayıp
+      paywall'a geçti (ekran görüntüsü kanıtlı). Kalan: Aşama 7 (ASC hazırlığı, tamamen
+      kod dışı). Detaylı plan: `~/.claude/plans/evet-project-yml-i-inceleyip-watchos-eager-bubble.md`.
+      Bilinen ortam kısıtı: `simctl privacy` bildirim iznini desteklemiyor, StoreKit
+      sandbox satın alma headless güvenilir değil → premium-kilitli ekranlar (Home/Kıble/
+      Zikir) ve gerçek dedup testi gerçek cihaz/TestFlight aşamasına kalıyor.
+- KULLANICI KAPILARI (kod dışı):
+  - [x] AB erişilebilirliği (non-trader, global) — doğrulandı (20 Ağu 2026).
+  - [x] ASC Paid Applications Agreement — imzalandı (20 Ağu 2026, geçici banka hesabıyla;
+        20/B hesabı gelince IBAN güncellenecek).
+  - [ ] 20/B istisna belgesi + özel ticari hesap (aciliyeti düşük).
+  - [ ] IAP product'ları ASC'de oluştur (kodla eşleşen ID) — bağımsız, hemen yapılabilir.
+  - [ ] Ezan ses dosyaları (ezan.caf ≤30sn + ezan-full.m4a) — **ERTELENDİ** (20 Ağu 2026,
+        lisans araştırması kullanıcı kararıyla durduruldu; kod gate'i hazır, dosya
+        eklenince otomatik aktifleşir).
 - NOT: StoreKit satın alma akışı simülatörde .storekit config scheme'e seçilerek denenir
   (headless xcodebuild'de SKTestSession güvenilir değil); kod standart StoreKit 2.
 

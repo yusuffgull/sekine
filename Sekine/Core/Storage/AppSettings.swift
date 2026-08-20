@@ -205,6 +205,16 @@ final class AppSettings: ObservableObject {
         prayer.isNotifiable && !disabledPrayers.contains(prayer)
     }
 
+    /// Yalnızca Watch app çağırır (bkz. SekineWatchApp.bootstrap). Cuma/kandil/günlük-ayet
+    /// bildirimlerinin kimlikleri konum değil ayar bazlı türüyor; iki cihazın ayarları
+    /// senkron değilse sistem dedup'ı garanti edilemez, bu yüzden watch'ta kalıcı kapatılır.
+    /// iOS hiç çağırmadığı için telefon davranışını etkilemez.
+    func disableCrossDeviceExtraNotifications() {
+        if fridayReminder { fridayReminder = false }
+        if specialDayGreetings { specialDayGreetings = false }
+        if dailyVerse { dailyVerse = false }
+    }
+
     func setNotification(_ enabled: Bool, for prayer: Prayer) {
         if enabled { disabledPrayers.remove(prayer) }
         else { disabledPrayers.insert(prayer) }
