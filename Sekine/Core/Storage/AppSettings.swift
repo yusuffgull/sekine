@@ -95,6 +95,7 @@ final class AppSettings: ObservableObject {
         self.hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarded)
         self.preReminderMinutes = defaults.object(forKey: Keys.preReminder) as? Int ?? 0
         self.lastLocationCheckAt = defaults.object(forKey: Keys.lastLocationCheckAt) as? Date
+        self.declinedLocationDistrictID = defaults.string(forKey: Keys.declinedLocationDistrictID)
     }
 
     @Published var location: SavedLocation? {
@@ -104,6 +105,10 @@ final class AppSettings: ObservableObject {
             } else if location == nil {
                 defaults.removeObject(forKey: Keys.location)
             }
+            // Konumu elle değiştiren kullanıcı için ret hafızası anlamını yitirir;
+            // sıfırlanır ki gerçekten başka bir yere taşınınca tekrar sorulabilsin.
+            // (didSet init sırasında çalışmaz → açılışta yüklenen değer silinmez.)
+            declinedLocationDistrictID = nil
         }
     }
 
@@ -117,6 +122,19 @@ final class AppSettings: ObservableObject {
     /// Foreground konum kontrolü mevcut konumdan farklı bir yer bulduğunda burada
     /// tutulur; UI bir onay banner'ı gösterir. Kalıcı DEĞİL (oturum içi, kasıtlı).
     @Published var pendingLocationSuggestion: SavedLocation?
+
+    /// Kullanıcının "Hayır" dediği Diyanet ilçe ID'si. Aynı ilçe için bir daha
+    /// sorulmaz — aksi halde konumunu bilerek farklı tutan kullanıcı (ör. Kocaeli'de
+    /// oturup İstanbul vakitlerini tercih eden) her gün aynı uyarıyı alırdı.
+    @Published var declinedLocationDistrictID: String? {
+        didSet {
+            if let declinedLocationDistrictID {
+                defaults.set(declinedLocationDistrictID, forKey: Keys.declinedLocationDistrictID)
+            } else {
+                defaults.removeObject(forKey: Keys.declinedLocationDistrictID)
+            }
+        }
+    }
 
     /// Premium: kayıtlı konum yer imleri (hızlı geçiş için). Ücretsizde kullanılmaz.
     @Published var savedLocations: [SavedLocation] {
@@ -279,5 +297,6 @@ final class AppSettings: ObservableObject {
         static let preReminder = "settings.preReminder"
         static let onboarded = "settings.onboarded"
         static let lastLocationCheckAt = "settings.lastLocationCheckAt"
+        static let declinedLocationDistrictID = "settings.declinedLocationDistrictID"
     }
 }

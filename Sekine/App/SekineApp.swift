@@ -79,7 +79,8 @@ struct SekineApp: App {
         settings.lastLocationCheckAt = Date()
 
         guard let result = try? await location.resolveAndMatchDiyanetLocation(directory: locationDirectory),
-              result.matched, result.location.diyanetDistrictID != currentLocation.diyanetDistrictID
+              result.matched, result.location.diyanetDistrictID != currentLocation.diyanetDistrictID,
+              result.location.diyanetDistrictID != settings.declinedLocationDistrictID
         else { return }
         settings.pendingLocationSuggestion = result.location
     }

@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 struct RootView: View {
     @EnvironmentObject private var settings: AppSettings
@@ -35,7 +36,7 @@ struct MainTabView: View {
             SettingsView()
                 .tabItem { Label("Ayarlar", systemImage: "gearshape") }.tag("settings")
         }
-        .task { maybeAskForReview() }
+        .task { await maybeAskForReview() }
         .alert(
             "Konum değişti mi?",
             isPresented: Binding(
@@ -48,7 +49,11 @@ struct MainTabView: View {
                 settings.location = suggestion
                 Task { await store.refresh(location: suggestion, settings: settings) }
             }
-            Button("Hayır", role: .cancel) { settings.pendingLocationSuggestion = nil }
+            Button("Hayır", role: .cancel) {
+                // Aynı ilçe için bir daha sorulmasın (bkz. AppSettings.declinedLocationDistrictID).
+                settings.declinedLocationDistrictID = suggestion.diyanetDistrictID
+                settings.pendingLocationSuggestion = nil
+            }
         } message: { suggestion in
             Text("Şu an \(suggestion.name) konumunda görünüyorsunuz. Namaz vakitlerini buna göre güncelleyelim mi?")
         }
@@ -57,7 +62,7 @@ struct MainTabView: View {
     /// Birkaç günlük düzenli kullanımdan sonra, sürüm başına en fazla bir kez sorar
     /// (sistem zaten yılda birkaç kezle sınırlar) — App Store rating sayısını artırmak
     /// organik arama sıralamasında önemli bir sinyal.
-    private func maybeAskForReview() {
+    private func maybeAskForReview() async {
         let defaults = UserDefaults.standard
         let countKey = "growth.significantOpenCount"
         let askedVersionKey = "growth.reviewAskedVersion"
@@ -67,6 +72,14 @@ struct MainTabView: View {
 
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
         guard count >= 5, defaults.string(forKey: askedVersionKey) != currentVersion else { return }
+
+        // Açılış ve konum sürüklenme kontrolü (SekineApp.bootstrap) otursun: ikisi aynı
+        // anda modal açarsa rating diyalogu konum uyarısını yutuyor.
+        try? await Task.sleep(for: .seconds(4))
+        guard settings.pendingLocationSuggestion == nil else { return }
+
+        // Sürüm kapısı yalnızca gerçekten sorduğumuzda yazılır; atladıysak sonraki
+        // açılışta tekrar denenebilsin.
         defaults.set(currentVersion, forKey: askedVersionKey)
         requestReview()
     }
