@@ -13,30 +13,42 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                premiumSection
-                locationSection
-                notificationSection
-                perPrayerSoundSection
-                extraRemindersSection
-                appearanceSection
-                appIconSection
-                widgetSection
-                donateSection
-                aboutSection
-            }
-            .navigationTitle("Ayarlar")
-            .sheet(isPresented: $showSearch) {
-                LocationSearchSheet { place in
-                    settings.location = place
-                    if iap.isPremium { settings.addSavedLocation(place) }
-                    Task { await store.refresh(location: place, settings: settings) }
+            ScrollViewReader { proxy in
+                Form {
+                    premiumSection
+                    locationSection
+                    notificationSection
+                    perPrayerSoundSection
+                    extraRemindersSection
+                    appearanceSection
+                    appIconSection
+                    widgetSection
+                    donateSection.id("donate")
+                    aboutSection
+                }
+                .navigationTitle("Ayarlar")
+                .sheet(isPresented: $showSearch) {
+                    LocationSearchSheet { place in
+                        settings.location = place
+                        if iap.isPremium { settings.addSavedLocation(place) }
+                        Task { await store.refresh(location: place, settings: settings) }
+                    }
+                }
+                .sheet(isPresented: $showPaywall) {
+                    PaywallView()
+                }
+                .task {
+                    await notifications.refreshStatus()
+                    #if DEBUG
+                    let args = ProcessInfo.processInfo.arguments
+                    if args.contains("-uiTestShowPaywall") { showPaywall = true }
+                    if let i = args.firstIndex(of: "-uiTestScrollTo"), i + 1 < args.count {
+                        try? await Task.sleep(nanoseconds: 300_000_000)
+                        withAnimation { proxy.scrollTo(args[i + 1], anchor: .top) }
+                    }
+                    #endif
                 }
             }
-            .sheet(isPresented: $showPaywall) {
-                PaywallView()
-            }
-            .task { await notifications.refreshStatus() }
         }
     }
 

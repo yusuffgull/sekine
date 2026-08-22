@@ -67,5 +67,13 @@ En büyük 1-yıldız riski budur. Göndermeden önce:
 - TestFlight'ta kendinde bir dene, sonra "Submit for Review".
 
 ## 7. Review notları (App Review'a)
-- Uygulama tamamen ücretsiz, IAP yok, hesap gerektirmez.
-- Konum izni: yalnızca namaz vakti hesabı için, cihazda kullanılır.
+- Hesap/giriş gerektirmez, test hesabı gerekli değildir.
+- Konum izni: yalnızca namaz vakti hesabı için, cihazda kullanılır; sunucuya kimlik
+  bilgisi göndermez.
+- Uygulama ücretsizdir; isteğe bağlı IAP var: "Sekine Premium" (ömür boyu, tek seferlik,
+  `com.sekineapp.sekine.premium.lifetime`) ve 3 adet bağış (`tip.small/medium/large`,
+  consumable). IAP'siz de uygulama tam işlevseldir (Zikir sekmesi, temel vakitler/
+  bildirimler ücretsiz) — premium yalnızca tam ezan sesi, ek temalar, çoklu konum gibi
+  isteğe bağlı ekstraları açar.
+- Apple Watch companion app dahildir (`SekineWatch`), iPhone'dan bağımsız da çalışır
+  (`WKRunsIndependentlyOfCompanionApp: true`).
