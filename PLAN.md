@@ -43,7 +43,7 @@ uygulaması**, kod tamam/uçtan uca doğrulandı, kalan kısım TestFlight/gerç
   - [x] AB erişilebilirliği (non-trader, global) — doğrulandı
   - [x] ASC Paid Applications Agreement — imzalandı (geçici banka hesabıyla)
   - [ ] 20/B istisna belgesi + özel ticari hesap (aciliyeti düşük)
-  - [ ] IAP product'ları ASC'de oluştur (kodla eşleşen ID) — bağımsız, hemen yapılabilir
+  - [x] IAP product'ları ASC'de oluştur (kodla eşleşen ID) — 4 ürün de eklendi (22 Ağu 2026)
   - [ ] Ezan ses dosyaları — ERTELENDİ (lisans araştırması kullanıcı kararıyla durduruldu;
         kod gate'i hazır, dosya eklenince otomatik aktifleşir)
 
