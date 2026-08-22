@@ -17,7 +17,7 @@ struct LocalCalculationProvider: PrayerTimeProvider {
         cal.timeZone = tz
 
         let coordinates = Coordinates(latitude: latitude, longitude: longitude)
-        var params = CalculationMethod.turkey.params
+        let params = CalculationMethod.turkey.params
 
         guard let start = cal.date(from: DateComponents(timeZone: tz, year: year, month: 1, day: 1)),
               let end = cal.date(from: DateComponents(timeZone: tz, year: year, month: 12, day: 31))

@@ -127,7 +127,7 @@ struct MonthlyView: View {
     }
 
     private var monthTitle: String {
-        var cal = Calendar(identifier: .gregorian)
+        let cal = Calendar(identifier: .gregorian)
         let base = cal.date(byAdding: .month, value: monthOffset, to: Date()) ?? Date()
         return Self.monthFormatter.string(from: base)
     }
