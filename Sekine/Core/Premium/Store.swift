@@ -21,6 +21,12 @@ final class Store: ObservableObject, PremiumProviding {
     private var updatesTask: Task<Void, Never>?
 
     init() {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestForcePremium") {
+            isPremium = true
+            return
+        }
+        #endif
         // Uygulama açıkken gelen (başka cihaz/aile paylaşımı) işlemleri dinle.
         updatesTask = Task { [weak self] in
             for await update in Transaction.updates {
