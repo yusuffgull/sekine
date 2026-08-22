@@ -394,6 +394,15 @@ struct SettingsView: View {
             if let source = store.schedule?.source {
                 LabeledContent("Vakit kaynağı", value: Self.sourceLabel(source))
             }
+            Link(destination: Self.appStoreURL(action: "write-review")) {
+                Label("Bizi Değerlendirin", systemImage: "star.fill")
+            }
+            ShareLink(
+                item: Self.appStoreURL(),
+                message: Text("Sekine ile namaz vakitlerini takip ediyorum, sen de dene:")
+            ) {
+                Label("Uygulamayı Paylaş", systemImage: "square.and.arrow.up")
+            }
         } header: {
             Text("Hakkında")
         }
@@ -415,5 +424,11 @@ struct SettingsView: View {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         return "\(v) (\(b))"
+    }
+
+    static func appStoreURL(action: String? = nil) -> URL {
+        var string = "https://apps.apple.com/app/id6796900944"
+        if let action { string += "?action=\(action)" }
+        return URL(string: string)!
     }
 }
