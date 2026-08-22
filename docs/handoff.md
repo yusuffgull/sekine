@@ -1,10 +1,16 @@
 # Handoff
 
 ## CURRENT TASK
-Faz E4 (Apple Watch companion app) kod tamam, `feat/watch-app` branch'inde, WatchConnectivity
-uçtan uca gerçek simülatör eşleştirmesiyle doğrulandı. Kalan kısım tamamen TestFlight/gerçek
-cihaz aşaması (headless ortamda yapılamaz) + Xcode Cloud'un ilk kez çalışır hale getirilmesi
-(bkz. aşağı) — kod tarafında aktif iş yok.
+1.3 (6) — Premium/IAP + Apple Watch app içeren ilk gerçek sürüm — Xcode'dan elle arşivlenip
+ASC'ye upload edildi (22 Ağu 2026). 4 IAP ürünü ASC'de oluşturuldu, ASC'nin istediği
+Apple Watch ekran görüntüleri (Home + Tesbih, 422×514 Ultra 3) hazırlandı ve masaüstüne
+kondu. Kalan: kullanıcı ASC'de version 1.3'ü tamamlayıp (screenshot'lar + What's New +
+IAP'ler ekli) **Submit for Review** yapacak.
+
+**Pushlanmamış local commit'ler var (main'de, origin'de yok):** `736dd66`
+(`-uiTestForcePremium` debug hook'u) ve `d3b6178` (`-uiTestTab` Watch TabView'a eklendi).
+İkisi de DEBUG-only, App Store binary'sini etkilemiyor — kullanıcı kararıyla bir sonraki
+geliştirmeyle birlikte pushlanacak, şimdi tek başına gönderilmiyor.
 
 ## DONE
 - **v1** yayında: native SwiftUI, Diyanet birebir vakit kaynağı (DiyanetProvider), il/ilçe
