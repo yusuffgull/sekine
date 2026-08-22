@@ -100,18 +100,9 @@ struct OnboardingView: View {
         isResolving = true
         Task {
             do {
-                let resolved = try await location.resolveCurrentLocation()
-                // GPS'ten gelen il/ilçe'yi Diyanet listesiyle eşleştir → birebir vakit.
-                if let match = await directory.match(
-                    cityName: resolved.cityName, districtName: resolved.districtName) {
-                    settings.location = SavedLocation(
-                        name: "\(match.district.name.capitalized(with: Locale(identifier: "tr_TR"))), \(match.city.name.capitalized(with: Locale(identifier: "tr_TR")))",
-                        latitude: resolved.location.latitude,
-                        longitude: resolved.location.longitude,
-                        diyanetDistrictID: match.district.IlceID)
-                } else {
-                    // Eşleşme yoksa koordinatla devam (yaklaşık vakit); kullanıcı sonra ilçe seçebilir.
-                    settings.location = resolved.location
+                let (resolvedLocation, matched) = try await location.resolveAndMatchDiyanetLocation(directory: directory)
+                settings.location = resolvedLocation
+                if !matched {
                     errorText = "İlçeniz otomatik bulunamadı; yaklaşık vakit gösterilecek. İsterseniz 'Şehir / İlçe Ara' ile ilçenizi seçin."
                 }
             } catch {

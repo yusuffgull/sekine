@@ -94,6 +94,7 @@ final class AppSettings: ObservableObject {
         self.fridayReminderHour = defaults.object(forKey: Keys.fridayReminderHour) as? Int ?? 9
         self.hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarded)
         self.preReminderMinutes = defaults.object(forKey: Keys.preReminder) as? Int ?? 0
+        self.lastLocationCheckAt = defaults.object(forKey: Keys.lastLocationCheckAt) as? Date
     }
 
     @Published var location: SavedLocation? {
@@ -105,6 +106,17 @@ final class AppSettings: ObservableObject {
             }
         }
     }
+
+    /// Kullanıcı seyahat ettiğinde konumun bayatlamasını önlemek için: uygulama ön
+    /// plana her geldiğinde GPS'i sessizce yeniden kontrol ederiz, ama pil/GPS
+    /// kullanımını sınırlamak için günde en fazla bir kez (bkz. `SekineApp.bootstrap`).
+    @Published var lastLocationCheckAt: Date? {
+        didSet { defaults.set(lastLocationCheckAt, forKey: Keys.lastLocationCheckAt) }
+    }
+
+    /// Foreground konum kontrolü mevcut konumdan farklı bir yer bulduğunda burada
+    /// tutulur; UI bir onay banner'ı gösterir. Kalıcı DEĞİL (oturum içi, kasıtlı).
+    @Published var pendingLocationSuggestion: SavedLocation?
 
     /// Premium: kayıtlı konum yer imleri (hızlı geçiş için). Ücretsizde kullanılmaz.
     @Published var savedLocations: [SavedLocation] {
@@ -266,5 +278,6 @@ final class AppSettings: ObservableObject {
         static let fridayReminderHour = "settings.fridayReminderHour"
         static let preReminder = "settings.preReminder"
         static let onboarded = "settings.onboarded"
+        static let lastLocationCheckAt = "settings.lastLocationCheckAt"
     }
 }

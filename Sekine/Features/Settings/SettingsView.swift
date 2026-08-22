@@ -6,10 +6,15 @@ struct SettingsView: View {
     @EnvironmentObject private var store: PrayerTimeStore
     @EnvironmentObject private var notifications: NotificationManager
     @EnvironmentObject private var iap: Store
+    @EnvironmentObject private var location: LocationManager
 
+    @StateObject private var directory = DiyanetDirectory()
     @State private var showSearch = false
     @State private var showPaywall = false
     @State private var currentIcon = AppIconOption.current
+    @State private var isResolvingLocation = false
+    @State private var locationError: String?
+    @State private var purchasingProductID: String?
 
     var body: some View {
         NavigationStack {
@@ -19,7 +24,7 @@ struct SettingsView: View {
                     locationSection
                     notificationSection
                     perPrayerSoundSection
-                    extraRemindersSection
+                    extraRemindersSection.id("reminders")
                     appearanceSection
                     appIconSection
                     widgetSection
@@ -89,14 +94,24 @@ struct SettingsView: View {
             Section {
                 ForEach(iap.tipProducts, id: \.id) { product in
                     Button {
-                        Task { await iap.purchase(product) }
+                        guard purchasingProductID == nil else { return }
+                        purchasingProductID = product.id
+                        Task {
+                            defer { purchasingProductID = nil }
+                            _ = await iap.purchase(product)
+                        }
                     } label: {
                         HStack {
                             Text(product.displayName).foregroundStyle(Palette.textPrimary)
                             Spacer()
-                            Text(product.displayPrice).foregroundStyle(Palette.accent)
+                            if purchasingProductID == product.id {
+                                ProgressView()
+                            } else {
+                                Text(product.displayPrice).foregroundStyle(Palette.accent)
+                            }
                         }
                     }
+                    .disabled(purchasingProductID != nil)
                 }
             } header: {
                 Text("Destekle")
@@ -114,6 +129,23 @@ struct SettingsView: View {
                 Text(settings.location?.name ?? "Seçilmedi")
                 Spacer()
                 Button("Değiştir") { showSearch = true }
+            }
+
+            Button {
+                useCurrentLocation()
+            } label: {
+                HStack {
+                    if isResolvingLocation {
+                        ProgressView()
+                    } else {
+                        Label("Konumumu Kullan", systemImage: "location.fill")
+                    }
+                }
+            }
+            .disabled(isResolvingLocation)
+
+            if let locationError {
+                Text(locationError).font(.footnote).foregroundStyle(Palette.textSecondary)
             }
 
             // Premium: kayıtlı konumlar arasında hızlı geçiş.
@@ -265,6 +297,8 @@ struct SettingsView: View {
                     get: { settings.fridayReminderHour },
                     set: { settings.fridayReminderHour = $0; reschedule() }
                 ))
+                Text("Her Cuma bu saatte \"Cuma Mübarek Olsun\" hatırlatma bildirimi gönderilir.")
+                    .font(.caption).foregroundStyle(Palette.textSecondary)
             }
 
             Toggle("Kandil & bayram tebrikleri", isOn: Binding(
@@ -281,6 +315,8 @@ struct SettingsView: View {
                     get: { settings.dailyVerseHour },
                     set: { settings.dailyVerseHour = $0; reschedule() }
                 ))
+                Text("Her gün bu saatte günün ayeti veya duası bildirim olarak gönderilir.")
+                    .font(.caption).foregroundStyle(Palette.textSecondary)
             }
         } header: {
             Text("Ek Hatırlatmalar")
@@ -410,6 +446,25 @@ struct SettingsView: View {
 
     private func reschedule() {
         Task { await store.rescheduleNotifications(settings: settings) }
+    }
+
+    private func useCurrentLocation() {
+        locationError = nil
+        location.requestPermission()
+        isResolvingLocation = true
+        Task {
+            defer { isResolvingLocation = false }
+            do {
+                let result = try await location.resolveAndMatchDiyanetLocation(directory: directory)
+                settings.location = result.location
+                await store.refresh(location: result.location, settings: settings)
+                if !result.matched {
+                    locationError = "İlçeniz otomatik bulunamadı; yaklaşık vakit gösterilecek. İsterseniz 'Değiştir' ile ilçenizi seçin."
+                }
+            } catch {
+                locationError = "Konum alınamadı. Ayarlar'dan konum iznini açın veya 'Değiştir' ile şehir arayın."
+            }
+        }
     }
 
     static func sourceLabel(_ source: String) -> String {

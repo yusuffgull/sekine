@@ -17,6 +17,8 @@ struct RootView: View {
 }
 
 struct MainTabView: View {
+    @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var store: PrayerTimeStore
     @State private var selection: String = MainTabView.initialTab
     @Environment(\.requestReview) private var requestReview
 
@@ -34,6 +36,22 @@ struct MainTabView: View {
                 .tabItem { Label("Ayarlar", systemImage: "gearshape") }.tag("settings")
         }
         .task { maybeAskForReview() }
+        .alert(
+            "Konum değişti mi?",
+            isPresented: Binding(
+                get: { settings.pendingLocationSuggestion != nil },
+                set: { if !$0 { settings.pendingLocationSuggestion = nil } }
+            ),
+            presenting: settings.pendingLocationSuggestion
+        ) { suggestion in
+            Button("Güncelle") {
+                settings.location = suggestion
+                Task { await store.refresh(location: suggestion, settings: settings) }
+            }
+            Button("Hayır", role: .cancel) { settings.pendingLocationSuggestion = nil }
+        } message: { suggestion in
+            Text("Şu an \(suggestion.name) konumunda görünüyorsunuz. Namaz vakitlerini buna göre güncelleyelim mi?")
+        }
     }
 
     /// Birkaç günlük düzenli kullanımdan sonra, sürüm başına en fazla bir kez sorar

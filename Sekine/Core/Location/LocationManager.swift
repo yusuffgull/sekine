@@ -42,6 +42,21 @@ final class LocationManager: NSObject, ObservableObject {
         }
     }
 
+    /// GPS'ten okuyup Diyanet il/ilçe listesiyle eşleştirir (birebir vakit için).
+    /// Eşleşme yoksa koordinatla döner (yaklaşık vakit), `matched: false`.
+    func resolveAndMatchDiyanetLocation(directory: DiyanetDirectory) async throws
+        -> (location: SavedLocation, matched: Bool) {
+        let resolved = try await resolveCurrentLocation()
+        if let match = await directory.match(cityName: resolved.cityName, districtName: resolved.districtName) {
+            let locale = Locale(identifier: "tr_TR")
+            let name = "\(match.district.name.capitalized(with: locale)), \(match.city.name.capitalized(with: locale))"
+            return (SavedLocation(name: name, latitude: resolved.location.latitude,
+                                   longitude: resolved.location.longitude,
+                                   diyanetDistrictID: match.district.IlceID), true)
+        }
+        return (resolved.location, false)
+    }
+
     /// Metinle ilçe/şehir arar (offline değil; kullanıcı tetikler).
     func search(_ query: String) async -> [SavedLocation] {
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }
