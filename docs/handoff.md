@@ -1,6 +1,28 @@
 # Handoff
 
-## CURRENT TASK
+## CURRENT TASK — 1.5 (8) hazır, 1.4'ün yayınlanması bekleniyor
+**1.4 (7) App Review'da** (metadata + ASO alanları girildi, What's New yazıldı).
+Kullanıcı kararı: 1.4 olduğu gibi çıkacak; **1.5 (8) kodu hazır ve doğrulandı**, 1.4
+yayınlandıktan sonra kullanıcı arşivleyip gönderecek.
+
+1.5'in içeriği (1.4'ü review ederken bulunan iki gerçek hata):
+- **Kıble artık asla doğrulanmamış koordinattan çizilmiyor.** İl/ilçe seçicisi geocode
+  başarısız olunca sessizce `39.0/35.0` (Kırşehir civarı) saklıyordu → kullanıcı uyarısız
+  yanlış yöne yöneliyordu. Ayrıca konum hiç yokken açı 0'da kalıp **kuzeyi kıble**
+  gösteriyordu. Koordinatlar opsiyonel yapıldı, placeholder kaldırıldı; izin varsa açı
+  **gerçek GPS'ten** hesaplanıyor, hesaplanamıyorsa yön yerine konum izni isteniyor.
+- **Drift uyarısına 25 km mesafe eşiği.** Yalnızca ilçe ID'si karşılaştırıldığı için,
+  ilçe sınırına yakın oturan kullanıcı evindeyken uyarı alabiliyordu.
+
+Gerekçeler `docs/decisions.md` (2026-08-24). Doğrulama: bağımsız hesaplanan kıble
+açılarıyla karşılaştırıldı (Ankara canlı GPS 160° / beklenen 160.1; legacy 1.4 verisi
+152° / beklenen 151.6), mesafe eşiği kontrol testiyle, 16/16 birim testi, iOS+watchOS
+derlemesi.
+
+**ASO baseline (24 Ağu 2026, 1.4 yayınlanmadan önce):** "ezan vakti" aramasında ~70. sıra.
+1.4 çıktıktan 1-2 hafta sonra aynı aramalar tekrarlanıp karşılaştırılacak.
+
+## ÖNCEKİ
 **1.4 (7) arşivlenmeyi bekliyor.** 1.3 (6) — Premium/IAP + Apple Watch içeren sürüm —
 Apple review'ından geçti ve **yayında** (Ready for Distribution, 23 Ağu 2026). Yayına
 çıkmış bir versiyona yeni build eklenemediği için sonraki tüm değişiklikler **1.4**'e

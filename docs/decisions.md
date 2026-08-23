@@ -2,6 +2,41 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-08-24 — Koordinat opsiyonel: kıble ASLA doğrulanmamış koordinattan çizilmez
+**Sorun:** `LocationSearchSheet` ilçe adını geocode ediyor, başarısız olursa sessizce
+`39.0 / 35.0` (Türkiye'nin coğrafi merkezi) saklıyordu. Kıble bu koordinattan hesaplandığı
+için kullanıcı, hiçbir uyarı görmeden ~10-15° sapmış "makul görünen" bir yöne yöneliyordu.
+`CLGeocoder` çevrimdışıyken ve rate-limit'te başarısız olur — onboarding sırasında
+gerçekçi. Ayrıca `QiblaManager`, konum hiç yokken `qiblaBearing`'i 0'da bırakıyor, yani
+**kuzeyi kıble olarak** gösteriyordu.
+**Karar:** `SavedLocation` (ve `PrayerSchedule`) koordinatları **opsiyonel** yapıldı;
+placeholder ASLA saklanmıyor. Geocode önce ilçe, sonra il ile denenir; ikisi de olmazsa
+koordinat `nil` kalır. Vakitler etkilenmez — Diyanet yalnızca `diyanetDistrictID` kullanır.
+`QiblaManager` konum izni varsa **tek seferlik gerçek GPS** ölçümüyle açıyı hesaplar
+(kayıtlı koordinattan daha kesin); izin yoksa yalnızca DOĞRULANMIŞ kayıtlı koordinata
+düşer; hiçbiri yoksa `bearingAvailable = false` olur ve iOS/watch ekranları yön çizmek
+yerine konum izni ister. GPS ile aynı ilçe doğrulandığında eksik koordinat sessizce
+doldurulur (Aladhan/lokal fallback tekrar çalışsın).
+**Neden bu kadar sert:** Namaz uygulamasında yanlış kıble, sessizce yanlış çalışan ve
+kullanıcının fark edemeyeceği bir hata. "Koordinatsız kalmak", "yanlış koordinat"tan iyidir.
+**Geriye dönük uyumluluk:** 1.4 ve öncesinde yazılmış kayıtlarda alanlar dolu olduğu için
+opsiyonele decode sorunsuz; simülatörde legacy plist'le doğrulandı (İstanbul → 152°,
+bağımsız hesap 151.6°).
+
+## 2026-08-24 — Konum sürüklenme uyarısı mesafe eşiği ister (25 km)
+**Sorun:** `checkForLocationDrift` kararını yalnızca Diyanet ilçe ID'si değişti mi diye
+veriyordu; GPS ise `kCLLocationAccuracyKilometer` (~1 km) ile çalışıyor. İlçe sınırına
+yakın oturan kullanıcı **evindeyken** komşu ilçeye düşen bir ölçüm yüzünden "Konum değişti
+mi?" uyarısı alabiliyordu. Ret hafızası tek bir ilçe ID'si tuttuğundan, ölçüm iki komşu
+ilçe arasında salınıyorsa birini reddetmek diğerini susturmuyordu. (İstanbul,
+`LocationOverrides` ilçeleri 9541'e bağladığı için korunuyordu; Ankara/İzmir/Bursa değil.)
+**Karar:** İlçe değişikliğine ek olarak kayıtlı ve tespit edilen koordinat arasında
+**≥ 25 km** şartı (`SekineApp.isMeaningfulMove`). Gerekçe: Türkiye enlemlerinde ~21 km
+boylam farkı ≈ 1 dakika vakit farkı → altında vakitler pratikte aynı, sormaya değmez;
+GPS gürültüsü (~1-3 km) çok altında kalır; şehirlerarası seyahat rahatça geçer.
+Kayıtlı koordinat yoksa mesafe bilinemez → ilçe değişikliği tek sinyal olarak kalır.
+**Doğrulama:** ~10 km hareket uyarı üretmiyor, Sakarya (~150 km) üretiyor (kontrol testli).
+
 ## 2026-08-23 — Şemalar project.yml'de TANIMLANIR (Xcode otomatik-şemasına güvenilmez)
 **Sorun:** XcodeGen hiç `.xcscheme` dosyası üretmiyordu; şemalar Xcode tarafından
 otomatik oluşturulup `xcuserdata`'da (kullanıcıya özel, gitignore'da) tutuluyordu. Bu

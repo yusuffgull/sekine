@@ -5,10 +5,14 @@
 sekmesi ve Apple Watch companion app dahil. Yani Faz 1, 1.2, 1.3 ve Faz 2'nin tamamı
 (E4 dahil) kullanıcıya ulaştı.
 
-**Sıradaki sürüm: 1.4 (7)** — arşivlenip gönderilmeyi bekliyor. İçeriği: rating isteme +
-Değerlendir/Paylaş, konum otomatik güncelleme (seyahat), Ayarlar'da GPS butonu,
-Cuma/ayet-dua saati açıklamaları, bağış butonu race düzeltmesi. Detay ve kalan ASC
-adımları: `docs/handoff.md`.
+**1.4 (7) App Review'da.** İçeriği: rating isteme + Değerlendir/Paylaş, konum otomatik
+güncelleme (seyahat), Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış
+butonu race düzeltmesi.
+
+**1.5 (8) kodu hazır ve doğrulandı**, 1.4 yayınlanınca gönderilecek: kıble artık asla
+doğrulanmamış koordinattan çizilmiyor (geocode başarısızlığında saklanan sahte koordinat
+kaldırıldı; izin varsa gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
+Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
 
 ## Yayınlanan sürümler
 - **1.0** — vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget. Diyanet
