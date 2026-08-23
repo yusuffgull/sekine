@@ -3,27 +3,38 @@
 ## Katmanlar
 
 ```
-App/            SekineApp (entry), AppDelegate (UN delegate), RootView (onboarding gate + TabView),
-                BackgroundRefresh (BGAppRefresh + cache'ten yeniden zamanlama)
-Shared/         Widget ile paylaşılan: Prayer, PrayerDay/PrayerSchedule, PrayerCache, AppGroup
+App/            SekineApp (entry), AppDelegate (UN delegate), RootView (onboarding gate +
+                TabView), BackgroundRefresh (BGAppRefresh + cache'ten yeniden zamanlama)
+Shared/         Widget + Watch ile paylaşılan: Prayer, PrayerDay/PrayerSchedule,
+                PrayerCache, AppGroup
 Core/
-  PrayerTimes/  PrayerTimeProvider (protokol), AladhanProvider, LocalCalculationProvider,
-                PrayerTimeStore (beyin: cache→fetch→schedule)
+  PrayerTimes/  PrayerTimeProvider (protokol), DiyanetProvider (birincil), AladhanProvider,
+                LocalCalculationProvider, PrayerTimeStore (beyin: cache→fetch→schedule)
   Notifications/ NotificationManager (izin), RollingScheduler (64-pencere), NotificationSound
-  Location/     LocationManager (GPS + reverse geocode + arama)
+  Location/     LocationManager (GPS + reverse geocode + arama),
+                DiyanetDirectory (il/ilçe + LocationOverrides.json)
   Storage/      AppSettings (app group UserDefaults)
-  Premium/      PremiumGate (v1: FreeTierGate → false)
+  Premium/      PremiumProviding + Store (StoreKit 2: ömürlük premium + bağış)
+  WatchConnectivity/ WatchSessionManager (iPhone tarafı)
 DesignSystem/   Palette + SekineFont + kart stili (tüm renk/font token'ları burada)
-Features/       Onboarding, Home, Monthly, Qibla, Settings (SwiftUI view'lar)
-SekineWidget/   WidgetKit extension (Shared model'i okur)
+Features/       Onboarding, Home, Monthly, Qibla, Spiritual (Zikir), Premium (Paywall),
+                Settings
+SekineWidget/            WidgetKit extension (Shared model'i okur)
+SekineWatch/             watchOS app — Core'u değişmeden kullanır, kendi view'ları +
+                         WatchSessionManager (watch tarafı)
+SekineWatchComplications/ watch komplikasyonları (watch-lokal PrayerCache'ten okur)
 ```
+
+Şemalar `project.yml`'deki `schemes:` bloğunda tanımlıdır (Xcode otomatik-şemasına
+güvenilmez — bkz. `docs/decisions.md`, 2026-08-23).
 
 ## Veri akışı
 1. `PrayerTimeStore` açılışta `PrayerCache`'ten yükler.
-2. `ensureData` kapsamı kontrol eder; gerekiyorsa `AladhanProvider` (fallback:
-   `LocalCalculationProvider`) ile bir yıllık planı çeker → cache'e yazar.
+2. `ensureData` kapsamı kontrol eder; gerekiyorsa `DiyanetProvider` (fallback sırası:
+   Aladhan → `LocalCalculationProvider`) ile bir yıllık planı çeker → cache'e yazar.
 3. `RollingScheduler` cache'ten gelecek ~60 vakti bildirim olarak kurar.
-4. Widget aynı cache'i (app group) okur.
+4. Widget ve Watch komplikasyonları aynı cache'i okur (widget app group üzerinden,
+   watch kendi lokal cache'inden).
 
 ## Zamanlar mutlak Date olarak saklanır
 API'den gelen "HH:mm" değerleri, günün tarihi + timezone (Europe/Istanbul) ile mutlak

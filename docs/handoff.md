@@ -22,10 +22,10 @@ metadata) → **Submit for Review**.
 Gerekçe: arama ağırlığı App Name > Subtitle > Keywords; "ezan" daha önce yalnızca
 Keywords'teydi. Description aramada kullanılmaz.
 
-**Pushlanmamış local commit'ler (main'de, origin'de yok):** `736dd66`..`d52d5e8` —
+**Pushlanmamış local commit'ler (main'de, origin'de yok):** `736dd66`'dan itibaren —
 DEBUG-only test kancaları, growth özellikleri (rating/paylaş), kullanıcının bildirdiği 4
-sorunun düzeltmesi ve review sonrası iki ek düzeltme. Kullanıcı kararıyla bir sonraki
-geliştirmeyle birlikte pushlanacak.
+sorunun düzeltmesi, review sonrası iki ek düzeltme, 1.4 bump ve şema düzeltmesi.
+Kullanıcı kararıyla toplu pushlanacak.
 
 ### Review sonucu (23 Ağu 2026) — backward compatibility TEMİZ
 Pushlanmamış 6 commit tam diff okunarak review edildi. Yeni `UserDefaults` anahtarları
@@ -47,36 +47,42 @@ SettingsView, OnboardingView, LocationSearchSheet), her biri kendi bellek cache'
 il/ilçe listesini ayrı ayrı indirebiliyor. Yayın öncesi çalışan koda dokunmamak için
 şimdi yapılmadı; tek örneği `.environmentObject` ile paylaştırmak temiz bir iyileştirme.
 
+### Şema düzeltmesi (23 Ağu 2026)
+Xcode'un şema seçicisinde **"Sekine" şeması kaybolmuştu** (yalnızca Watch/Complications/
+Widget görünüyordu) — kullanıcı yanlışlıkla bir extension'ı arşivlemek üzereydi. Kök neden:
+XcodeGen `.xcscheme` üretmiyordu, şemalar Xcode tarafından otomatik oluşturulup
+gitignore'daki `xcuserdata`'da tutuluyordu ve `xcodegen generate` sonrası bayatlıyordu.
+Aynı neden Xcode Cloud'da da vardı (CI "Catalog" adımı hep 3 şema buluyordu). Çözüm: dört
+şema da `project.yml`'deki `schemes:` bloğunda tanımlandı → paylaşılan şema olarak
+üretiliyor. `.xcodeproj` tamamen silinip sıfırdan üretilerek doğrulandı. Detay:
+`docs/decisions.md`.
+
 ## DONE
-- **v1** yayında: native SwiftUI, Diyanet birebir vakit kaynağı (DiyanetProvider), il/ilçe
-  konum, RollingScheduler bildirimleri, WidgetKit. **v1.1** gönderildi (UX düzeltmeleri).
-- **Faz 1.2/1.3** (güvenilirlik, hicri/kıble saati, ek hatırlatmalar) kod tamam.
-- **Faz 2** (Ömürlük Premium + Bağış, StoreKit 2, backend'siz) neredeyse tamam: StoreKit
-  altyapısı, tam ezan, premium temalar/ikon, ücretsiz Zikir sekmesi, çoklu konum, vakit-başına
-  ses, premium widget accent — hepsi push'landı.
-- **Faz E4 (Apple Watch)** — `SekineWatch` + `SekineWatchComplications` hedefleri, paylaşılan
-  Core kod değişikliksiz derlendi, watch-özel ekranlar (Onboarding/Home/Qibla/Paywall/Tesbih),
-  gerçek komplikasyon view'ları, çift yönlü WatchConnectivity — `xcrun simctl pair` ile
-  iPhone→Watch context transferi ekran görüntüsü kanıtlı doğrulandı. 3 gerçek sorun çözüldü:
-  `UNNotificationSound(named:)` watchOS'ta yok (sistem sesine düşülüyor), Swift 6 concurrency
-  (nonisolated erişim), bildirim izni her açılışta isteniyordu (artık yalnızca onboarding'te).
-- **Xcode Cloud CI** ilk kez çalışır hale getiriliyor (20 Ağu 2026) — build 1'den beri hiç
-  yeşil build almamıştı (Xcode Cloud hiç kullanılmıyordu, tüm gönderimler Xcode GUI'den elle
-  yapılıyordu). `ci_scripts/ci_post_clone.sh` eklendi: `Sekine.xcodeproj` gitignore'da olduğu
-  için (XcodeGen üretimi) her CI çalışmasında `xcodegen generate` + paket resolve gerekiyor;
-  Xcode Cloud'un zorladığı `IDEPackageOnlyUseVersionsFromResolvedFile`/
-  `IDEDisableAutomaticPackageResolution` defaults'ları da temizleniyor. Detay: `docs/decisions.md`
-  (2026-08-20). **Kural: `project.yml`/`ci_scripts/` değişince push'tan önce
-  `./scripts/verify-xcode-cloud.sh` çalıştır.**
+Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pahalı olan bağlam:
+
+- **Faz E4 (Apple Watch)** — Core kodu değişmeden watch hedefinde derlendi. Uygulama
+  sırasında çözülen 3 gerçek sorun: `UNNotificationSound(named:)` watchOS'ta yok (sistem
+  sesine düşülüyor), Swift 6 concurrency (nonisolated erişim), bildirim izni her açılışta
+  isteniyordu (artık yalnızca onboarding'te). WatchConnectivity `xcrun simctl pair` ile
+  uçtan uca doğrulandı. Watch app'in TAMAMI premium kilidinde (bilinçli tasarım) →
+  ekran görüntüsü almak için `-uiTestForcePremium` gerekiyor.
+- **Xcode Cloud CI** çalışır durumda (build 24 yeşil). Build 1'den 19'a kadar hiç yeşil
+  build yoktu; Xcode Cloud hiç kullanılmıyordu, tüm gönderimler Xcode GUI'den elle
+  yapılıyordu. `ci_scripts/ci_post_clone.sh` her çalışmada `xcodegen generate` + paket
+  resolve yapıyor ve Xcode Cloud'un zorladığı `IDEPackageOnlyUseVersionsFromResolvedFile`/
+  `IDEDisableAutomaticPackageResolution` defaults'larını temizliyor. Detay:
+  `docs/decisions.md` (2026-08-20). **Kural: `project.yml`/`ci_scripts/` değişince
+  push'tan önce `./scripts/verify-xcode-cloud.sh` çalıştır.**
 
 ## NEXT
-1. Xcode Cloud'da yeni build tetikleyip yeşil geçtiğini doğrula.
-2. Faz E4 kalanı: gerçek dedup testi (iki cihaz aynı anda bildirim → tek bildirim) ve
-   premium ekranların görsel doğrulaması — TestFlight/gerçek cihaz gerektiriyor.
-3. Gelir zinciri (kod dışı, kullanıcı takip ediyor): 20/B istisna belgesi + özel hesap
-   gelince ASC'de IBAN güncelle; IAP ürün ID'leri ASC'de tanımlanabilir (bağımsız, hemen
-   yapılabilir); ezan ses dosyaları ERTELENDİ (lisans araştırması durduruldu, kod gate'i hazır).
-4. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+1. 1.4 (7): Archive → Upload → ASC'de sürümü oluştur (What's New + ASO metadata) → Submit.
+2. Yayından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
+   metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
+   başvurulmayacağına karar ver.
+3. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
+   güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
+4. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
+5. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
 
 ## BLOCKERS
 Yok.
@@ -88,18 +94,11 @@ Claude — ürün/veri kararı gerektiren işler sürüyor.
 
 ## Referans notları (sık aranan, tekrar araştırmaya gerek yok)
 
+> Apple ID/Team, bundle ID'ler, gönderim adımları, mağaza metinleri ve geçmişte çözülen
+> gönderim hataları → `docs/store-submission.md`.
+
 **Repo görünürlüğü PUBLIC kalmalı:** Support URL + Privacy Policy URL repo'ya bağlı (ASC
 gereksinimi); private yapılırsa App Store'daki linkler kırılır. Bilinçli karar.
-
-**Apple ID:** 6796900944. **Team:** 33L468BTR2.
-
-**Gönderim sırasında çözülen sorunlar:**
-- 90474 (iPad orientation) → `TARGETED_DEVICE_FAMILY=1` her hedefte ayrı ayrı yazılmalı
-  (XcodeGen proje-base ayarı target seviyesini ezmiyor).
-- codesign "resource fork/detritus" → DerivedData'yı iCloud'lu `~/Documents` dışına ver.
-- ASC "Username/Password required" → App Review'da "Sign-in required" kutusu kapatılmalı.
-- Xcode GUI varsayılan DerivedData (`~/Library`) kullanır → iCloud xattr sorunu yaşanmaz;
-  CLI'dan device build alırken `-derivedDataPath`'i iCloud'lu dizin dışına ver.
 
 **AB erişilebilirliği:** 27 AB ülkesinde "Cannot Sell" idi (DSA Trader Status eksikti) →
 kullanıcı "non-trader" seçti, global erişilebilirlik açıldı, İspanya'dan test indirmesiyle

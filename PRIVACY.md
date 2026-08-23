@@ -1,6 +1,6 @@
 # Gizlilik Politikası — Sekine
 
-**Son güncelleme: 5 Ağustos 2026**
+**Son güncelleme: 23 Ağustos 2026**
 
 Sekine, gizliliğe saygıyı temel bir ilke olarak benimser. Kısaca: **hiçbir kişisel
 verinizi toplamıyor, saklamıyor veya paylaşmıyoruz.**
@@ -27,6 +27,11 @@ belirleyen hiçbir bilgi (isim, e-posta, cihaz kimliği vb.) gönderilmez.
 Namaz vakti bildirimleri tamamen cihazınızda, yerel olarak zamanlanır. Bildirim içeriği
 cihazınızdan dışarı çıkmaz.
 
+## Satın almalar
+Uygulama içi satın almalar (Ömürlük Premium ve bağışlar) tamamen **Apple** tarafından
+yürütülür. Ödeme bilgilerinizi görmez, toplamaz ve saklamayız; satın alma durumu yalnızca
+cihazınızda tutulur. Kendi sunucumuz veya hesap sistemimiz yoktur.
+
 ## Çocukların gizliliği
 Sekine her yaştan kullanıcıya uygundur ve hiçbir kişisel veri toplamadığından çocuklardan
 da veri toplamaz.
@@ -41,7 +46,7 @@ Soru veya talepleriniz için: **gull.yusuff@gmail.com**
 
 # Privacy Policy — Sekine (English)
 
-**Last updated: August 5, 2026**
+**Last updated: August 23, 2026**
 
 Sekine is built around privacy. In short: **we do not collect, store, or share any of
 your personal data.**
@@ -56,5 +61,7 @@ your personal data.**
   identifying information is transmitted. Times are cached on-device and the app then
   works offline.
 - **Notifications** are scheduled locally on your device.
+- **Purchases** (lifetime Premium and tips) are handled entirely by Apple. We never see,
+  collect, or store your payment details; entitlement is kept on-device only.
 
 Contact: **gull.yusuff@gmail.com**

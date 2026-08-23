@@ -1,79 +1,83 @@
 # App Store Gönderim Rehberi
 
-## 0. SUBMIT ÖNCESİ ZORUNLU — Diyanet doğruluk doğrulaması
-En büyük 1-yıldız riski budur. Göndermeden önce:
-1. Uygulamada İstanbul, Ankara, İzmir için vakitleri aç.
-2. Aynı gün için Diyanet resmi vakitleriyle karşılaştır:
-   https://namazvakti.diyanet.gov.tr (ilgili ilçeyi seç).
-3. Özellikle **İmsak** ve **Yatsı**'ya bak (en çok sapan vakitler).
-4. Sapma ≤1 dk ise kabul; >1-2 dk ise `PrayerTimeProvider`'a Diyanet resmi
-   (awqatsalah.diyanet.gov.tr) sağlayıcısı ekle — `PrayerTimeStore.primary`'yi değiştir,
-   başka yer değişmez. Kayıt/JWT gerekir (ücretsiz).
+Uygulama **yayında**. Bu dosya artık ilk-gönderim rehberi değil, **her güncelleme için**
+tekrarlanan adımların ve değişmeyen referans bilgilerin listesi.
 
-## 1. Xcode signing (kullanıcı)
-- `project.yml` → `DEVELOPMENT_TEAM` boş. Xcode'da hedefi seç → Signing & Capabilities →
-  Team'i seç (App group provisioning otomatik oluşur).
-- Bundle ID'ler: `com.sekineapp.sekine` (app), `.widget`, `.tests`. App Store Connect'te
-  `com.sekineapp.sekine` benzersiz olmalı; değilse project.yml'de değiştir + `xcodegen generate`.
-- App Group `group.com.sekineapp.sekine`'i Apple Developer portal'da kaydet.
-
-## 2. App Store Connect kaydı
-- **İsim:** "Sekine" (müsaitlik kontrolü: App Store Connect'te yeni app oluştururken görürsün;
-  doluysa "Sekine - Namaz Vakti" dene).
-- **Alt başlık:** Reklamsız, gizli namaz vakti
-- **Kategori:** Yaşam Tarzı (veya Referans)
-- **Yaş sınırı:** 4+
-
-## 2b. Zorunlu URL'ler (App Information)
+## Sabitler (değişmez)
+- **Apple ID:** 6796900944 · **Team:** 33L468BTR2
+- **Bundle ID'ler:** `com.sekineapp.sekine` (app), `.widget`, `.watchkitapp`,
+  `.watchkitapp.complications`, `.tests`
+- **App Group:** `group.com.sekineapp.sekine`
 - **Privacy Policy URL:** https://github.com/yusuffgull/sekine/blob/main/PRIVACY.md
 - **Support URL:** https://github.com/yusuffgull/sekine
+- **App Privacy:** "Data Not Collected" (backend yok, analytics yok, reklam yok; konum
+  yalnızca cihazda kullanılır, vakit servisine yalnızca il/ilçe veya koordinat gider)
+- **Kategori:** Yaşam Tarzı · **Yaş sınırı:** 4+
+- Signing otomatik; `DEVELOPMENT_TEAM` `project.yml`'de tanımlı, elle ayar gerekmez.
 
-## 3. Gizlilik "Nutrition Label" (App Privacy)
-- **Veri toplama: YOK.** "Data Not Collected" seç. (Backend yok, analytics yok, reklam yok.)
-- Konum yalnızca cihazda kullanılır, toplanmaz/gönderilmez → beyan gerekmez.
-- Not: Aladhan API'ye yalnızca koordinat + tarih gider, kullanıcı kimliği gitmez. Bu bir
-  3rd-party servistir; istersen gizlilik metninde belirt (zorunlu değil, kişisel veri değil).
+## Her güncellemede
+1. **Versiyon/build:** `project.yml` → `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION`.
+   Yayına çıkmış bir versiyona yeni build EKLENEMEZ → yayındaysa versiyonu yükselt.
+   Gömülü Watch app'in sürümü iOS ile aynı olmalı (XcodeGen `settings.base`'ten geliyor).
+2. `xcodegen generate` → `./scripts/verify-xcode-cloud.sh` (derleme + CI senaryosu).
+3. Xcode → scheme **Sekine** + "Any iOS Device" → Product → Archive → Distribute App →
+   App Store Connect. (Şemalar `project.yml`'de tanımlı; yanlış şemayla extension
+   arşivlememeye dikkat.)
+4. ASC'de yeni sürümü oluştur → build'i seç → **What's New** yaz.
+5. İlk kez eklenen IAP'ler bir app sürümüyle birlikte gönderilmek zorundadır; zaten
+   onaylanmış IAP'leri tekrar iliştirmeye gerek yok.
+6. **Submit for Review.**
 
-## 4. Mağaza açıklaması (paste'e hazır)
+## Ekran görüntüleri
+- **iPhone 6.9" zorunlu** (1320×2868) → `store/screenshots/`; 6.5" (1284×2778) →
+  `store/screenshots-6.5/`.
+- **Apple Watch zorunlu** (binary Watch app içerdiği için) — 422×514 (Ultra 3) kabul edilir.
+- Yakalama: `xcrun simctl io booted screenshot ekran.png`. Premium-kilitli ekranlar için
+  DEBUG launch argümanları: `-uiTestSeedIstanbul`, `-uiTestForcePremium`, `-uiTestTab <id>`,
+  `-uiTestShowPaywall`, `-uiTestScrollTo <id>`.
+- Kıble ekranını simülatörde çekme — manyetometre olmadığı için "pusula yok" boş-durumu
+  görünür.
 
-**Kısa:**
-> Sekine, reklamsız ve gizliliğe saygılı bir namaz vakti uygulamasıdır. Diyanet'e uygun
-> vakitler, güvenilir bildirimler, sade ve büyük bir arayüz.
+## Mağaza metinleri
 
-**Uzun:**
+**ASO metadata (arama ağırlığı: App Name > Subtitle > Keywords; Description aramada
+kullanılmaz):**
+- **App Name:** `Sekine: Ezan ve Namaz Vakti`
+- **Subtitle:** `Kıble, İmsakiye, Ezan Saatleri`
+- **Keywords:** `ezan,namaz,vakit,imsak,kıble,diyanet,imsakiye,sabah,öğle,ikindi,akşam,yatsı,dua,zikir,hicri,takvim`
+
+**Açıklama:**
 > Sekine; namaz vakitlerini sade, huzurlu ve güvenilir biçimde sunar.
 >
 > • Reklamsız — hiçbir reklam, hiçbir dikkat dağıtıcı yok.
 > • Gizli — verileriniz cihazınızdan çıkmaz, hiçbir takip yok.
 > • Diyanet uyumlu — Türkiye vakitleri, çevrimdışı çalışır.
 > • Güvenilir bildirimler — vakit bildirimleri düzenli yenilenir, susmaz.
-> • Ana ekran widget'ı — sonraki vakit ve geri sayım.
-> • Kıble pusulası.
+> • Widget'lar — ana ekran, kilit ekranı ve StandBy'da sonraki vakit ve geri sayım.
+> • Kıble pusulası ve aylık imsakiye.
+> • Zikir — tesbih, Esmaül Hüsna ve dualar. Ücretsiz.
+> • Apple Watch uygulaması ve komplikasyonlar.
 > • Her yaşa uygun — büyük, net, anlaşılır tasarım.
 >
-> Reklam yok. Abonelik zorunluluğu yok. Sadece namaz vakitleri.
+> Reklam yok. Abonelik yok. Dilerseniz tek seferlik Premium ile destek olabilirsiniz.
 
-**Anahtar kelimeler:** namaz,ezan,vakit,imsak,diyanet,kıble,namaz vakti,ezan vakti,imsakiye,dua
-
-## 5. Ekran görüntüleri
-- Gerekli: 6.9" (iPhone 17 Pro Max) — App Store Connect'in istediği boyut.
-- Simülatörde (iPhone 17 Pro Max) çalıştırıp yakala:
-  `xcrun simctl io booted screenshot ekran1.png`
-- Öneri: Onboarding, Home (geri sayım), Aylık, Kıble ekranları.
-
-## 6. Derleme & yükleme
-- Xcode → Product → Archive → Distribute App → App Store Connect.
-- Veya `xcodebuild archive` + `xcrun altool`/Transporter.
-- TestFlight'ta kendinde bir dene, sonra "Submit for Review".
-
-## 7. Review notları (App Review'a)
+## Review notları (App Review'a)
 - Hesap/giriş gerektirmez, test hesabı gerekli değildir.
 - Konum izni: yalnızca namaz vakti hesabı için, cihazda kullanılır; sunucuya kimlik
   bilgisi göndermez.
-- Uygulama ücretsizdir; isteğe bağlı IAP var: "Sekine Premium" (ömür boyu, tek seferlik,
-  `com.sekineapp.sekine.premium.lifetime`) ve 3 adet bağış (`tip.small/medium/large`,
-  consumable). IAP'siz de uygulama tam işlevseldir (Zikir sekmesi, temel vakitler/
-  bildirimler ücretsiz) — premium yalnızca tam ezan sesi, ek temalar, çoklu konum gibi
-  isteğe bağlı ekstraları açar.
+- Uygulama ücretsizdir; isteğe bağlı IAP: "Sekine Premium" (ömür boyu, tek seferlik,
+  `com.sekineapp.sekine.premium.lifetime`) ve 3 bağış (`tip.small/medium/large`,
+  consumable). IAP'siz de uygulama tam işlevseldir (Zikir sekmesi, vakitler, bildirimler
+  ücretsiz) — premium yalnızca tam ezan sesi, ek temalar, çoklu konum gibi ekstraları açar.
 - Apple Watch companion app dahildir (`SekineWatch`), iPhone'dan bağımsız da çalışır
   (`WKRunsIndependentlyOfCompanionApp: true`).
+
+## Geçmişte çözülen gönderim sorunları (tekrarında referans)
+- **90474 (iPad orientation)** → `TARGETED_DEVICE_FAMILY=1` her hedefte AYRI yazılmalı;
+  XcodeGen proje-base ayarı target seviyesini ezmiyor.
+- **codesign "resource fork/detritus"** → DerivedData'yı iCloud'lu `~/Documents` dışına ver.
+  (Xcode GUI varsayılanı `~/Library` kullandığı için GUI'de bu sorun çıkmaz.)
+- **ASC "Username/Password required"** → App Review'da "Sign-in required" kutusu kapatılmalı.
+- **Watch App ID capability hatası** → `watchkitapp` ve `.complications` App ID'lerinde
+  App Groups (+ Watch app'te Time Sensitive Notifications) Developer portal'da açık olmalı;
+  aksi halde Xcode Cloud'un export adımı imzalama hatası verir.

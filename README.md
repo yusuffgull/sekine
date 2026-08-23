@@ -15,7 +15,8 @@ tasarım ilkeleri hâline geldi:
   saklanır; konumunuz cihazdan çıkmaz.
 - **Diyanet uyumlu.** Vakit kaynağı birebir Diyanet (ezanvakti/namazvakti.diyanet.gov.tr
   aynası), yedek Aladhan `method=13`; mimari kaynak-bağımsızdır (bkz. `docs/decisions.md`).
-- **Widget.** Ana ekranda sonraki vakit + geri sayım.
+- **Widget.** Ana ekranda, kilit ekranında ve StandBy'da sonraki vakit + geri sayım.
+- **Apple Watch.** Bağımsız çalışan watchOS uygulaması ve komplikasyonlar.
 
 ## Teknoloji
 
@@ -41,10 +42,12 @@ xcodebuild -project Sekine.xcodeproj -scheme Sekine \
 
 ## Yol Haritası
 
-- **v1** (yayında): vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget.
-- **Faz 2** (neredeyse tamam): Ömürlük Premium + Bağış (StoreKit 2) — tam ezan, premium
-  temalar, çoklu konum; ücretsiz Zikir sekmesi; Apple Watch companion app.
-- **Faz 3**: Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini içerik.
+- **Yayında (1.3):** vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget'lar;
+  ücretsiz Zikir sekmesi (tesbih + Esmaül Hüsna + dualar); Apple Watch companion app;
+  isteğe bağlı Ömürlük Premium + bağış (StoreKit 2, abonelik yok).
+- **Sıradaki (1.4):** seyahatte konum otomatik algılama, Ayarlar'da GPS ile konum yenileme,
+  hatırlatma saatlerinin açıklanması, çeşitli düzeltmeler.
+- **Sonraki:** Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini içerik.
 
 ## Destek & Gizlilik
 
