@@ -95,6 +95,9 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   `IDEDisableAutomaticPackageResolution` defaults'larını temizliyor. Detay:
   `docs/decisions.md` (2026-08-20). **Kural: `project.yml`/`ci_scripts/` değişince
   push'tan önce `./scripts/verify-xcode-cloud.sh` çalıştır.**
+  Workflow **Archive/export yapmıyor**, yalnızca Build + Test koşuyor (24 Ağu 2026 kararı,
+  bkz. `docs/decisions.md`): export edilen üç dağıtım paketi hiç kullanılmıyordu ve
+  imzalama yüzünden CI'ı sürekli kırmızı tutuyordu. Release arşivi Xcode'dan elle alınır.
 
 ## NEXT
 1. 1.4 (7): Archive → Upload → ASC'de sürümü oluştur (What's New + ASO metadata) → Submit.

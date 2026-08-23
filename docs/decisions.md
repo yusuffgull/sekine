@@ -2,6 +2,23 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-08-24 — Xcode Cloud: Archive/export yerine Build + Test (dağıtım paketi üretilmiyor)
+**Sorun:** Workflow'un Archive action'ı her çalışmada **üç ayrı dağıtım paketi** export
+etmeye çalışıyordu (ad-hoc, development, app-store) ve export adımı imzalama/provisioning
+yüzünden `exit 70` ile patlıyordu. Arşivin kendisi sorunsuzdu — yerelde `Sekine` şemasıyla
+alınan arşivde `Products/Applications/Sekine.app` doğru şekilde üretiliyor, Release
+derlemesi temiz. Yani hata kodda değil, imzalamadaydı.
+**Karar:** Archive action kaldırıldı; yerine **Build + Test** action'ları kondu (Scheme:
+`Sekine`, test için iOS Simulator). Gerekçe: üretilen üç .ipa hiç kullanılmıyor —
+release arşivi Xcode'dan elle alınıp yükleniyor. CI'ın gerçek değeri "derleniyor mu +
+testler geçiyor mu" sorusunu yanıtlamak; workflow test bile çalıştırmıyordu (16 birim
+testi vardı). Böylece CI hem yeşile döndü hem de ilk kez gerçek bir regresyon ağı oldu.
+**Not:** Bu değişiklik App Store Connect'teki workflow ayarındadır, repoda değil.
+İleride TestFlight'a otomatik build gönderilmek istenirse Archive action geri eklenebilir —
+o durumda imzalama sorununun ayrıca çözülmesi gerekir (logs artifact'ından kök neden
+okunmalı; muhtemel aday: yerelde otomatik imzalamayla arşiv alınırken profillerin
+güncellenip Xcode Cloud'un yönetilen profilleriyle çakışması).
+
 ## 2026-08-24 — Koordinat opsiyonel: kıble ASLA doğrulanmamış koordinattan çizilmez
 **Sorun:** `LocationSearchSheet` ilçe adını geocode ediyor, başarısız olursa sessizce
 `39.0 / 35.0` (Türkiye'nin coğrafi merkezi) saklıyordu. Kıble bu koordinattan hesaplandığı
