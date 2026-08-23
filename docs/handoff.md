@@ -81,7 +81,8 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   isteniyordu (artık yalnızca onboarding'te). WatchConnectivity `xcrun simctl pair` ile
   uçtan uca doğrulandı. Watch app'in TAMAMI premium kilidinde (bilinçli tasarım) →
   ekran görüntüsü almak için `-uiTestForcePremium` gerekiyor.
-- **Xcode Cloud CI** çalışır durumda (build 24 yeşil). Build 1'den 19'a kadar hiç yeşil
+- **Xcode Cloud CI** çalışır durumda; Build + Test kurulumu 24 Ağu 2026'da yeşil doğrulandı
+  (ilk kez testler de CI'da koşuyor). Build 1'den 19'a kadar hiç yeşil
   build yoktu; Xcode Cloud hiç kullanılmıyordu, tüm gönderimler Xcode GUI'den elle
   yapılıyordu. `ci_scripts/ci_post_clone.sh` her çalışmada `xcodegen generate` + paket
   resolve yapıyor ve Xcode Cloud'un zorladığı `IDEPackageOnlyUseVersionsFromResolvedFile`/
