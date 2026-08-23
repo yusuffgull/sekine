@@ -2,6 +2,27 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-08-23 — Şemalar project.yml'de TANIMLANIR (Xcode otomatik-şemasına güvenilmez)
+**Sorun:** XcodeGen hiç `.xcscheme` dosyası üretmiyordu; şemalar Xcode tarafından
+otomatik oluşturulup `xcuserdata`'da (kullanıcıya özel, gitignore'da) tutuluyordu. Bu
+durum `xcodegen generate` sonrası bozulabiliyor: Xcode'un şema seçicisinde **"Sekine"
+şeması kayboldu** (yalnızca SekineWatch/Complications/Widget görünüyordu) ve
+`xcschememanagement.plist` yalnızca 3 şema içeriyordu — kullanıcı yanlışlıkla bir
+extension'ı arşivlemek üzereydi. Aynı kök neden Xcode Cloud'da da görülmüştü: build
+loglarındaki "Catalog app product and scheme metadata" adımı yalnızca Watch/
+Complications/Widget buluyor, paket çözümlemesini `-scheme SekineWidget` ile yapıyordu;
+bu yüzden `ci_post_clone.sh`'ta `-scheme` kullanmaktan vazgeçilmişti (bkz. 2026-08-20).
+**Karar:** Dört şema da `project.yml`'deki `schemes:` bloğunda açıkça tanımlanır. XcodeGen
+bunları `Sekine.xcodeproj/xcshareddata/xcschemes/` altına **paylaşılan** şema olarak yazar.
+`Sekine` şeması `SekineTests`'i test hedefi olarak içerir (coverage açık).
+**Neden bu yeterli:** `.xcscheme` dosyaları `Sekine.xcodeproj/` içinde olduğu için git'e
+girmiyor, ama tek kaynak olan `project.yml` giriyor ve şemalar her `xcodegen generate`'te
+(yerelde ve Xcode Cloud'un post-clone adımında) deterministik olarak yeniden üretiliyor.
+Doğrulandı: `Sekine.xcodeproj` tamamen silinip sıfırdan üretildiğinde dört şema da mevcut.
+**Elenen alternatif:** Otomatik şemalara güvenip bozulunca elle "Autocreate Schemes Now"
+demek — her `xcodegen generate` sonrası tekrarlayan, sessizce yanlış hedefi arşivletebilen
+bir tuzak; makine/kullanıcı değişince de taşınmıyor.
+
 ## 2026-08-20 — Xcode Cloud + XcodeGen: ci_scripts/ci_post_clone.sh zorunlu, push öncesi scripts/verify-xcode-cloud.sh
 **Sorun:** `Sekine.xcodeproj/` bilinçli olarak gitignore'da (XcodeGen üretimi, kaynak
 `project.yml`). Xcode Cloud repoyu clone'layıp doğrudan `Sekine.xcodeproj` arıyor → build 19

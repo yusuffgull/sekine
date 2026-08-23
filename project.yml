@@ -152,3 +152,65 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sekineapp.sekine.tests
         GENERATE_INFOPLIST_FILE: YES
+
+# Paylaşılan şemalar burada TANIMLANIR — Xcode'un otomatik-şema üretimine güvenilmez.
+# Otomatik şemalar xcuserdata'da tutulur ve `xcodegen generate` sonrası kaybolabiliyordu:
+# Xcode'un şema seçicisinde "Sekine" görünmez olmuştu ve Xcode Cloud da yalnızca
+# Watch/Complications/Widget şemalarını buluyordu (bkz. docs/decisions.md, 2026-08-23).
+schemes:
+  Sekine:
+    build:
+      targets:
+        Sekine: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - SekineTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  SekineWatch:
+    build:
+      targets:
+        SekineWatch: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  SekineWidget:
+    build:
+      targets:
+        SekineWidget: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  SekineWatchComplications:
+    build:
+      targets:
+        SekineWatchComplications: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
