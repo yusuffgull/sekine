@@ -1,16 +1,43 @@
 # Handoff
 
 ## CURRENT TASK
-1.3 (6) — Premium/IAP + Apple Watch app içeren ilk gerçek sürüm — Xcode'dan elle arşivlenip
-ASC'ye upload edildi (22 Ağu 2026). 4 IAP ürünü ASC'de oluşturuldu, ASC'nin istediği
-Apple Watch ekran görüntüleri (Home + Tesbih, 422×514 Ultra 3) hazırlandı ve masaüstüne
-kondu. Kalan: kullanıcı ASC'de version 1.3'ü tamamlayıp (screenshot'lar + What's New +
-IAP'ler ekli) **Submit for Review** yapacak.
+**1.3 (7) arşivlenmeyi bekliyor.** Build 6 ASC'ye yüklendi ama Premium/IAP + Watch
+sonrası eklenen growth ve hata düzeltmelerini içermiyor; build 7 henüz arşivlenmedi
+(kullanıcı teyidi, 23 Ağu 2026) → numara 7'de kalıyor, tüm son değişiklikler bu build'e
+girecek. 4 IAP ürünü ASC'de hazır, Apple Watch ekran görüntüleri (Home + Tesbih,
+422×514) yüklendi. Kalan: Xcode'dan Archive → Upload, sonra ASC'de 1.3'ü
+(What's New + IAP'ler ekli) **Submit for Review**.
 
-**Pushlanmamış local commit'ler var (main'de, origin'de yok):** `736dd66`
-(`-uiTestForcePremium` debug hook'u) ve `d3b6178` (`-uiTestTab` Watch TabView'a eklendi).
-İkisi de DEBUG-only, App Store binary'sini etkilemiyor — kullanıcı kararıyla bir sonraki
-geliştirmeyle birlikte pushlanacak, şimdi tek başına gönderilmiyor.
+**ASO metadata (ASC'de elle girilecek, build'den bağımsız):** App Name
+`Sekine: Ezan ve Namaz Vakti`, Subtitle `Kıble, İmsakiye, Ezan Saatleri`, Keywords
+`ezan,namaz,vakit,imsak,kıble,diyanet,imsakiye,sabah,öğle,ikindi,akşam,yatsı,dua,zikir,hicri,takvim`.
+Gerekçe: arama ağırlığı App Name > Subtitle > Keywords; "ezan" daha önce yalnızca
+Keywords'teydi. Description aramada kullanılmaz.
+
+**Pushlanmamış local commit'ler (main'de, origin'de yok):** `736dd66`..`d52d5e8` —
+DEBUG-only test kancaları, growth özellikleri (rating/paylaş), kullanıcının bildirdiği 4
+sorunun düzeltmesi ve review sonrası iki ek düzeltme. Kullanıcı kararıyla bir sonraki
+geliştirmeyle birlikte pushlanacak.
+
+### Review sonucu (23 Ağu 2026) — backward compatibility TEMİZ
+Pushlanmamış 6 commit tam diff okunarak review edildi. Yeni `UserDefaults` anahtarları
+nil-güvenli okunuyor, mevcut anahtarların anlamı değişmedi, `SavedLocation`/`PrayerCache`
+modelleri aynı → mevcut kullanıcıda veri kaybı/çökme riski yok. Widget hedefi değişen
+dosyaların hiçbirini almıyor; watch hedefi alıyor ve watchOS derlemesi doğrulandı.
+Testler (12/12) değişen tipleri hiç kurmuyor, hepsi geçiyor. DEBUG kancaları `#if DEBUG`
+içinde → Release binary'ye girmiyor. Konum izin metinleri yeni foreground kontrolünü
+zaten doğru tarif ediyor.
+
+Review'da bulunan **2 gerçek hata düzeltildi** (`d52d5e8`): (1) rating diyalogu konum
+uyarısını yutuyordu — ask artık bootstrap'ı bekleyip öneri varken atlıyor ve sürüm
+kapısını yakmıyor; ayrıca `RootView`'a eksik `import StoreKit` eklendi. (2) Konum önerisi
+reddedilince hatırlanmıyordu, 24 saatte bir tekrar soruyordu — `declinedLocationDistrictID`
+kalıcı saklanıyor, konum elle değişince sıfırlanıyor.
+
+**Bilinen, kasıtlı olarak ertelenen:** 4 ayrı `DiyanetDirectory` örneği var (SekineApp,
+SettingsView, OnboardingView, LocationSearchSheet), her biri kendi bellek cache'iyle
+il/ilçe listesini ayrı ayrı indirebiliyor. Yayın öncesi çalışan koda dokunmamak için
+şimdi yapılmadı; tek örneği `.environmentObject` ile paylaştırmak temiz bir iyileştirme.
 
 ## DONE
 - **v1** yayında: native SwiftUI, Diyanet birebir vakit kaynağı (DiyanetProvider), il/ilçe
