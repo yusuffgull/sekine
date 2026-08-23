@@ -22,12 +22,10 @@ derlemesi.
 **ASO baseline (24 Ağu 2026, 1.4 yayınlanmadan önce):** "ezan vakti" aramasında ~70. sıra.
 1.4 çıktıktan 1-2 hafta sonra aynı aramalar tekrarlanıp karşılaştırılacak.
 
-## ÖNCEKİ
-**1.4 (7) arşivlenmeyi bekliyor.** 1.3 (6) — Premium/IAP + Apple Watch içeren sürüm —
-Apple review'ından geçti ve **yayında** (Ready for Distribution, 23 Ağu 2026). Yayına
-çıkmış bir versiyona yeni build eklenemediği için sonraki tüm değişiklikler **1.4**'e
-alındı (`MARKETING_VERSION` 1.4, build 7; gömülü Watch app'in sürümü de 1.4 (7) olarak
-doğrulandı — Apple eşleşmesini şart koşuyor).
+## ÖNCEKİ — 1.4'ün hazırlanışı (23 Ağu 2026)
+1.3 (6) — Premium/IAP + Apple Watch içeren sürüm — Apple review'ından geçip **yayına
+çıktı**. Yayınlanmış bir versiyona yeni build eklenemediği için sonraki tüm değişiklikler
+1.4'e alındı (gömülü Watch app'in sürümü de iOS ile aynı olmalı — Apple şart koşuyor).
 
 1.4'ün içeriği (yayındaki 1.3'te YOK): growth özellikleri (rating isteme,
 Değerlendir/Paylaş) + kullanıcının bildirdiği 4 sorunun düzeltmesi (konum otomatik
@@ -43,11 +41,6 @@ metadata) → **Submit for Review**.
 `ezan,namaz,vakit,imsak,kıble,diyanet,imsakiye,sabah,öğle,ikindi,akşam,yatsı,dua,zikir,hicri,takvim`.
 Gerekçe: arama ağırlığı App Name > Subtitle > Keywords; "ezan" daha önce yalnızca
 Keywords'teydi. Description aramada kullanılmaz.
-
-**Pushlanmamış local commit'ler (main'de, origin'de yok):** `736dd66`'dan itibaren —
-DEBUG-only test kancaları, growth özellikleri (rating/paylaş), kullanıcının bildirdiği 4
-sorunun düzeltmesi, review sonrası iki ek düzeltme, 1.4 bump ve şema düzeltmesi.
-Kullanıcı kararıyla toplu pushlanacak.
 
 ### Review sonucu (23 Ağu 2026) — backward compatibility TEMİZ
 Pushlanmamış 6 commit tam diff okunarak review edildi. Yeni `UserDefaults` anahtarları
@@ -100,7 +93,8 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   imzalama yüzünden CI'ı sürekli kırmızı tutuyordu. Release arşivi Xcode'dan elle alınır.
 
 ## NEXT
-1. 1.4 (7): Archive → Upload → ASC'de sürümü oluştur (What's New + ASO metadata) → Submit.
+1. 1.4 (7) review'dan çıkınca yayınla; ardından 1.5 (8)'i Xcode'dan (Scheme: `Sekine`,
+   Any iOS Device) arşivleyip yükle ve What's New yaz.
 2. Yayından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
    metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
    başvurulmayacağına karar ver.
