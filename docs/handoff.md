@@ -91,6 +91,13 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   Workflow **Archive/export yapmıyor**, yalnızca Build + Test koşuyor (24 Ağu 2026 kararı,
   bkz. `docs/decisions.md`): export edilen üç dağıtım paketi hiç kullanılmıyordu ve
   imzalama yüzünden CI'ı sürekli kırmızı tutuyordu. Release arşivi Xcode'dan elle alınır.
+  **Workflow'un güncel hâli** (ASC'de tutuluyor, repoda değil — sıfırlanırsa referans):
+  · Test - iOS → Platform iOS, Scheme `Sekine`, Required to Pass, Test (Use Scheme Setting),
+    Destination "Recommended iPhones" / Latest from Selected Xcode
+  · Build - iOS → Platform iOS, Scheme `Sekine`, Build For "Any iOS Device"
+  · Post-Actions: BOŞ (TestFlight/App Store dağıtımı yok — imzalama hatası buradan geliyordu)
+  Tek `Sekine` şeması iPhone + Widget + Watch + komplikasyonları birlikte derler (Watch
+  gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
 1. 1.4 (7) review'dan çıkınca yayınla; ardından 1.5 (8)'i Xcode'dan (Scheme: `Sekine`,
