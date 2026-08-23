@@ -79,9 +79,40 @@ struct SekineApp: App {
         settings.lastLocationCheckAt = Date()
 
         guard let result = try? await location.resolveAndMatchDiyanetLocation(directory: locationDirectory),
-              result.matched, result.location.diyanetDistrictID != currentLocation.diyanetDistrictID,
-              result.location.diyanetDistrictID != settings.declinedLocationDistrictID
+              result.matched
+        else { return }
+
+        // Kayıtlı konumun koordinatı yoksa (geocode başarısızdı) GPS'ten gelen gerçek
+        // koordinatı sessizce doldur — Aladhan/lokal fallback ve kıble tekrar çalışsın.
+        if currentLocation.coordinate == nil,
+           result.location.diyanetDistrictID == currentLocation.diyanetDistrictID {
+            settings.location?.latitude = result.location.latitude
+            settings.location?.longitude = result.location.longitude
+            return
+        }
+
+        guard result.location.diyanetDistrictID != currentLocation.diyanetDistrictID,
+              result.location.diyanetDistrictID != settings.declinedLocationDistrictID,
+              Self.isMeaningfulMove(from: currentLocation, to: result.location)
         else { return }
         settings.pendingLocationSuggestion = result.location
     }
+
+    /// Konum önerisi için ilçe değişikliği TEK BAŞINA yetmez: GPS ~1 km hassasiyetle
+    /// çalıştığından, ilçe sınırına yakın oturan kullanıcı evindeyken bile komşu ilçeye
+    /// düşebilir. Anlamlı bir mesafe de şart koşulur.
+    ///
+    /// Eşik 25 km: Türkiye enlemlerinde ~21 km boylam farkı ≈ 1 dakika vakit farkı, yani
+    /// altında kalan hareketlerde vakitler pratikte aynı; GPS gürültüsü (~1-3 km) çok
+    /// altında kalır, gerçek şehirlerarası seyahat rahatça geçer.
+    /// Kayıtlı koordinat yoksa mesafe bilinemez → ilçe değişikliği tek sinyal olarak kalır.
+    static func isMeaningfulMove(from previous: SavedLocation, to detected: SavedLocation) -> Bool {
+        guard let previousCoordinate = previous.coordinate,
+              let detectedCoordinate = detected.coordinate else { return true }
+        let a = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
+        let b = CLLocation(latitude: detectedCoordinate.latitude, longitude: detectedCoordinate.longitude)
+        return a.distance(from: b) >= locationDriftThresholdMeters
+    }
+
+    static let locationDriftThresholdMeters: CLLocationDistance = 25_000
 }

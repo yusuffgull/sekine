@@ -46,8 +46,10 @@ struct PrayerDay: Codable, Hashable, Identifiable, Sendable {
 /// Cache'lenen tam plan: konum + günlerin listesi.
 struct PrayerSchedule: Codable, Sendable {
     let placeName: String
-    let latitude: Double
-    let longitude: Double
+    /// Konumun doğrulanmış koordinatı; geocode başarısızsa nil olabilir
+    /// (uydurma koordinat saklanmaz — bkz. `SavedLocation`).
+    let latitude: Double?
+    let longitude: Double?
     let timeZoneIdentifier: String
     let source: String        // "aladhan-13" | "local-adhan"
     let fetchedAt: Date

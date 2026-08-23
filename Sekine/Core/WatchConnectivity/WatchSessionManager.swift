@@ -42,8 +42,9 @@ final class WatchSessionManager: NSObject, ObservableObject {
         ]
         if let location = settings.location {
             context["locationName"] = location.name
-            context["latitude"] = location.latitude
-            context["longitude"] = location.longitude
+            // Koordinat doğrulanmamışsa hiç gönderilmez (uydurma değer taşınmaz).
+            if let latitude = location.latitude { context["latitude"] = latitude }
+            if let longitude = location.longitude { context["longitude"] = longitude }
             if let districtID = location.diyanetDistrictID {
                 context["diyanetDistrictID"] = districtID
             }

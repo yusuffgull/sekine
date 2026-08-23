@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import CoreLocation
 
 enum AppTheme: String, CaseIterable, Identifiable {
     case system, light, dark
@@ -51,17 +52,28 @@ enum FontScale: String, CaseIterable, Identifiable {
 }
 
 /// Seçili konum. Diyanet ilçe ID'si varsa vakitler birebir Diyanet resmi verisinden
-/// gelir; yoksa (ör. eşleşmeyen GPS) koordinatla Aladhan'a düşülür. lat/lng kıble ve
-/// fallback için her zaman tutulur.
+/// gelir; yoksa koordinatla Aladhan'a/lokal hesaba düşülür.
+///
+/// Koordinat OPSİYONEL ve yalnızca gerçekten doğrulanmışsa (GPS ya da başarılı geocode)
+/// doldurulur. Uydurma/placeholder koordinat ASLA saklanmaz: kıble bu koordinattan
+/// hesaplandığı için yanlış bir değer kullanıcıyı sessizce yanlış yöne yönlendirir.
+/// Koordinat yoksa vakitler `diyanetDistrictID` ile çalışmaya devam eder, kıble ise
+/// gerçek konuma düşer veya konum izni ister (bkz. `QiblaManager`).
 struct SavedLocation: Codable, Equatable, Identifiable {
     var name: String
-    var latitude: Double
-    var longitude: Double
+    var latitude: Double?
+    var longitude: Double?
     var diyanetDistrictID: String?
 
-    var id: String { "\(name)|\(latitude)|\(longitude)" }
+    var id: String { "\(name)|\(latitude?.description ?? "-")|\(longitude?.description ?? "-")" }
 
-    init(name: String, latitude: Double, longitude: Double, diyanetDistrictID: String? = nil) {
+    /// Doğrulanmış koordinat (ikisi de varsa).
+    var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+
+    init(name: String, latitude: Double?, longitude: Double?, diyanetDistrictID: String? = nil) {
         self.name = name
         self.latitude = latitude
         self.longitude = longitude

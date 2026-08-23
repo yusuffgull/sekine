@@ -89,8 +89,14 @@ final class PrayerTimeStore: ObservableObject {
     /// Yeniden indirme gerekiyor mu? (konum değişti, kaynak yükseltilebilir, kapsam bitiyor)
     private func needsRefresh(for location: SavedLocation) -> Bool {
         guard let schedule else { return true }
-        let sameLocation = abs(schedule.latitude - location.latitude) < 0.01
-            && abs(schedule.longitude - location.longitude) < 0.01
+        let sameLocation: Bool
+        if let scheduleLat = schedule.latitude, let scheduleLon = schedule.longitude,
+           let lat = location.latitude, let lon = location.longitude {
+            sameLocation = abs(scheduleLat - lat) < 0.01 && abs(scheduleLon - lon) < 0.01
+        } else {
+            // Koordinat yoksa (geocode başarısız) yer adı kimlik olarak kullanılır.
+            sameLocation = schedule.placeName == location.name
+        }
         if !sameLocation { return true }
         // Diyanet ID'si var ama cache Diyanet değilse, birebir veriye yükselt.
         if location.diyanetDistrictID != nil, schedule.source != "diyanet" { return true }

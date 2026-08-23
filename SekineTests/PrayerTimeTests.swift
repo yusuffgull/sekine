@@ -195,4 +195,45 @@ final class PrayerTimeTests: XCTestCase {
         XCTAssertEqual(loaded?.placeName, "İstanbul")
         XCTAssertEqual(loaded?.days.first?.times.count, 6)
     }
+
+    // MARK: Konum doğruluğu (1.5)
+
+    /// Koordinat yoksa kıble açısı ÜRETİLMEMELİ — uydurma yön kabul edilemez.
+    func testSavedLocationWithoutCoordinateHasNoCoordinate() {
+        let noCoord = SavedLocation(name: "Çankaya, Ankara", latitude: nil, longitude: nil,
+                                    diyanetDistrictID: "9206")
+        XCTAssertNil(noCoord.coordinate)
+
+        let withCoord = SavedLocation(name: "İstanbul", latitude: 41.0082, longitude: 28.9784,
+                                      diyanetDistrictID: "9541")
+        XCTAssertNotNil(withCoord.coordinate)
+    }
+
+    /// 1.4 ve öncesinde yazılmış (koordinatları dolu) kayıtlar bozulmadan okunmalı.
+    func testSavedLocationDecodesLegacyPayloadWithCoordinates() throws {
+        let legacy = #"{"name":"Ümraniye, İstanbul","latitude":41.0082,"longitude":28.9784,"diyanetDistrictID":"9541"}"#
+        let decoded = try JSONDecoder().decode(SavedLocation.self, from: Data(legacy.utf8))
+        XCTAssertEqual(decoded.latitude, 41.0082)
+        XCTAssertEqual(decoded.diyanetDistrictID, "9541")
+        XCTAssertNotNil(decoded.coordinate)
+    }
+
+    /// İlçe sınırındaki GPS gürültüsü konum önerisi tetiklememeli; gerçek seyahat tetiklemeli.
+    func testLocationDriftRequiresMeaningfulDistance() {
+        let home = SavedLocation(name: "Çankaya, Ankara", latitude: 39.9208, longitude: 32.8541)
+        // ~8 km kuzey: komşu ilçeye düşse bile "taşındı" sayılmamalı.
+        let nextDistrict = SavedLocation(name: "Yenimahalle, Ankara", latitude: 39.9930, longitude: 32.8541)
+        XCTAssertFalse(SekineApp.isMeaningfulMove(from: home, to: nextDistrict))
+
+        // İstanbul: gerçek şehirlerarası seyahat.
+        let istanbul = SavedLocation(name: "İstanbul", latitude: 41.0082, longitude: 28.9784)
+        XCTAssertTrue(SekineApp.isMeaningfulMove(from: home, to: istanbul))
+    }
+
+    /// Kayıtlı koordinat yoksa mesafe bilinemez → ilçe değişikliği tek sinyal kalır.
+    func testLocationDriftAllowedWhenPreviousCoordinateUnknown() {
+        let unknown = SavedLocation(name: "Çankaya, Ankara", latitude: nil, longitude: nil)
+        let detected = SavedLocation(name: "İstanbul", latitude: 41.0082, longitude: 28.9784)
+        XCTAssertTrue(SekineApp.isMeaningfulMove(from: unknown, to: detected))
+    }
 }

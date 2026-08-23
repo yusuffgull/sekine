@@ -57,6 +57,20 @@ final class LocationManager: NSObject, ObservableObject {
         return (resolved.location, false)
     }
 
+    /// İlçe/il adından koordinat çözer: önce ilçe, olmazsa il ile dener.
+    /// Hiçbiri çözülemezse **nil** döner — uydurma bir koordinat ASLA üretilmez.
+    /// (Kıble bu koordinattan hesaplandığı için yanlış değer kullanıcıyı sessizce
+    /// yanlış yöne yönlendirir; koordinatsız kalmak yanlış olmaktan iyidir.)
+    func geocodeCoordinate(district: String, city: String) async -> (latitude: Double, longitude: Double)? {
+        for query in ["\(district), \(city), Türkiye", "\(city), Türkiye"] {
+            if let hit = await search(query).first,
+               let latitude = hit.latitude, let longitude = hit.longitude {
+                return (latitude, longitude)
+            }
+        }
+        return nil
+    }
+
     /// Metinle ilçe/şehir arar (offline değil; kullanıcı tetikler).
     func search(_ query: String) async -> [SavedLocation] {
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }

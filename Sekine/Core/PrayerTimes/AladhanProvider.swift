@@ -12,8 +12,11 @@ struct AladhanProvider: PrayerTimeProvider {
     }
 
     func fetchSchedule(for location: SavedLocation) async throws -> PrayerSchedule {
-        let latitude = location.latitude
-        let longitude = location.longitude
+        // Koordinatsız konumda (geocode başarısız) bu sağlayıcı çalışamaz; zincir
+        // Diyanet ilçe ID'siyle devam eder.
+        guard let latitude = location.latitude, let longitude = location.longitude else {
+            throw PrayerProviderError.emptyResult
+        }
         let placeName = location.name
         let year = Calendar(identifier: .gregorian).component(.year, from: Date())
 

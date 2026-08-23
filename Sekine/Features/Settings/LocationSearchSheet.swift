@@ -107,12 +107,12 @@ struct LocationSearchSheet: View {
     private func select(city: DiyanetCity, district: DiyanetDistrict) async {
         let name = "\(district.name.capitalized(with: Locale(identifier: "tr_TR"))), \(city.name.capitalized(with: Locale(identifier: "tr_TR")))"
         // Kıble + fallback için koordinat çöz (Diyanet vakti için gerekmez).
-        let results = await location.search("\(district.name), \(city.name), Türkiye")
-        let coord = results.first
+        // Çözülemezse koordinat nil kalır; placeholder saklanmaz.
+        let coord = await location.geocodeCoordinate(district: district.name, city: city.name)
         let saved = SavedLocation(
             name: name,
-            latitude: coord?.latitude ?? 39.0,
-            longitude: coord?.longitude ?? 35.0,
+            latitude: coord?.latitude,
+            longitude: coord?.longitude,
             diyanetDistrictID: district.IlceID)
         onSelect(saved)
         dismiss()

@@ -8,7 +8,14 @@ struct WatchQiblaView: View {
         VStack(spacing: 8) {
             Text("Kıble")
                 .font(.headline)
-            if qibla.headingAvailable {
+            if !qibla.bearingAvailable {
+                // Açı hesaplanamıyorsa yön çizilmez — yanlış yön göstermektense hiç
+                // göstermemek doğrusu. Vakitler bundan etkilenmez.
+                Text("Kıble yönü için konum gerekiyor. iPhone'daki Sekine'den konum izni verin.")
+                    .font(.caption2)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+            } else if qibla.headingAvailable {
                 ZStack {
                     Circle().stroke(.secondary.opacity(0.3), lineWidth: 4)
                     Image(systemName: "location.north.fill")
@@ -19,10 +26,15 @@ struct WatchQiblaView: View {
                 .frame(width: 120, height: 120)
                 .animation(.easeOut(duration: 0.2), value: qibla.heading)
             } else {
-                Text("Bu Watch'ta pusula bulunmuyor.")
-                    .font(.caption2)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 4) {
+                    Text("\(Int(qibla.qiblaBearing.rounded()))°")
+                        .font(.title2.monospacedDigit())
+                        .foregroundStyle(.tint)
+                    Text("Bu Watch'ta pusula bulunmuyor. Açı, kuzeye göre kıble yönüdür.")
+                        .font(.caption2)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .padding()

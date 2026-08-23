@@ -7,8 +7,10 @@ struct LocalCalculationProvider: PrayerTimeProvider {
     let sourceIdentifier = "local-adhan"
 
     func fetchSchedule(for location: SavedLocation) async throws -> PrayerSchedule {
-        let latitude = location.latitude
-        let longitude = location.longitude
+        // Koordinatsız konumda yaklaşık hesap da yapılamaz (bkz. AladhanProvider).
+        guard let latitude = location.latitude, let longitude = location.longitude else {
+            throw PrayerProviderError.emptyResult
+        }
         let placeName = location.name
         let year = Calendar(identifier: .gregorian).component(.year, from: Date())
 

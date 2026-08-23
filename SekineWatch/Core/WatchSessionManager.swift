@@ -22,13 +22,16 @@ final class WatchSessionManager: NSObject, ObservableObject {
         if let raw = context["colorTheme"] as? String, let theme = ColorTheme(rawValue: raw) {
             settings.colorTheme = theme
         }
-        if let name = context["locationName"] as? String,
-           let lat = context["latitude"] as? Double,
-           let lng = context["longitude"] as? Double {
+        // Koordinat opsiyonel: iPhone tarafında geocode başarısızsa hiç gönderilmez,
+        // ama ilçe ID'si ile vakitler yine de doğru gelir.
+        if let name = context["locationName"] as? String {
             let districtID = context["diyanetDistrictID"] as? String
-            let incoming = SavedLocation(name: name, latitude: lat, longitude: lng, diyanetDistrictID: districtID)
+            let incoming = SavedLocation(name: name,
+                                         latitude: context["latitude"] as? Double,
+                                         longitude: context["longitude"] as? Double,
+                                         diyanetDistrictID: districtID)
             let locationChanged = settings.location?.diyanetDistrictID != incoming.diyanetDistrictID
-                || settings.location?.latitude != incoming.latitude
+                || settings.location?.name != incoming.name
             settings.location = incoming
             settings.hasCompletedOnboarding = true
             if locationChanged, let store {
