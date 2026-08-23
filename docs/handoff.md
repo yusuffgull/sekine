@@ -1,12 +1,20 @@
 # Handoff
 
 ## CURRENT TASK
-**1.3 (7) arşivlenmeyi bekliyor.** Build 6 ASC'ye yüklendi ama Premium/IAP + Watch
-sonrası eklenen growth ve hata düzeltmelerini içermiyor; build 7 henüz arşivlenmedi
-(kullanıcı teyidi, 23 Ağu 2026) → numara 7'de kalıyor, tüm son değişiklikler bu build'e
-girecek. 4 IAP ürünü ASC'de hazır, Apple Watch ekran görüntüleri (Home + Tesbih,
-422×514) yüklendi. Kalan: Xcode'dan Archive → Upload, sonra ASC'de 1.3'ü
-(What's New + IAP'ler ekli) **Submit for Review**.
+**1.4 (7) arşivlenmeyi bekliyor.** 1.3 (6) — Premium/IAP + Apple Watch içeren sürüm —
+Apple review'ından geçti ve **yayında** (Ready for Distribution, 23 Ağu 2026). Yayına
+çıkmış bir versiyona yeni build eklenemediği için sonraki tüm değişiklikler **1.4**'e
+alındı (`MARKETING_VERSION` 1.4, build 7; gömülü Watch app'in sürümü de 1.4 (7) olarak
+doğrulandı — Apple eşleşmesini şart koşuyor).
+
+1.4'ün içeriği (yayındaki 1.3'te YOK): growth özellikleri (rating isteme,
+Değerlendir/Paylaş) + kullanıcının bildirdiği 4 sorunun düzeltmesi (konum otomatik
+güncelleme, Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış butonu race)
++ review'da bulunan 2 ek düzeltme.
+
+4 IAP ürünü 1.3 ile birlikte onaylandı → 1.4'te tekrar iliştirmeye gerek yok.
+Kalan: Xcode'dan Archive → Upload, ASC'de 1.4 sürümünü oluştur (What's New + ASO
+metadata) → **Submit for Review**.
 
 **ASO metadata (ASC'de elle girilecek, build'den bağımsız):** App Name
 `Sekine: Ezan ve Namaz Vakti`, Subtitle `Kıble, İmsakiye, Ezan Saatleri`, Keywords
