@@ -5,13 +5,13 @@
 sekmesi ve Apple Watch companion app dahil. Yani Faz 1, 1.2, 1.3 ve Faz 2'nin tamamı
 (E4 dahil) kullanıcıya ulaştı.
 
-**1.4 (7) App Review'da.** İçeriği: rating isteme + Değerlendir/Paylaş, konum otomatik
+**1.4 (7) yayında.** İçeriği: rating isteme + Değerlendir/Paylaş, konum otomatik
 güncelleme (seyahat), Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış
 butonu race düzeltmesi.
 
-**1.5 (8) kodu hazır ve doğrulandı**, 1.4 yayınlanınca gönderilecek: kıble artık asla
-doğrulanmamış koordinattan çizilmiyor (geocode başarısızlığında saklanan sahte koordinat
-kaldırıldı; izin varsa gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
+**1.5 (8) App Review'da** (25 Ağu 2026 gönderildi): kıble artık asla doğrulanmamış
+koordinattan çizilmiyor (geocode başarısızlığında saklanan sahte koordinat kaldırıldı;
+izin varsa gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
 Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
 
 ## Yayınlanan sürümler
@@ -25,6 +25,8 @@ Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
 - **1.3** — Faz 2 tamamı: StoreKit 2 altyapısı, tam ezan mekanizması, premium temalar +
   alternatif ikon, ücretsiz Zikir sekmesi, çoklu konum, vakit-başına ses, premium widget
   accent, **Apple Watch app + komplikasyonlar + WatchConnectivity**.
+- **1.4** — growth (rating isteme, Değerlendir/Paylaş) + konum otomatik güncelleme,
+  Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış butonu race düzeltmesi.
 
 ## Kullanıcı kapıları (kod dışı)
 - [x] AB erişilebilirliği (non-trader, global)

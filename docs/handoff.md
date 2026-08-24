@@ -1,9 +1,8 @@
 # Handoff
 
-## CURRENT TASK — 1.5 (8) hazır, 1.4'ün yayınlanması bekleniyor
-**1.4 (7) App Review'da** (metadata + ASO alanları girildi, What's New yazıldı).
-Kullanıcı kararı: 1.4 olduğu gibi çıkacak; **1.5 (8) kodu hazır ve doğrulandı**, 1.4
-yayınlandıktan sonra kullanıcı arşivleyip gönderecek.
+## CURRENT TASK — 1.4 yayında, 1.5 (8) App Review'da
+**1.4 (7) yayında.** **1.5 (8) arşivlendi, ASC'ye yüklendi ve Submit for Review yapıldı**
+(25 Ağu 2026) — What's New ASC'ye elle girildi. Şu an Apple review'ı bekleniyor.
 
 1.5'in içeriği (1.4'ü review ederken bulunan iki gerçek hata):
 - **Kıble artık asla doğrulanmamış koordinattan çizilmiyor.** İl/ilçe seçicisi geocode
@@ -22,55 +21,9 @@ derlemesi.
 **ASO baseline (24 Ağu 2026, 1.4 yayınlanmadan önce):** "ezan vakti" aramasında ~70. sıra.
 1.4 çıktıktan 1-2 hafta sonra aynı aramalar tekrarlanıp karşılaştırılacak.
 
-## ÖNCEKİ — 1.4'ün hazırlanışı (23 Ağu 2026)
-1.3 (6) — Premium/IAP + Apple Watch içeren sürüm — Apple review'ından geçip **yayına
-çıktı**. Yayınlanmış bir versiyona yeni build eklenemediği için sonraki tüm değişiklikler
-1.4'e alındı (gömülü Watch app'in sürümü de iOS ile aynı olmalı — Apple şart koşuyor).
-
-1.4'ün içeriği (yayındaki 1.3'te YOK): growth özellikleri (rating isteme,
-Değerlendir/Paylaş) + kullanıcının bildirdiği 4 sorunun düzeltmesi (konum otomatik
-güncelleme, Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış butonu race)
-+ review'da bulunan 2 ek düzeltme.
-
-4 IAP ürünü 1.3 ile birlikte onaylandı → 1.4'te tekrar iliştirmeye gerek yok.
-Kalan: Xcode'dan Archive → Upload, ASC'de 1.4 sürümünü oluştur (What's New + ASO
-metadata) → **Submit for Review**.
-
-**ASO metadata (ASC'de elle girilecek, build'den bağımsız):** App Name
-`Sekine: Ezan ve Namaz Vakti`, Subtitle `Kıble, İmsakiye, Ezan Saatleri`, Keywords
-`ezan,namaz,vakit,imsak,kıble,diyanet,imsakiye,sabah,öğle,ikindi,akşam,yatsı,dua,zikir,hicri,takvim`.
-Gerekçe: arama ağırlığı App Name > Subtitle > Keywords; "ezan" daha önce yalnızca
-Keywords'teydi. Description aramada kullanılmaz.
-
-### Review sonucu (23 Ağu 2026) — backward compatibility TEMİZ
-Pushlanmamış 6 commit tam diff okunarak review edildi. Yeni `UserDefaults` anahtarları
-nil-güvenli okunuyor, mevcut anahtarların anlamı değişmedi, `SavedLocation`/`PrayerCache`
-modelleri aynı → mevcut kullanıcıda veri kaybı/çökme riski yok. Widget hedefi değişen
-dosyaların hiçbirini almıyor; watch hedefi alıyor ve watchOS derlemesi doğrulandı.
-Testler (12/12) değişen tipleri hiç kurmuyor, hepsi geçiyor. DEBUG kancaları `#if DEBUG`
-içinde → Release binary'ye girmiyor. Konum izin metinleri yeni foreground kontrolünü
-zaten doğru tarif ediyor.
-
-Review'da bulunan **2 gerçek hata düzeltildi** (`d52d5e8`): (1) rating diyalogu konum
-uyarısını yutuyordu — ask artık bootstrap'ı bekleyip öneri varken atlıyor ve sürüm
-kapısını yakmıyor; ayrıca `RootView`'a eksik `import StoreKit` eklendi. (2) Konum önerisi
-reddedilince hatırlanmıyordu, 24 saatte bir tekrar soruyordu — `declinedLocationDistrictID`
-kalıcı saklanıyor, konum elle değişince sıfırlanıyor.
-
-**Bilinen, kasıtlı olarak ertelenen:** 4 ayrı `DiyanetDirectory` örneği var (SekineApp,
-SettingsView, OnboardingView, LocationSearchSheet), her biri kendi bellek cache'iyle
-il/ilçe listesini ayrı ayrı indirebiliyor. Yayın öncesi çalışan koda dokunmamak için
-şimdi yapılmadı; tek örneği `.environmentObject` ile paylaştırmak temiz bir iyileştirme.
-
-### Şema düzeltmesi (23 Ağu 2026)
-Xcode'un şema seçicisinde **"Sekine" şeması kaybolmuştu** (yalnızca Watch/Complications/
-Widget görünüyordu) — kullanıcı yanlışlıkla bir extension'ı arşivlemek üzereydi. Kök neden:
-XcodeGen `.xcscheme` üretmiyordu, şemalar Xcode tarafından otomatik oluşturulup
-gitignore'daki `xcuserdata`'da tutuluyordu ve `xcodegen generate` sonrası bayatlıyordu.
-Aynı neden Xcode Cloud'da da vardı (CI "Catalog" adımı hep 3 şema buluyordu). Çözüm: dört
-şema da `project.yml`'deki `schemes:` bloğunda tanımlandı → paylaşılan şema olarak
-üretiliyor. `.xcodeproj` tamamen silinip sıfırdan üretilerek doğrulandı. Detay:
-`docs/decisions.md`.
+> 1.4'ün hazırlanış süreci (review bulguları, şema düzeltmesi, ASO metadata gerekçesi)
+> artık kapandı — detay için `docs/decisions.md` (2026-08-23/24) ve git log
+> (`f69c195`, `d52d5e8`, `50850cf`).
 
 ## DONE
 Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pahalı olan bağlam:
@@ -101,9 +54,8 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. 1.4 (7) review'dan çıkınca yayınla; ardından 1.5 (8)'i Xcode'dan (Scheme: `Sekine`,
-   Any iOS Device) arşivleyip yükle ve What's New yaz.
-2. Yayından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
+1. 1.5 (8) review'dan çıkınca yayınla.
+2. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
    metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
    başvurulmayacağına karar ver.
 3. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
