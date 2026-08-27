@@ -15,11 +15,13 @@ struct SettingsView: View {
     @State private var isResolvingLocation = false
     @State private var locationError: String?
     @State private var purchasingProductID: String?
+    @State private var updateInfo: AppUpdateChecker.UpdateInfo?
 
     var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
                 Form {
+                    updateAvailableSection
                     premiumSection
                     locationSection
                     notificationSection
@@ -44,6 +46,7 @@ struct SettingsView: View {
                 }
                 .task {
                     await notifications.refreshStatus()
+                    await maybeCheckForUpdate()
                     #if DEBUG
                     let args = ProcessInfo.processInfo.arguments
                     if args.contains("-uiTestShowPaywall") { showPaywall = true }
@@ -417,6 +420,32 @@ struct SettingsView: View {
         }
     }
 
+    // MARK: Güncelleme
+    @ViewBuilder
+    private var updateAvailableSection: some View {
+        if let updateInfo {
+            Section {
+                Link(destination: updateInfo.appStoreURL) {
+                    HStack {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .foregroundStyle(Palette.gold)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Yeni sürüm mevcut")
+                                .foregroundStyle(Palette.textPrimary)
+                            Text("v\(updateInfo.latestVersion) — güncellemek için dokunun")
+                                .font(.footnote)
+                                .foregroundStyle(Palette.textSecondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.footnote)
+                            .foregroundStyle(Palette.textSecondary)
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: Hakkında
     private var aboutSection: some View {
         Section {
@@ -464,6 +493,37 @@ struct SettingsView: View {
             } catch {
                 locationError = "Konum alınamadı. Ayarlar'dan konum iznini açın veya 'Değiştir' ile şehir arayın."
             }
+        }
+    }
+
+    /// En fazla 24 saatte bir kontrol eder; sonucu cache'ler ki Ayarlar açılır açılmaz
+    /// önceki bilinen durum anında görünsün, arkada tazelensin.
+    private func maybeCheckForUpdate() async {
+        let defaults = UserDefaults.standard
+        let lastCheckedKey = "updateCheck.lastCheckedAt"
+        let cachedVersionKey = "updateCheck.latestKnownVersion"
+
+        if let cached = defaults.string(forKey: cachedVersionKey),
+           AppUpdateChecker.isNewer(cached, than: AppUpdateChecker.currentInstalledVersion) {
+            updateInfo = .init(latestVersion: cached, appStoreURL: Self.appStoreURL())
+        }
+
+        if let lastCheckedAt = defaults.object(forKey: lastCheckedKey) as? Date,
+           Date().timeIntervalSince(lastCheckedAt) < 24 * 60 * 60 {
+            return
+        }
+
+        defaults.set(Date(), forKey: lastCheckedKey)
+        do {
+            let result = try await AppUpdateChecker().checkForUpdate()
+            if let result {
+                defaults.set(result.latestVersion, forKey: cachedVersionKey)
+            } else {
+                defaults.removeObject(forKey: cachedVersionKey)
+            }
+            updateInfo = result
+        } catch {
+            // Ağ hatasında sessizce vazgeç — önceki cache'lenmiş durum korunur.
         }
     }
 
