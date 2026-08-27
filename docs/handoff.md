@@ -1,12 +1,18 @@
 # Handoff
 
-## CURRENT TASK — 1.5 (8) yayında, 1.6 (9) kod tarafı tamam, arşiv/gönderim bekliyor
-**1.5 (8) App Review'dan geçti ve yayınlandı** (27 Ağu 2026). 1.6 için Ayarlar ekranına
-"yeni sürüm mevcut" bildirimi eklendi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
-tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `project.yml` 1.6 (9)'a
-yükseltildi, `xcodegen generate` + `./scripts/verify-xcode-cloud.sh` yeşil, 12 yeni birim
-testi (`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor. Henüz
-arşivlenip ASC'ye gönderilmedi (manuel adım, bkz. `docs/store-submission.md`).
+## CURRENT TASK — 1.5 (8) yayında, 1.6 (9) arşivlendi ve Submit for Review yapıldı
+**1.5 (8) App Review'dan geçti ve yayınlandı** (27 Ağu 2026). **1.6 (9) arşivlenip
+ASC'ye yüklendi ve Submit for Review yapıldı** (27 Ağu 2026). İçeriği: Ayarlar ekranına
+"yeni sürüm mevcut" bildirimi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
+tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `xcodegen generate` +
+`./scripts/verify-xcode-cloud.sh` yeşil, 12 yeni birim testi
+(`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor. Şu an Apple
+review'ı bekleniyor.
+
+Bu sürümle birlikte mağaza görselleri de güncellendi: `store/screenshots-marketing-6.5/`
+ve `store/screenshots-watch/`'a eklenen yeni AI-üretimi tanıtım görselleri yanlış
+boyutlardaydı (852×1846 / 853×1844) — hepsi kırpılıp doğru ASC boyutlarına
+(6.5": 1284×2778, Watch: 422×514) getirildi.
 
 1.5'in içeriği (1.4'ü review ederken bulunan iki gerçek hata):
 - **Kıble artık asla doğrulanmamış koordinattan çizilmiyor.** İl/ilçe seçicisi geocode
@@ -58,9 +64,7 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. 1.6 (9): Xcode → scheme Sekine + "Any iOS Device" → Archive → Distribute App →
-   App Store Connect; ASC'de What's New yaz ("Ayarlar'da yeni sürüm bildirimi eklendi")
-   ve Submit for Review (bkz. `docs/store-submission.md` "Her güncellemede" adımları).
+1. 1.6 (9) review'dan çıkınca yayınla.
 2. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
    metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
    başvurulmayacağına karar ver.

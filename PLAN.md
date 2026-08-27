@@ -14,7 +14,7 @@ butonu race düzeltmesi.
 gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
 Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
 
-**1.6 (9) kod tarafı tamam, gönderim bekliyor:** Ayarlar ekranına, App Store'da yeni
+**1.6 (9) App Review'da** (27 Ağu 2026 gönderildi): Ayarlar ekranına, App Store'da yeni
 sürüm varsa bildirim gösteren ve tıklanınca App Store sayfasına yönlendiren bir satır
 eklendi (`AppUpdateChecker`, iTunes Lookup API, Trendyol tarzı). Detay: `docs/handoff.md`.
 
