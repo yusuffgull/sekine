@@ -31,6 +31,14 @@ tekrarlanan adımların ve değişmeyen referans bilgilerin listesi.
 ## Ekran görüntüleri
 - **iPhone 6.9" zorunlu** (1320×2868) → `store/screenshots/`; 6.5" (1284×2778) →
   `store/screenshots-6.5/`.
+- **ASC'ye yüklenecek asıl görseller artık bunlar — cihaz çerçeveli + başlıklı:**
+  `./scripts/generate-store-screenshots.sh` → `store/screenshots-marketing/` (1320×2868,
+  6.9" boyutuna hazır) + `store/screenshots-marketing-6.5/` (1284×2778, aynı render'dan
+  resize). Ham `store/screenshots/`'daki çerçevesiz görüntüleri kaynak alır, WKWebView
+  tabanlı HTML/CSS render (`scripts/html-to-png.swift`) ile işler, marka rengi arka plan
+  (#1F6E5C, AccentColor) + Türkçe başlık ekler. Başlık metinleri script içinde tanımlı —
+  yeni ekran eklenirse script'e yeni bir `render` çağrısı eklenir. Apple, gerçek uygulama
+  içeriğini gösteren çerçeveli/metinli ekran görüntülerine izin verir (yaygın pratik).
 - **Apple Watch zorunlu** (binary Watch app içerdiği için) — 422×514 (Ultra 3) kabul edilir.
 - Yakalama: `xcrun simctl io booted screenshot ekran.png`. Premium-kilitli ekranlar için
   DEBUG launch argümanları: `-uiTestSeedIstanbul`, `-uiTestForcePremium`, `-uiTestTab <id>`,

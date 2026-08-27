@@ -1,8 +1,12 @@
 # Handoff
 
-## CURRENT TASK — 1.4 yayında, 1.5 (8) App Review'da
-**1.4 (7) yayında.** **1.5 (8) arşivlendi, ASC'ye yüklendi ve Submit for Review yapıldı**
-(25 Ağu 2026) — What's New ASC'ye elle girildi. Şu an Apple review'ı bekleniyor.
+## CURRENT TASK — 1.5 (8) yayında, 1.6 (9) kod tarafı tamam, arşiv/gönderim bekliyor
+**1.5 (8) App Review'dan geçti ve yayınlandı** (27 Ağu 2026). 1.6 için Ayarlar ekranına
+"yeni sürüm mevcut" bildirimi eklendi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
+tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `project.yml` 1.6 (9)'a
+yükseltildi, `xcodegen generate` + `./scripts/verify-xcode-cloud.sh` yeşil, 12 yeni birim
+testi (`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor. Henüz
+arşivlenip ASC'ye gönderilmedi (manuel adım, bkz. `docs/store-submission.md`).
 
 1.5'in içeriği (1.4'ü review ederken bulunan iki gerçek hata):
 - **Kıble artık asla doğrulanmamış koordinattan çizilmiyor.** İl/ilçe seçicisi geocode
@@ -54,7 +58,9 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. 1.5 (8) review'dan çıkınca yayınla.
+1. 1.6 (9): Xcode → scheme Sekine + "Any iOS Device" → Archive → Distribute App →
+   App Store Connect; ASC'de What's New yaz ("Ayarlar'da yeni sürüm bildirimi eklendi")
+   ve Submit for Review (bkz. `docs/store-submission.md` "Her güncellemede" adımları).
 2. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
    metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
    başvurulmayacağına karar ver.
