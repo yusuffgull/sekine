@@ -9,10 +9,14 @@ sekmesi ve Apple Watch companion app dahil. Yani Faz 1, 1.2, 1.3 ve Faz 2'nin ta
 güncelleme (seyahat), Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış
 butonu race düzeltmesi.
 
-**1.5 (8) App Review'da** (25 Ağu 2026 gönderildi): kıble artık asla doğrulanmamış
-koordinattan çizilmiyor (geocode başarısızlığında saklanan sahte koordinat kaldırıldı;
-izin varsa gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
+**1.5 (8) yayında** (27 Ağu 2026): kıble artık asla doğrulanmamış koordinattan
+çizilmiyor (geocode başarısızlığında saklanan sahte koordinat kaldırıldı; izin varsa
+gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
 Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
+
+**1.6 (9) kod tarafı tamam, gönderim bekliyor:** Ayarlar ekranına, App Store'da yeni
+sürüm varsa bildirim gösteren ve tıklanınca App Store sayfasına yönlendiren bir satır
+eklendi (`AppUpdateChecker`, iTunes Lookup API, Trendyol tarzı). Detay: `docs/handoff.md`.
 
 ## Yayınlanan sürümler
 - **1.0** — vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget. Diyanet
