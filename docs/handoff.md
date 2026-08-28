@@ -1,13 +1,11 @@
 # Handoff
 
-## CURRENT TASK — 1.5 (8) yayında, 1.6 (9) arşivlendi ve Submit for Review yapıldı
-**1.5 (8) App Review'dan geçti ve yayınlandı** (27 Ağu 2026). **1.6 (9) arşivlenip
-ASC'ye yüklendi ve Submit for Review yapıldı** (27 Ağu 2026). İçeriği: Ayarlar ekranına
+## CURRENT TASK — 1.6 (9) yayında
+**1.6 (9) App Review'dan geçti ve yayınlandı** (28 Ağu 2026). İçeriği: Ayarlar ekranına
 "yeni sürüm mevcut" bildirimi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
 tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `xcodegen generate` +
 `./scripts/verify-xcode-cloud.sh` yeşil, 12 yeni birim testi
-(`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor. Şu an Apple
-review'ı bekleniyor.
+(`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor.
 
 Bu sürümle birlikte mağaza görselleri de güncellendi: `store/screenshots-marketing-6.5/`
 ve `store/screenshots-watch/`'a eklenen yeni AI-üretimi tanıtım görselleri yanlış
@@ -64,8 +62,7 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. 1.6 (9) review'dan çıkınca yayınla.
-2. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
+1. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
    metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
    başvurulmayacağına karar ver.
 3. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
