@@ -2,6 +2,24 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-08 — İmsakiye çok-ay genişletmesi ERTELENDİ
+
+**Karar:** Aylık imsakiye ekranını 1 aydan birkaç aya genişletme fikri şimdilik
+uygulanmayacak, mevcut 32-günlük kayan pencere korunacak.
+
+**Neden:** Mevcut kaynak (ezanvakti.emushaf.net, Diyanet aynası) her zaman "bugünden
+itibaren sabit 32 gün" döndürüyor, tarih aralığı parametresi kabul etmiyor — bu bir
+tasarım kısıtı, hızlı düzeltilemez. Araştırıldı: Diyanet'in resmi "Awqat Salah" API'si
+(awqatsalah.diyanet.gov.tr) tarih aralığını (aylık/yıllık) destekliyor AMA rate-limit'i
+(günde 5, ayda 10 istek/konum) kendi backend/cache/proxy katmanını zorunlu kılıyor —
+bu, uygulamanın "%100 çevrimdışı & gizli" temel iddiasını değiştiren büyük bir mimari
+karar olurdu. Alternatif (Aladhan API, `method=13&annual=true`) backend gerektirmiyor
+ama Diyanet'in resmi verisi değil, hesaplama-tabanlı yaklaşık değer — "Diyanet birebir"
+iddiasıyla çelişme riski taşıyor.
+
+**Kullanıcı kararı:** Şimdilik dokunma, mevcut pencereyi koru. İleride tekrar
+değerlendirilebilir.
+
 ## 2026-08-24 — Xcode Cloud: Archive/export yerine Build + Test (dağıtım paketi üretilmiyor)
 **Sorun:** Workflow'un Archive action'ı her çalışmada **üç ayrı dağıtım paketi** export
 etmeye çalışıyordu (ad-hoc, development, app-store) ve export adımı imzalama/provisioning
