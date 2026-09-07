@@ -36,6 +36,20 @@ enum NotificationSound: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Bundle'da ses dosyası mevcut mu? (Picker'da yalnızca çalışan sesler gösterilsin diye.)
+    /// `.default` dosya gerektirmediği için her zaman kullanılabilir. watchOS özel ses
+    /// dosyalarını desteklemediğinden, orada yalnızca `.default` kullanılabilir sayılır
+    /// (bkz. `unSound(silent:)` — aynı platform ayrımı).
+    var isAvailable: Bool {
+        #if os(watchOS)
+        return self == .default
+        #else
+        guard let fileName else { return true }
+        return Bundle.main.url(forResource: (fileName as NSString).deletingPathExtension,
+                                withExtension: (fileName as NSString).pathExtension) != nil
+        #endif
+    }
+
     /// UNNotificationSound. Dosya bundle'da yoksa güvenli şekilde varsayılana döner.
     /// watchOS özel bildirim sesi dosyalarını desteklemiyor (`init(named:)` unavailable) —
     /// o platformda her zaman sistem varsayılanına düşülür.

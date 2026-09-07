@@ -221,7 +221,7 @@ struct SettingsView: View {
                     reschedule()
                 }
             )) {
-                ForEach(NotificationSound.allCases) { sound in
+                ForEach(NotificationSound.allCases.filter(\.isAvailable)) { sound in
                     Text(sound.displayName + (sound.isPremiumSound && !iap.isPremium ? " 🔒" : ""))
                         .tag(sound.rawValue)
                 }
@@ -268,7 +268,7 @@ struct SettingsView: View {
                         }
                     )) {
                         Text("Genel").tag("")
-                        ForEach(NotificationSound.allCases) { s in
+                        ForEach(NotificationSound.allCases.filter(\.isAvailable)) { s in
                             Text(s.displayName).tag(s.rawValue)
                         }
                     }

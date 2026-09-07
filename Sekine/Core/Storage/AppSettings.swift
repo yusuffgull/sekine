@@ -108,6 +108,20 @@ final class AppSettings: ObservableObject {
         self.preReminderMinutes = defaults.object(forKey: Keys.preReminder) as? Int ?? 0
         self.lastLocationCheckAt = defaults.object(forKey: Keys.lastLocationCheckAt) as? Date
         self.declinedLocationDistrictID = defaults.string(forKey: Keys.declinedLocationDistrictID)
+        migrateUnavailableSounds()
+    }
+
+    /// Dosyası bundle'da olmayan bir ses (ör. henüz eklenmemiş `.ezan`) daha önce
+    /// seçilmiş olabilir — picker artık bunu göstermiyor ama kayıtlı state öyle
+    /// kalırsa scheduler sessizce `.default`'a düşmeye devam eder (kullanıcı hiç
+    /// fark etmeden). Burada kalıcı olarak normalize ediyoruz.
+    private func migrateUnavailableSounds() {
+        if let sound = NotificationSound(rawValue: notificationSound), !sound.isAvailable {
+            notificationSound = NotificationSound.default.rawValue
+        }
+        for (prayer, sound) in perPrayerSounds where !sound.isAvailable {
+            perPrayerSounds[prayer] = nil
+        }
     }
 
     @Published var location: SavedLocation? {
