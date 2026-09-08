@@ -6,7 +6,7 @@ struct SekineApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     @StateObject private var settings = AppSettings()
-    @StateObject private var store = PrayerTimeStore()
+    @StateObject private var store: PrayerTimeStore
     @StateObject private var notifications = NotificationManager()
     @StateObject private var location = LocationManager()
     @StateObject private var locationDirectory = DiyanetDirectory()
@@ -15,6 +15,24 @@ struct SekineApp: App {
     @StateObject private var watchSession = WatchSessionManager()
 
     @Environment(\.scenePhase) private var scenePhase
+
+    /// Composition root: uygulama genelinde TEK kanonik `RollingScheduler` burada
+    /// yaratılır. `PrayerTimeStore` (constructor parametresi) ve `AppDelegate`/
+    /// `BackgroundRefresh` (aşağıda `appDelegate.scheduler` ataması ile) AYNI instance'ı
+    /// paylaşır — hiçbiri kendi instance'ını yaratmaz (bkz. `RollingScheduler`
+    /// dokümantasyonu, "çoklu-instance race" misyon notu).
+    ///
+    /// Sıralama önemli: `@UIApplicationDelegateAdaptor` bu struct'ın init'i sırasında
+    /// (kendi varsayılan ifadesiyle) zaten `AppDelegate` instance'ını yaratmış olur —
+    /// UIKit `didFinishLaunchingWithOptions`'ı YALNIZCA bu init tamamlandıktan SONRA
+    /// (uygulama gerçekten başlatılırken) çağırır. Bu yüzden burada `appDelegate.scheduler`
+    /// atamak, `AppDelegate.application(_:didFinishLaunchingWithOptions:)` içinde
+    /// `BackgroundRefresh.register(scheduler:)` çağrılmadan ÖNCE garantili olarak tamamlanır.
+    init() {
+        let scheduler = RollingScheduler()
+        _store = StateObject(wrappedValue: PrayerTimeStore(scheduler: scheduler))
+        appDelegate.scheduler = scheduler
+    }
 
     var body: some Scene {
         WindowGroup {

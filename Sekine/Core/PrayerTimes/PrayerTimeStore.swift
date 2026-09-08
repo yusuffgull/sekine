@@ -10,12 +10,17 @@ final class PrayerTimeStore: ObservableObject {
 
     /// Öncelik sırası: birebir Diyanet → Aladhan (yaklaşık, konum) → lokal hesap (çevrimdışı).
     private let providers: [PrayerTimeProvider]
-    private let scheduler = RollingScheduler()
+    private let scheduler: RollingScheduler
 
+    /// `scheduler`: uygulama genelinde TEK kanonik instance enjekte edilir (composition
+    /// root `SekineApp.init()`) — bu tip kendi instance'ını YARATMAZ. Varsayılan değer
+    /// yalnızca watchOS hedefi (kendi ayrı `WatchBackgroundRefresh`'i olan, iOS'un
+    /// `BackgroundRefresh`'iyle instance paylaşmayan bağımsız bir süreç) için korunur.
     init(providers: [PrayerTimeProvider] = [
         DiyanetProvider(), AladhanProvider(), LocalCalculationProvider()
-    ]) {
+    ], scheduler: RollingScheduler = RollingScheduler()) {
         self.providers = providers
+        self.scheduler = scheduler
         self.schedule = PrayerCache.load()
     }
 
@@ -76,7 +81,11 @@ final class PrayerTimeStore: ObservableObject {
             specialDayGreetings: settings.specialDayGreetings,
             dailyVerse: settings.dailyVerse,
             dailyVerseHour: settings.dailyVerseHour)
-        await scheduler.reschedule(from: schedule, config: config)
+        let result = await scheduler.reschedule(from: schedule, config: config)
+        if !result.isFullSuccess {
+            print("PrayerTimeStore: reschedule kısmen başarısız — istenen \(result.requested), " +
+                  "eklendi \(result.added), başarısız \(result.failed), ertelendi \(result.deferred).")
+        }
     }
 
     // MARK: - Yardımcılar

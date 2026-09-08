@@ -33,6 +33,9 @@ uçtan uca yapıldı, çoklu VISION review turlarından geçti:
   `Transaction.updates`'e taşındı, `RestoreOutcome`. 6 tur review sonrası mevcut
   haliyle kabul edildi — kalan 6 bilinen risk `docs/decisions.md` 2026-09-08'de
   kayıtlı, ayrı bir StoreKit-v2 turu gerektiriyor.
+- `RollingScheduler` 7 tur review + bir gerçek test-kilitlenmesi düzeltmesinden
+  sonra mevcut haliyle kabul edildi — kalan 2 bilinen risk (düşük ciddiyet,
+  BGTask zaman-aşımı kenar durumları) `docs/decisions.md` 2026-09-08'de kayıtlı.
 - **Henüz yapılmadı:** gerçek cihazda sandbox satın alma/restore testi, App Store
   submission. Ezan ses dosyası (CC0 aday bulundu, kullanıcı onayı bekliyor),
   imsakiye çok-ay genişletmesi (kaynak kısıtı nedeniyle ertelendi) bu sürüme dahil

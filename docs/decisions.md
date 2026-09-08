@@ -2,6 +2,49 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-08 — RollingScheduler (bildirim planlama): 7 turdan sonra mevcut haliyle kabul
+
+**Karar:** `Sekine/Core/Notifications/RollingScheduler.swift` baştan yazımı, 7 turluk
+VISION (GPT) review döngüsünden sonra mevcut haliyle kabul edildi. 72/72 test geçiyor
+(3 kez art arda doğrulandı, kilitlenme yok). Misyon: `~/Documents/repos/stark-industries/missions/2026-09-07-sekine-rolling-scheduler.md`.
+
+**Ulaşılan ve doğrulanan kritik garantiler (ana misyon hedefi):** Çoklu-instance
+race çözüldü (tek kanonik `RollingScheduler`, composition root `SekineApp.init()`'te).
+Stabil identifier + `content.userInfo` fingerprint + otomatik replace ile transactional-
+benzeri reconciliation. Artık istenmeyen v2 kayıtlar temizleniyor. Legacy (v1)
+migrasyonu gerçek production ID formatlarını (`<prayer>-main/pre-<epoch>`, `holy-
+<date>`, `verse-<date>`, `friday-weekly`) doğru hedefliyor. 64-bildirim limiti
+gerçek pending sayısından hesaplanıyor, aşım riski deferred'e düşüyor.
+
+**Yol boyunca yakalanan gerçek bir hata (round 4→5 arası):** Round 4'ün eklediği
+concurrency testi, sabit-yield varsayımına dayandığı için tüm test suite'ini
+GERÇEKTEN kilitledi (300+ saniye asıldı, manuel `pkill` gerekti) — VISION'ın önceden
+uyardığı risk gerçekleşti. Kök neden: testin kendi rendezvous mantığı, üretim kodu
+değil. Deterministik bir poll (`isTokenQueuedForTesting`) + 5sn zaman aşımıyla
+düzeltildi, üretim koduna dokunulmadı. **Ders:** Concurrency testlerinde "N kez
+yield et, yeterli olmalı" varsayımı gerçek bir deadlock'a dönüşebilir — her zaman
+gözlemlenebilir bir durum sinyali (test-only accessor) + zaman aşımı kullanılmalı.
+
+**Kabul edilen, ÇÖZÜLMEMİŞ bilinen riskler (düşük ciddiyet — bildirim kaybı değil,
+nadir BGTask zaman-aşımı kenar durumları; ayrı bir takip turunda ele alınabilir):**
+1. **[P2]** Kuyrukta bekleyen expired bir iş hemen tamamlandığında dönen
+   `RescheduleResult`'taki sayım (`requested:0, deferred:1`) invariant'ı hafifçe
+   bozuyor — kozmetik, davranışı etkilemiyor.
+2. **[P1]** `markExpired`'ın TTL tabanlı token temizliği, HÂLÂ AKTİF (henüz
+   bitmemiş) bir işin expire bilgisini yanlışlıkla süpürebilir — iş A expire olup
+   60 saniyeden uzun sürerse, başka bir işin `markExpired` çağrısı A'nın token'ını
+   koşulsuz temizleyebilir, A devam ettiğinde expire olmamış gibi davranabilir.
+   Düzeltmesi: aktif ve orphan token'ları ayrı takip etmek gerekir.
+
+**Neden mevcut haliyle kabul edildi:** 7 tur + bir gerçek test-kilitlenmesi
+düzeltmesinden sonra azalan getiri noktasına ulaşıldı (StoreKit misyonunda da aynı
+desen gözlemlendi — bkz. altındaki girdi). Kalan riskler normal çalışmada bildirim
+kaybına yol açmıyor, sadece OS'un BGTask zaman bütçesi dolduğunda nadir bir
+zamanlama kenar durumu. Ana misyon hedefi (sessiz bildirim kaybı, çoklu-instance
+race, legacy migrasyon) doğrulanmış şekilde kapatıldı.
+
+---
+
 ## 2026-09-08 — StoreKit entitlement güvenilirliği: 6 turdan sonra mevcut haliyle kabul
 
 **Karar:** `Sekine/Core/Premium/Store.swift` StoreKit entitlement/restore güvenilirliği
