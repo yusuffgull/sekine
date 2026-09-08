@@ -18,6 +18,26 @@ Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
 bildirim gösteren ve tıklanınca App Store sayfasına yönlendiren bir satır eklendi
 (`AppUpdateChecker`, iTunes Lookup API, Trendyol tarzı). Detay: `docs/handoff.md`.
 
+**1.7 (henüz yayınlanmadı, 2026-09-08) — sessiz hata düzeltmeleri + StoreKit
+güvenilirliği.** Stark Industries Avengers kadrosu (JARVIS/VISION/BANNER) ile
+uçtan uca yapıldı, çoklu VISION review turlarından geçti:
+- Ezan bildirim sesi seçici artık dosya yoksa gizleniyor + mevcut kullanıcıların
+  bozuk state'i migrasyonla düzeltildi (commit `9b6e71b`).
+- `LocationManager` race condition single-flight pattern ile çözüldü.
+- `RollingScheduler` (bildirim planlama) baştan yazıldı: actor + gerçek FIFO,
+  stabil identifier + otomatik replace, transactional-benzeri reconciliation,
+  legacy migrasyon. 6 tur review, kalan 3 küçük bulgu (kuyruk-önceliği, markExpired
+  yarışı, injection-hatası-başarı-sayılması) ayrı bir takip turunda ele alınacak.
+- `Store.swift` (StoreKit entitlement) baştan yazıldı: nesil-korumalı single-flight
+  refresh, `EntitlementState` (loading/owned/notOwned/indeterminate), revocation
+  `Transaction.updates`'e taşındı, `RestoreOutcome`. 6 tur review sonrası mevcut
+  haliyle kabul edildi — kalan 6 bilinen risk `docs/decisions.md` 2026-09-08'de
+  kayıtlı, ayrı bir StoreKit-v2 turu gerektiriyor.
+- **Henüz yapılmadı:** gerçek cihazda sandbox satın alma/restore testi, App Store
+  submission. Ezan ses dosyası (CC0 aday bulundu, kullanıcı onayı bekliyor),
+  imsakiye çok-ay genişletmesi (kaynak kısıtı nedeniyle ertelendi) bu sürüme dahil
+  değil.
+
 ## Yayınlanan sürümler
 - **1.0** — vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget. Diyanet
   birebir vakit kaynağı (DiyanetProvider).

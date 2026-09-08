@@ -113,6 +113,7 @@ struct PaywallView: View {
             Task { await store.restore() }
         }
         .buttonStyle(SecondaryButtonStyle())
+        .disabled(store.isRestoring)
     }
 
     private var ownedBadge: some View {

@@ -42,9 +42,13 @@ struct WatchPaywallView: View {
                 }
 
                 Button("Satın Almaları Geri Yükle") {
-                    Task { await iap.restore() }
+                    Task {
+                        let outcome = await iap.restore()
+                        errorText = outcome.userFacingMessage
+                    }
                 }
                 .font(.caption2)
+                .disabled(iap.isRestoring)
             }
             .padding()
         }

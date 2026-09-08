@@ -2,6 +2,56 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-08 — StoreKit entitlement güvenilirliği: 6 turdan sonra mevcut haliyle kabul
+
+**Karar:** `Sekine/Core/Premium/Store.swift` StoreKit entitlement/restore güvenilirliği
+düzeltmesi, 6 turluk VISION (GPT) review döngüsünden sonra mevcut haliyle kabul edildi.
+68/68 test geçiyor. Misyon: `~/Documents/repos/stark-industries/missions/2026-09-07-sekine-storekit-entitlement.md`.
+
+**Ulaşılan ve doğrulanan en kritik garanti (ana misyon hedefi):** `.unverified` bir
+transaction sonucu ASLA önceden doğrulanmış `owned=true` durumunu ezmiyor — ödeme
+yapmış bir kullanıcının premium'u kaybetmesi riski kapatıldı. Ayrıca: revocation
+doğru akışa (`Transaction.updates`) taşındı, `finish()` sırası düzeltildi, restore
+tek in-flight task'a birleşiyor (normal tamamlanma senaryosunda).
+
+**Kabul edilen, ÇÖZÜLMEMİŞ bilinen riskler (takip gerektirir, ayrı/daha sakin bir
+StoreKit turunda ele alınmalı):**
+1. **[P1]** `restore()`'un `alreadyOwned` kararı, sync tamamlandıktan SONRA state
+   okunarak veriliyor — sync sırasında gerçek bir satın alma `Transaction.updates`
+   üzerinden gelirse, restore bunu kendi getirdiği bir sonuç gibi değil `alreadyOwned`
+   gibi yanlış raporlayabilir.
+2. **[P1]** `restore()`'un sonucu kendi taramasına değil PAYLAŞILAN state'e dayanıyor
+   — restore taraması sürerken başka bir `refreshEntitlements()` generation'ı
+   artırırsa, restore'un bulduğu gerçek `owned` sonucu atılıp yanlışlıkla
+   `.noPurchasesFound` dönebilir.
+3. **[P1]** `.indeterminate` durumu hâlâ bazı senaryolarda (Watch'ta cache'te eski
+   `false` varsa, veya cache hiç yoksa tek retry sonrası hâlâ unverified'sa) yanlış
+   davranabilir — ya paywall gösterip tekrar satın alma sunuyor ya da kalıcı
+   "kontrol ediliyor" ekranında takılı kalıyor.
+4. **[P2]** Restore hiç dönmeyen bir `syncProvider()`/tarama'da asılı kalırsa
+   (`[weak self]` güçlü referansa çevrilip tutulduğu için) `isRestoring` sonsuza
+   dek `true` kalabilir, sonraki restore çağrıları aynı asılı task'a bağlanır.
+5. **[P2]** `StoreKitError.notEntitled` → `.noPurchasesFound` eşlemesi Apple
+   semantiğine aykırı (notEntitled = uygulama entitlement'a sahip değil/dağıtım-
+   imzalama sorunu, kullanıcının satın alması yok demek değil) — bu bir
+   dağıtım/imzalama hatasını "satın almanız yok" diye yanlış gösterebilir.
+6. **[P2]** `Transaction.updates`'teki unverified update olayı tamamen atlanıp
+   sadece loglanıyor — `EntitlementState.indeterminate` sözleşmesine göre bu durumun
+   state'i (owned korunarak) indeterminate'e geçirmesi gerekirdi.
+
+**Neden mevcut haliyle kabul edildi:** 6 tur derinlemesine review sonrası azalan
+getiri noktasına ulaşıldı (RollingScheduler misyonunda da benzer bir desen
+gözlemlendi). Kalan riskler "ödeme yapan kullanıcı parayı/erişimi kalıcı kaybeder"
+seviyesinde değil — nadir yarış durumları ve restore-akışı UX detayları. Ana
+misyon hedefi (entitlement kaybı riski) doğrulanmış şekilde kapatıldı.
+
+**Takip:** Yukarıdaki 6 madde, ayrı bir StoreKit-v2 misyonu olarak ileride ele
+alınabilir — özellikle restore'un kendi taramasının sonucunu (paylaşılan state
+yerine) doğrudan döndürmesi ve `alreadyOwned` kararının sync ÖNCESİ state'e göre
+verilmesi öncelikli olmalı.
+
+---
+
 ## 2026-09-08 — İmsakiye çok-ay genişletmesi ERTELENDİ
 
 **Karar:** Aylık imsakiye ekranını 1 aydan birkaç aya genişletme fikri şimdilik
