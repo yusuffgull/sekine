@@ -39,6 +39,11 @@ tekrarlanan adımların ve değişmeyen referans bilgilerin listesi.
   (#1F6E5C, AccentColor) + Türkçe başlık ekler. Başlık metinleri script içinde tanımlı —
   yeni ekran eklenirse script'e yeni bir `render` çağrısı eklenir. Apple, gerçek uygulama
   içeriğini gösteren çerçeveli/metinli ekran görüntülerine izin verir (yaygın pratik).
+- **Sıra (2026-09-23'te değişti):** `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`.
+  Arama sonucunda yalnızca ilk 2-3 görsel görünür; eskiden 1. sırada onboarding (marka
+  tanıtımı) vardı, gerçek uygulama ekranı (ana ekran) 2. sıraya kadar görünmüyordu. ASC'de
+  görsellerin sırası dosya adından değil elle sürükle-bırak'tan gelir — yükleme sırasında
+  bu sıra takip edilecek.
 - **Apple Watch zorunlu** (binary Watch app içerdiği için) — 422×514 (Ultra 3) kabul edilir.
 - Yakalama: `xcrun simctl io booted screenshot ekran.png`. Premium-kilitli ekranlar için
   DEBUG launch argümanları: `-uiTestSeedIstanbul`, `-uiTestForcePremium`, `-uiTestTab <id>`,
@@ -52,7 +57,16 @@ tekrarlanan adımların ve değişmeyen referans bilgilerin listesi.
 kullanılmaz):**
 - **App Name:** `Sekine: Ezan ve Namaz Vakti`
 - **Subtitle:** `Kıble, İmsakiye, Ezan Saatleri`
-- **Keywords:** `ezan,namaz,vakit,imsak,kıble,diyanet,imsakiye,sabah,öğle,ikindi,akşam,yatsı,dua,zikir,hicri,takvim`
+- **Keywords (2026-09-23 güncellendi):**
+  `vakitleri,saati,imsakiye,iftar,sahur,ramazan,kuran,kıble,pusula,diyanet,dua,zikirmatik,tesbih,hicri,cuma`
+  Eskisi App Name'de zaten geçen `ezan,namaz,vakit` kelimelerini tekrarlıyor ve Apple
+  bunları başlıktan ayrıca indeksliyor — boşa alan kaplıyordu. Ayrıca düşük hacimli
+  `sabah,öğle,ikindi,akşam,yatsı` çıkarıldı, yerine rakip yorum analizinde talep görülen
+  `ramazan,iftar,sahur,kuran` ve sevilen özellik kelimeleri (`zikirmatik,tesbih`) eklendi.
+  Gerekçe: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
+- **Promotional Text (build gerektirmez, ASC'den anında güncellenir):**
+  `Reklam yok, uygunsuz içerik yok, takip yok. Diyanet vakitleri, ailenizin tüm
+  büyüklerine gönül rahatlığıyla.`
 
 **Açıklama:**
 > Sekine; namaz vakitlerini sade, huzurlu ve güvenilir biçimde sunar.
@@ -68,6 +82,11 @@ kullanılmaz):**
 > • Her yaşa uygun — büyük, net, anlaşılır tasarım.
 >
 > Reklam yok. Abonelik yok. Dilerseniz tek seferlik Premium ile destek olabilirsiniz.
+
+**Neden bu metinler:** Rakip uygulamaların (9 uygulama, 327 yorum) şikayet analizinde
+açık ara #1 şikayet reklam (uygunsuz reklam, açılışta tam ekran reklam yüzünden
+uzun süreli kullanıcı kaybı). Sekine'nin reklamsız olması en güçlü fark, description ve
+promo text bunu öne çıkarıyor.
 
 ## Review notları (App Review'a)
 - Hesap/giriş gerektirmez, test hesabı gerekli değildir.

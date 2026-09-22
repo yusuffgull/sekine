@@ -28,10 +28,10 @@ render() {
   sips -z 2778 1284 "$work/rendered/${name}.png" --out "store/screenshots-marketing-6.5/${name}.png" >/dev/null
 }
 
-render "1-onboarding" "Namaz vakitleriniz, sade ve huzurlu"
-render "2-home"       "Sonraki vakte kalan süreyi anında görün"
-render "3-monthly"    "Aylık imsakiye, tek bakışta"
-render "4-qibla"      "Kıble yönünü kolayca bulun"
-render "5-settings"   "Reklamsız. Gizli. Güvenilir bildirimler."
+render "1-home"       "Reklamsız. Takipsiz. Sadece namaz vakti."
+render "2-onboarding" "Diyanet vakitleri, çevrimdışı çalışır"
+render "3-qibla"      "Kıble yönünü kolayca bulun"
+render "4-monthly"    "Aylık imsakiye, tek bakışta"
+render "5-settings"   "Bildirimler düzenli yenilenir, susmaz"
 
 echo "OK: marketing screenshots written to store/screenshots-marketing/ and store/screenshots-marketing-6.5/"
