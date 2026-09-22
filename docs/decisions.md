@@ -2,6 +2,37 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
+
+**Karar:** ASC Analytics (24 Haz–21 Eyl 2026, 90 gün) ve 9 rakip uygulamanın 327
+yorumu incelendi. Sonuç: Sekine'nin ürün kalitesi sorun değil (5.0★, D35 ödeme
+oranı %5.26 — kategori medyanından iyi), asıl darboğaz görünürlük (90 günde 39
+indirme, dönüşüm %0.93 — medyan %1.62) ve puan sayısı (3 değerlendirme). Bu yüzden
+ilk faz kod değil ASO: keywords yenilendi (App Name'de zaten geçen `ezan,namaz,vakit`
+tekrarı ve düşük hacimli `sabah/öğle/ikindi/akşam/yatsı` çıkarıldı, yerine
+`ramazan,iftar,sahur,kuran,zikirmatik,tesbih` eklendi), Promotional Text eklendi,
+ekran görüntüsü sırası değişti (onboarding yerine gerçek ana ekran 1. sıraya alındı).
+Detay ve tam yol haritası (Ekim: yıllık abonelik, Kasım: yurtdışı desteği + timezone
+düzeltmesi, Aralık-Ocak: Ramazan modu + Kur'an + kaza takibi):
+`/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
+
+**Rakip analizinden çıkan #1 bulgu:** 96 adet 1-2★ yorumun ezici çoğunluğu reklam
+şikayeti (uygunsuz reklam — flört/kumar/+18/kripto — ve açılışta tam ekran reklam).
+Sekine'nin reklamsız olması rakiplere karşı en güçlü fark; mağaza metni ve ilk ekran
+görüntüsü artık bunu doğrudan söylüyor.
+
+**Hedef gerçekçiliği:** Kullanıcı hedefi (1 yılda App Store + YouTube'dan 3K$/ay
+pasif gelir) Sekine tek başına karşılanamaz — bunun için ayda ~30-50K indirme
+gerekir, mevcut trafik bunun çok altında. Gerçekçi yıl-1 aralığı Sekine için
+150-500$/ay + Ramazan (8 Şub 2027) sıçraması. Kalan hedef portföyden (diğer 3
+uygulama + YouTube kanalları) gelmeli; bu yüzden burada kurulan ASO/paywall/event
+şablonu portföy geneline uygulanabilir şekilde belgelenecek.
+
+**Elenen alternatif:** Doğrudan yeni özellik geliştirmeye başlamak (kullanıcının
+ilk isteği). Veri, özellik eksikliğinin değil dağıtımın darboğaz olduğunu
+gösterdiği için reddedildi — yeni özellik eklemek mevcut ~39 indirimlik trafiği
+büyütmez.
+
 ## 2026-09-08 — RollingScheduler (bildirim planlama): 7 turdan sonra mevcut haliyle kabul
 
 **Karar:** `Sekine/Core/Notifications/RollingScheduler.swift` baştan yazımı, 7 turluk

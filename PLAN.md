@@ -1,5 +1,18 @@
 # PLAN
 
+## Faz 0 — Büyüme/gelir planı: ASO refresh (23 Eyl 2026, sürüyor)
+1 yıllık büyüme/gelir yol haritası kabul edildi:
+`/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
+Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
+
+- [x] ASC Analytics + rakip yorum analizi
+- [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
+- [x] Ekran görüntüsü sırası değişti + yeniden üretildi
+- [ ] Kullanıcı: yeni metinleri/görselleri ASC'ye gir, 1.7'yi gönder
+- [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
+- [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
+- [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
+
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
 sekmesi ve Apple Watch companion app dahil. Yani Faz 1, 1.2, 1.3 ve Faz 2'nin tamamı

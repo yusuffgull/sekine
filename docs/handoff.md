@@ -1,6 +1,31 @@
 # Handoff
 
-## CURRENT TASK — 1.6 (9) yayında
+## CURRENT TASK — Büyüme/gelir planı, Faz 0 (ASO refresh)
+**23 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
+yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
+(kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
+
+Faz 0 (kod dışı, bu oturumda tamamlandı — `docs/aso-refresh-and-growth-plan` branch'i):
+- Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
+  (`docs/store-submission.md`).
+- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`
+  (eskiden ilk sırada onboarding vardı, gerçek uygulama ekranı 2. sıradaydı).
+  `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
+- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı
+  (`fastlane/html-screens`, `scripts/{generate-store-screenshots.sh,html-to-png.swift}`)
+  bu turda ilk kez commit edildi.
+
+**Henüz yapılmadı (kullanıcı aksiyonu gerekli, kod dışı):** yeni keywords/promo
+text/description'ın ASC'ye elle girilmesi, yeni ekran görüntülerinin ASC'ye doğru
+sırayla yüklenmesi, Featuring nomination, Apple Search Ads (10-30$/ay) başvurusu.
+
+**Sıradaki kod işi (Faz 1, Ekim):** yıllık abonelik + paywall yenileme — plan
+dosyasının "Faz 1" bölümüne bakılacak, T3 (para akışı) olarak NATASHA review'ından
+geçecek.
+
+---
+
+## Geçmiş — 1.6 (9) yayında
 **1.6 (9) App Review'dan geçti ve yayınlandı** (28 Ağu 2026). İçeriği: Ayarlar ekranına
 "yeni sürüm mevcut" bildirimi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
 tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `xcodegen generate` +
@@ -62,13 +87,15 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. 1.4 yayınından ~1 hafta sonra App Analytics → App Store Search verisine bak; ASO
-   metadata'sının etkisini ölç, duruma göre Apple Search Ads'e başvurulup
-   başvurulmayacağına karar ver.
-3. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
+1. Kullanıcı: yeni ASO metnini ve ekran görüntülerini ASC'ye gir, 1.7'yi sandbox testinden
+   sonra gönder (bkz. CURRENT TASK).
+2. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
+   ölç.
+3. Faz 1 (Ekim): yıllık abonelik + paywall yenileme, `Store.swift`'e abonelik durumu.
+4. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
    güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-4. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-5. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+5. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
+6. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
 
 ## BLOCKERS
 Yok.

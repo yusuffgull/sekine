@@ -1,0 +1,21 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "background": "../assets/background.png",
+    "keyword": {
+      "font": "../assets/LabelFont.ttf",
+      "font_size": 46,
+      "color": "#B9E0D4"
+    },
+    "title": {
+      "font": "../assets/HeadlineFont.ttf",
+      "font_size": 118,
+      "color": "#FFFFFF"
+    },
+    "padding": "80x180",
+    "stack_title": true,
+    "title_below_image": false,
+    "show_complete_frame": false
+  },
+  "data": []
+}
