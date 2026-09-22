@@ -22,3 +22,12 @@ Package.resolved
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
+# Sistem fontu (Arial) redistribution lisansı belirsiz; script her seferinde kopyalıyor
+fastlane/assets/*.ttf
+# script'le yeniden üretiliyor (scripts/generate-store-screenshots.sh)
+fastlane/assets/background.png
+# generate-store-screenshots.sh çalışma alanı — kaynak store/screenshots/'tan
+# her seferinde yeniden üretilir; yalnızca template.html kaynak kontrolünde
+fastlane/html-screens/[0-9]-*.html
+fastlane/html-screens/[0-9]-*.png
+fastlane/html-screens/rendered/
