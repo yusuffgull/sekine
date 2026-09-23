@@ -14,7 +14,14 @@ struct LocalCalculationProvider: PrayerTimeProvider {
         let placeName = location.name
         let year = Calendar(identifier: .gregorian).component(.year, from: Date())
 
-        let tz = TimeZone(identifier: "Europe/Istanbul") ?? .current
+        // Cihazın kendi saat dilimi kullanılır: bu fallback yalnızca ağ/GPS henüz
+        // sonuçlanmadan devreye girer, o anda kullanıcının FİZİKSEL olarak bulunduğu
+        // yerin en iyi yaklaşık göstergesi cihazın kendi saati. Sabit Europe/Istanbul
+        // KULLANILMAZ — yurt dışındaki bir kullanıcı için gün sınırını (dolayısıyla
+        // hangi vakitlerin hangi güne ait olduğunu) saatlerce kaydırabilirdi
+        // (bkz. docs/decisions.md, 2026-09-24). Hesaplama METODU yine de `turkey`
+        // (Diyanet'e en yakın fiqh parametreleri) — bu bilinçli, konumdan bağımsız.
+        let tz = TimeZone.current
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = tz
 

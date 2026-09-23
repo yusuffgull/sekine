@@ -9,8 +9,12 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
 - [x] Ekran görüntüsü sırası değişti + yeniden üretildi
 - [ ] Kullanıcı: yeni metinleri/görselleri ASC'ye gir, 1.7'yi gönder
-- [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
-- [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
+- [x] Faz 1 (Ekim): yıllık abonelik eklendi (`feat/yearly-subscription` branch) — kod
+      hazır, testler yeşil; gerçek cihaz sandbox testi + ASC'de abonelik ürünü oluşturma
+      hâlâ gerekiyor
+- [x] Faz 2 (Kasım): yurtdışı konum desteği + KRİTİK timezone düzeltmesi eklendi
+      (`feat/international-locations` branch) — kod hazır, testler yeşil; gerçek cihazda
+      Almanya/Hollanda için Diyanet siteyle karşılaştırma hâlâ gerekiyor
 - [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
 
 ## Durum

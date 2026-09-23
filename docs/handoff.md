@@ -1,27 +1,68 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı, Faz 0 (ASO refresh)
-**23 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
+## CURRENT TASK — Büyüme/gelir planı, Faz 0 canlı + Faz 1/2 kod tarafı bitti
+**23-24 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
 yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
 (kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
 
-Faz 0 (kod dışı, bu oturumda tamamlandı — `docs/aso-refresh-and-growth-plan` branch'i):
-- Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
-  (`docs/store-submission.md`).
-- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`
-  (eskiden ilk sırada onboarding vardı, gerçek uygulama ekranı 2. sıradaydı).
+**Faz 0 (ASO refresh) — tamamlandı, `main`'e merge edildi VE ASC'ye canlı işlendi:**
+- Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`).
+- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`.
   `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
-- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı
-  (`fastlane/html-screens`, `scripts/{generate-store-screenshots.sh,html-to-png.swift}`)
-  bu turda ilk kez commit edildi.
+- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı commit edildi.
+- **ASC canlı 1.6 sürümünde Promotional Text güncellendi** (Chrome ile, elle onaylı).
+- **ASC'de "1.7 Prepare for Submission" taslağı açıldı**, yeni keywords/promo
+  text/description/what's-new/5 ekran görüntüsü girildi ve kaydedildi — **submit
+  EDİLMEDİ**, sandbox satın alma testi bekliyor (kasıtlı, bkz. NEXT).
 
-**Henüz yapılmadı (kullanıcı aksiyonu gerekli, kod dışı):** yeni keywords/promo
-text/description'ın ASC'ye elle girilmesi, yeni ekran görüntülerinin ASC'ye doğru
-sırayla yüklenmesi, Featuring nomination, Apple Search Ads (10-30$/ay) başvurusu.
+**Faz 1 (yıllık abonelik) — kod tarafı bitti, `feat/yearly-subscription` branch'i
+(main'e merge EDİLMEDİ):**
+- `com.sekineapp.sekine.premium.yearly` eklendi (₺149.99, 7 gün deneme).
+  `Store.entitlementProductIDs` (lifetime+yearly) tek doğruluk kaynağı.
+- `PaywallView`: yıllık (önerilen) + ömürlük yan yana, App Review'ın istediği otomatik
+  yenileme açıklaması eklendi.
+- NATASHA (T3 güvenlik review) temiz raporu verdi; tek düşük-önem bulgu (fiyat/deneme
+  süresi metnini tek cümlede birleştirme) düzeltildi.
+- Gerekçe: `docs/decisions.md` (2026-09-24, bu branch'in kendi commit'lerinde).
 
-**Sıradaki kod işi (Faz 1, Ekim):** yıllık abonelik + paywall yenileme — plan
-dosyasının "Faz 1" bölümüne bakılacak, T3 (para akışı) olarak NATASHA review'ından
-geçecek.
+**Faz 2 (yurtdışı konum) — kod tarafı bitti, `feat/international-locations` branch'i
+(main'e merge EDİLMEDİ, henüz commit edilmedi — bkz. NEXT):**
+- **Kritik bug düzeltildi:** `DiyanetProvider` her konum için sabit `Europe/Istanbul`
+  varsayıyordu — yurt dışı bir ilçe seçilse bile vakitler Türkiye saatiyle hesaplanıyordu
+  (sessizce, kullanıcı uyarısız). Artık her günün GERÇEK ofseti Diyanet API'sinin kendi
+  `MiladiTarihUzunIso8601` alanından okunuyor (curl ile Berlin +02:00 / Türkiye +03:00
+  olarak doğrulandı — API'nin `GreenwichOrtalamaZamani` alanı bunun aksine yanlış).
+  Aynı sınıf hata `LocalCalculationProvider`'da (ağsız fallback) da vardı, düzeltildi.
+- Diyanet servisi zaten 105+ ülkeyi kapsıyor — `DiyanetDirectory`'ye `countries()` +
+  `cities(countryID:)` + `country(forISOCode:)` eklendi.
+- GPS akışı artık önce ülkeyi otomatik tespit edip o ülke içinde arıyor (önceden
+  yalnızca Türkiye'de arayıp yurt dışı kullanıcı için hep "eşleşme yok" veriyordu —
+  rakip yorumlarında da sık şikayetti).
+- Manuel arama (`LocationSearchSheet`) bir ülke seçici kazandı, varsayılan Türkiye.
+- Bilinçli kapsam dışı: Onboarding/watchOS'un kendi arama akışları hâlâ yalnızca
+  Türkiye (GPS zaten otomatik ülke tespit ediyor, bu ekranlar ayrı bir tur).
+- Yeni birim testleri (offset ayrıştırma + Türkiye'ye sessizce düşmediğinin kanıtı)
+  dahil tüm test suite'i yeşil, Watch hedefi dahil tam derleme başarılı.
+- Gerekçe + bilinen dar sınır: `docs/decisions.md` (2026-09-24).
+- **Not (oturum içi kaza):** bu değişiklikler bir `git checkout main -- .` yanlışlığıyla
+  bir kez working tree'den silindi (commit edilmemiş hâldeyken), aynı içerikle yeniden
+  uygulandı. Faz 1'in kendi branch'i bu kazadan ETKİLENMEDİ (zaten commit'liydi).
+
+**Henüz yapılmadı:**
+1. Kullanıcı: `feat/yearly-subscription` ve `feat/international-locations`'ı incele,
+   `main`'e merge et. **Faz 2 branch'i henüz commit edilmedi** — bir sonraki oturum
+   önce `git status`/`git diff` ile çalışma alanını kontrol etmeli.
+2. Kullanıcı: ASC'de yıllık abonelik ÜRÜNÜNÜ oluştur (kod tarafı hazır ama ASC'de ürün
+   henüz yok — `loadProducts()` bulamadığı sürece yalnızca ömürlük görünür, sessizce
+   bozulmaz).
+3. Kullanıcı: gerçek cihazda hem ömürlük hem yıllık için sandbox satın alma/restore testi.
+4. Kullanıcı: gerçek cihazda Almanya/Hollanda gibi bir konum için vakitleri Diyanet
+   web sitesiyle birebir karşılaştır.
+5. Kullanıcı: 1.7'yi (yıllık abonelik + yurtdışı desteği dahil bir build ile) submit et.
+6. ASC'de: keywords/promo/description, Featuring nomination, Search Ads (10-30$/ay).
+7. ASC mağaza yerelleştirmesi (İngilizce/Almanca keyword'lere Türkçe terimler,
+   diaspora için) — plan dosyasının Faz 2 bölümünde, kod dışı.
+8. Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi.
 
 ---
 
@@ -87,18 +128,23 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. Kullanıcı: yeni ASO metnini ve ekran görüntülerini ASC'ye gir, 1.7'yi sandbox testinden
-   sonra gönder (bkz. CURRENT TASK).
-2. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
+1. Kullanıcı: `feat/yearly-subscription` ve `feat/international-locations`'ı gözden
+   geçir, `main`'e merge et (Faz 2 branch'i henüz commit edilmedi, önce commit'le).
+2. Kullanıcı: ASC'de yıllık abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`).
+3. Kullanıcı: gerçek cihazda sandbox satın alma/restore testi (ömürlük + yıllık).
+4. Kullanıcı: gerçek cihazda yurt dışı bir konum için vakitleri Diyanet siteyle karşılaştır.
+5. Kullanıcı: 1.7'yi gönder (ASC taslağı zaten hazır — bkz. CURRENT TASK).
+6. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
    ölç.
-3. Faz 1 (Ekim): yıllık abonelik + paywall yenileme, `Store.swift`'e abonelik durumu.
-4. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
+7. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
    güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-5. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-6. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+8. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
+9. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+10. Faz 3 (Aralık-Ocak): Ramazan modu, Kur'an+meal, kaza takibi.
 
 ## BLOCKERS
-Yok.
+Yok — ama 1.7 submit, yıllık abonelik ve yurtdışı desteğinin canlıya çıkışı yukarıdaki
+kullanıcı aksiyonlarına (ASC ürün oluşturma + gerçek cihaz testleri) bağlı.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.

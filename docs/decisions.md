@@ -2,6 +2,65 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-24 — Yurtdışı konum desteği + kritik saat dilimi düzeltmesi (Faz 2)
+
+**Karar:** `DiyanetProvider`, Diyanet vakit ID'si seçilen HER konum için sabit
+`Europe/Istanbul` varsayıyordu — Türkiye dışında bu SESSİZCE yanlış vakit demekti
+(bkz. memory: dini veride doğruluk, dar kapsam yok tam düzeltme). Aynı `ezanvakti
+.emushaf.net` servisi zaten 105+ ülkeyi kapsıyor (Almanya, Hollanda, ABD dahil) —
+ayrı bir veri kaynağı gerekmedi, yalnızca (1) ülke seçimi ve (2) doğru saat dilimi
+eklendi.
+
+**Saat dilimi düzeltmesi (kritik, ölçülüp doğrulandı):** API'nin
+`GreenwichOrtalamaZamani` alanı yurt dışı ilçelerde GÖZLEMSEL OLARAK hep Türkiye'nin
+kendi ofsetini döndürüyor (Berlin için de "+3" veriyor — yanlış). Ama aynı yanıttaki
+`MiladiTarihUzunIso8601` alanının sonundaki `±HH:MM` kısmı (ör. Berlin Eylül'de
+`+02:00`, Türkiye `+03:00`) GÜNLÜK ve DOĞRU — hedef ülkenin kendi yaz/kış saati
+kuralına göre hesaplanmış. `curl` ile canlı doğrulandı (Berlin ilçe ID 11002 →
+`+02:00`, Türkiye → `+03:00`, aynı gün). Artık her günün MUTLAK `Date`'i kendi
+GERÇEK ofsetinden hesaplanıyor; ofset ayrıştırılamazsa (alan yok/beklenmedik biçim)
+`Europe/Istanbul`'a düşülüyor (geriye dönük uyumlu, asla crash/veri kaybı yok).
+
+**Bilinen dar sınır (kabul edildi):** `PrayerSchedule.timeZoneIdentifier` tek bir
+alan (şema değişikliği gerektirmeden) — ilk günün ofseti temsilci alınıyor. DST
+uygulayan bir ülkede geçiş günü tam kayan pencerenin ortasına denk gelirse (yılda
+en fazla 2 gün), `day(containing:)` gün sınırını ~1 saatlik dar bir pencerede yanlış
+kovaya düşürebilir. Her günün KENDİ mutlak `Date`'i yine de doğru hesaplanmış
+durumda — yalnızca "hangi gün kovası" sınıflandırması dar bir pencerede kayabilir.
+Şema geniş çaplı değişmeden (her `PrayerDay`'e kendi tz'sini eklemek) tam çözülemez;
+v1 için kabul edilebilir.
+
+**`LocalCalculationProvider`'da da aynı sınıf hata bulundu ve düzeltildi:** ağ/GPS
+yokken devreye giren yerel (adhan-swift) hesaplama da gün sınırını sabit
+`Europe/Istanbul` ile çiziyordu. `TimeZone.current`'a çevrildi — bu fallback yalnızca
+kullanıcının FİZİKSEL olarak bulunduğu an devreye girdiği için cihazın kendi saat
+dilimi en iyi yaklaşık sinyal. Hesaplama METODU (`CalculationMethod.turkey`,
+Diyanet'e en yakın fıkıh parametreleri) bilinçli olarak konumdan bağımsız kalmaya
+devam ediyor.
+
+**Ülke seçimi:** `DiyanetDirectory`'ye `countries()` + `cities(countryID:)` +
+`country(forISOCode:)` eklendi. GPS akışı (`LocationManager.resolveAndMatchDiyanet
+Location`) artık önce GPS'in verdiği ülkeyi (`CLPlacemark.isoCountryCode` →
+`Locale.localizedString(forRegionCode:)` → Diyanet'in İngilizce ülke adıyla
+eşleştirme) bulup O ÜLKE içinde arıyor — önceden yalnızca Türkiye il listesinde
+aranıyordu, yurt dışındaki kullanıcı için her zaman "eşleşme yok" sonucu veriyordu
+(rakip yorum analizinde de "yurtdışı konum kabul etmiyor" sık şikayetti). Manuel
+arama (`LocationSearchSheet`) da bir ülke seçici kazandı, varsayılan Türkiye.
+
+**Bilinçli kapsam dışı bırakılan (ayrı bir tur gerektirir):** Onboarding ve
+watchOS'un kendi `LocationSearchSheet`-benzeri akışları (`OnboardingView`,
+`WatchOnboardingView`) hâlâ yalnızca Türkiye arıyor (`directory.cities()`
+parametresiz çağrılıyor, varsayılan Türkiye'ye düşüyor — davranış DEĞİŞMEDİ, kırılma
+yok). GPS akışı zaten otomatik ülke tespit ediyor; bu iki ekrandaki MANUEL arama
+akışına ülke seçici eklemek ayrı, düşük öncelikli bir iyileştirme (çoğu kullanıcı
+GPS kullanıyor).
+
+**Doğrulama:** yeni birim testleri (Berlin ofsetinin Türkiye'ye sessizce
+düşmediğini, offset ayrıştırmanın +/-/malformed durumlarını doğrulayan) dahil test
+suite'i yeşil, iOS simülatör derlemesi (Watch hedefi dahil, tek `Sekine` şeması)
+başarılı. Gerçek cihazda Almanya/Hollanda için Diyanet web sitesiyle birebir
+karşılaştırma HENÜZ yapılmadı — kullanıcı aksiyonu.
+
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 
 **Karar:** ASC Analytics (24 Haz–21 Eyl 2026, 90 gün) ve 9 rakip uygulamanın 327
