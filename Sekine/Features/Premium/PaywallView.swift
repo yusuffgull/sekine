@@ -9,6 +9,7 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var isPurchasing = false
+    @State private var purchasingProductID: String?
 
     private let features: [(String, String)] = [
         ("speaker.wave.3.fill", "Tam ezan sesi (birden fazla müezzin)"),
@@ -81,23 +82,28 @@ struct PaywallView: View {
     }
 
     @ViewBuilder private var buyButton: some View {
-        if let product = store.premiumProduct {
-            Button {
-                Task {
-                    isPurchasing = true
-                    let ok = await store.purchase(product)
-                    isPurchasing = false
-                    if ok { dismiss() }
+        if store.premiumProduct != nil || store.yearlyProduct != nil {
+            VStack(spacing: 10) {
+                if let yearly = store.yearlyProduct {
+                    purchaseButton(
+                        for: yearly,
+                        title: "Yıllık — \(yearly.displayPrice)",
+                        isPrimary: true,
+                        badge: "Önerilen · 7 gün ücretsiz deneme"
+                    )
                 }
-            } label: {
-                HStack {
-                    if isPurchasing { ProgressView().tint(.white) }
-                    Text(isPurchasing ? "İşleniyor…" : "Premium'u Aç — \(product.displayPrice)")
+                if let lifetime = store.premiumProduct {
+                    purchaseButton(
+                        for: lifetime,
+                        title: "Ömürlük — \(lifetime.displayPrice)",
+                        // İkisi de sunulduğunda yıllık öne çıkar (birincil), ömürlük ikincil
+                        // görünür. Yalnızca ömürlük varsa (ör. yıllık ürün henüz ASC'de
+                        // onaylanmadan önce) tek başına birincil kalır.
+                        isPrimary: store.yearlyProduct == nil,
+                        badge: nil
+                    )
                 }
-                .frame(maxWidth: .infinity)
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .disabled(isPurchasing)
         } else if store.isLoadingProducts {
             ProgressView().padding()
         } else {
@@ -105,6 +111,40 @@ struct PaywallView: View {
                 .font(SekineFont.caption(settings.fontScale))
                 .foregroundStyle(Palette.textSecondary)
                 .multilineTextAlignment(.center)
+        }
+    }
+
+    @ViewBuilder
+    private func purchaseButton(
+        for product: Product,
+        title: String,
+        isPrimary: Bool,
+        badge: String?
+    ) -> some View {
+        VStack(spacing: 4) {
+            if let badge {
+                Text(badge)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(Palette.accent)
+            }
+            Button {
+                Task {
+                    isPurchasing = true
+                    purchasingProductID = product.id
+                    let ok = await store.purchase(product)
+                    isPurchasing = false
+                    purchasingProductID = nil
+                    if ok { dismiss() }
+                }
+            } label: {
+                HStack {
+                    if purchasingProductID == product.id { ProgressView().tint(.white) }
+                    Text(purchasingProductID == product.id ? "İşleniyor…" : title)
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(isPrimary ? AnyButtonStyleBox(PrimaryButtonStyle()) : AnyButtonStyleBox(SecondaryButtonStyle()))
+            .disabled(isPurchasing)
         }
     }
 
@@ -128,10 +168,19 @@ struct PaywallView: View {
             if let err = store.purchaseError {
                 Text(err).font(.footnote).foregroundStyle(.red).multilineTextAlignment(.center)
             }
-            Text("Tek seferlik ödeme, ömür boyu. Aile paylaşımı destekli.")
-                .font(.footnote)
-                .foregroundStyle(Palette.textSecondary)
-                .multilineTextAlignment(.center)
+            // Apple App Review otomatik yenilenen aboneliklerde bu bilgilerin (süre, fiyat,
+            // otomatik yenilenme, deneme süresi) açıkça görünmesini şart koşar (Guideline 3.1.2).
+            if store.yearlyProduct != nil {
+                Text("Yıllık abonelik otomatik yenilenir, 7 gün ücretsiz deneme içerir. İstediğiniz zaman App Store ayarlarından iptal edebilirsiniz. Ömürlük seçenek tek seferlik ödemedir. İkisi de aile paylaşımını destekler.")
+                    .font(.footnote)
+                    .foregroundStyle(Palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            } else {
+                Text("Tek seferlik ödeme, ömür boyu. Aile paylaşımı destekli.")
+                    .font(.footnote)
+                    .foregroundStyle(Palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
         }
     }
 }

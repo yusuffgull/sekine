@@ -78,6 +78,10 @@ struct VerifiedTransactionInfo: Equatable {
 @MainActor
 final class Store: ObservableObject, PremiumProviding {
     static let lifetimeID = "com.sekineapp.sekine.premium.lifetime"
+    static let yearlyID = "com.sekineapp.sekine.premium.yearly"
+    /// Entitlement veren tüm ürünler — ömürlük (non-consumable) VE yıllık abonelik.
+    /// Bağışlar (`tipIDs`) bilinçli olarak dışarıda: hiçbir zaman entitlement vermezler.
+    static let entitlementProductIDs: Set<String> = [lifetimeID, yearlyID]
     static let tipIDs = [
         "com.sekineapp.sekine.tip.small",
         "com.sekineapp.sekine.tip.medium",
@@ -87,6 +91,7 @@ final class Store: ObservableObject, PremiumProviding {
     private static let cacheKey = "settings.isPremium"
 
     @Published private(set) var premiumProduct: Product?
+    @Published private(set) var yearlyProduct: Product?
     @Published private(set) var tipProducts: [Product] = []
     @Published private(set) var entitlementState: EntitlementState
     /// Cold-launch anında App Group önbelleğinde HERHANGİ bir değer (true ya da false)
@@ -144,23 +149,23 @@ final class Store: ObservableObject, PremiumProviding {
     /// çalışmadığından bu AsyncSequence de `purchase()`/`AppStore.sync()` gibi süresiz
     /// askıda kalabiliyor. `StoreEntitlementTests` bunu anında dönen sahte bir sonuçla
     /// değiştirerek `restore()`/`refreshEntitlements()`'ı deterministik test eder.
-    var entitlementsScanProvider: () async -> (foundOwnedLifetime: Bool, sawUnverifiedLifetime: Bool) = {
-        var foundOwnedLifetime = false
-        var sawUnverifiedLifetime = false
+    var entitlementsScanProvider: () async -> (foundOwnedEntitlement: Bool, sawUnverifiedEntitlement: Bool) = {
+        var foundOwnedEntitlement = false
+        var sawUnverifiedEntitlement = false
         for await result in Transaction.currentEntitlements {
             switch result {
             case .verified(let transaction):
-                if transaction.productID == Store.lifetimeID {
-                    foundOwnedLifetime = true
+                if Store.entitlementProductIDs.contains(transaction.productID) {
+                    foundOwnedEntitlement = true
                 }
             case .unverified(let transaction, let error):
-                if transaction.productID == Store.lifetimeID {
-                    sawUnverifiedLifetime = true
-                    print("Store: doğrulanamayan ömürlük transaction görüldü: \(error)")
+                if Store.entitlementProductIDs.contains(transaction.productID) {
+                    sawUnverifiedEntitlement = true
+                    print("Store: doğrulanamayan entitlement transaction'ı görüldü: \(error)")
                 }
             }
         }
-        return (foundOwnedLifetime, sawUnverifiedLifetime)
+        return (foundOwnedEntitlement, sawUnverifiedEntitlement)
     }
 
     init() {
@@ -204,8 +209,11 @@ final class Store: ObservableObject, PremiumProviding {
         isLoadingProducts = true
         defer { isLoadingProducts = false }
         do {
-            let products = try await Product.products(for: [Self.lifetimeID] + Self.tipIDs)
+            let products = try await Product.products(
+                for: [Self.lifetimeID, Self.yearlyID] + Self.tipIDs
+            )
             premiumProduct = products.first { $0.id == Self.lifetimeID }
+            yearlyProduct = products.first { $0.id == Self.yearlyID }
             // Bağış ürünlerini fiyata göre sırala.
             tipProducts = products
                 .filter { Self.tipIDs.contains($0.id) }
@@ -259,7 +267,7 @@ final class Store: ObservableObject, PremiumProviding {
     /// `refreshEntitlements()` taramalarını geçersiz kılar. `StoreEntitlementTests` bunu
     /// gerçek bir StoreKit satın alma/restore akışı tetiklemeden doğrudan çağırır.
     func applyVerifiedTransactionInfo(_ info: VerifiedTransactionInfo) {
-        guard info.productID == Self.lifetimeID else { return }
+        guard Self.entitlementProductIDs.contains(info.productID) else { return }
         setPremium(!info.isRevoked)
         refreshGeneration += 1
     }
@@ -268,6 +276,14 @@ final class Store: ObservableObject, PremiumProviding {
     /// tarar. Yalnızca app-launch'ta ve `restore()` sonrası çağrılır — satın alma/güncelleme
     /// akışları (`handleVerifiedTransaction`) entitlement'ı doğrudan uygular, yeniden
     /// taramaya gerek duymaz.
+    ///
+    /// **Yıllık abonelik ve sessiz süre dolumu:** Yenilenen bir abonelik `Transaction
+    /// .updates`'e yeni bir transaction düşürür (yenileme HEMEN yakalanır). Ama abonelik
+    /// yenilenmeden süresi dolarsa (kullanıcı iptal etti/ödeme geçmedi) StoreKit hiçbir
+    /// event GÖNDERMEZ — süresi dolan transaction sadece bir sonraki `currentEntitlements`
+    /// taramasında görünmez olur. Yani bu uygulamada süre dolumu ancak bir sonraki
+    /// app-launch veya restore'da fark edilir, anlık değil. Bilinçli kabul edilen bir
+    /// sınır (v1); gerekirse `expirationDate` bazlı bir arka plan kontrolüyle sıkılaştırılabilir.
     ///
     /// KRİTİK: generation'ı burada yalnızca OKUMAK yetmez, ARTTIRMAK gerekir. Aksi halde
     /// iki eş zamanlı `refreshEntitlements()` çağrısı (ör. cold-launch'taki `init()`
@@ -283,8 +299,8 @@ final class Store: ObservableObject, PremiumProviding {
         let myGeneration = refreshGeneration
         let scan = await entitlementsScanProvider()
         applyRefreshResult(
-            foundOwnedLifetime: scan.foundOwnedLifetime,
-            sawUnverifiedLifetime: scan.sawUnverifiedLifetime,
+            foundOwnedEntitlement: scan.foundOwnedEntitlement,
+            sawUnverifiedEntitlement: scan.sawUnverifiedEntitlement,
             generation: myGeneration
         )
     }
@@ -295,14 +311,14 @@ final class Store: ObservableObject, PremiumProviding {
     /// çalışmak yerine bu fonksiyonu doğrudan, kontrollü generation değerleriyle çağırarak
     /// "stale bir taramanın sonucu asla verified bir purchase/update'i ezmez" garantisini
     /// deterministik olarak doğrular.
-    func applyRefreshResult(foundOwnedLifetime: Bool, sawUnverifiedLifetime: Bool, generation: Int) {
+    func applyRefreshResult(foundOwnedEntitlement: Bool, sawUnverifiedEntitlement: Bool, generation: Int) {
         // Bu tarama sürerken bir purchase/update state'i çoktan (daha güncel bir bilgiyle)
         // yazdıysa, bu taramanın bayatlamış sonucu ASLA state'in üzerine yazılmaz.
         guard refreshGeneration == generation else { return }
 
-        if foundOwnedLifetime {
+        if foundOwnedEntitlement {
             setPremium(true)
-        } else if sawUnverifiedLifetime {
+        } else if sawUnverifiedEntitlement {
             // Hiçbir doğrulanmış ömürlük transaction yok ama doğrulanamayan bir tane var —
             // bu belirsizliği "sahip değil"e indirgemek, geçici bir doğrulama sorununda
             // ödeme yapmış kullanıcıyı kilitleyebilir. Zaten `.owned` ise ASLA dokunma

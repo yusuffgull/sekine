@@ -55,6 +55,19 @@ struct SekineFont {
     }
 }
 
+/// İki farklı somut `ButtonStyle` arasında çalışma zamanında (ör. bir koşula göre) seçim
+/// yapabilmek için tip-silici sarmalayıcı. SwiftUI'de `condition ? StyleA() : StyleB()`
+/// derlenmez (`some ButtonStyle` iki farklı somut tipi birleştiremez); bu, standart çözüm.
+struct AnyButtonStyleBox: ButtonStyle {
+    private let makeBodyClosure: (Configuration) -> AnyView
+    init<S: ButtonStyle>(_ style: S) {
+        makeBodyClosure = { AnyView(style.makeBody(configuration: $0)) }
+    }
+    func makeBody(configuration: Configuration) -> some View {
+        makeBodyClosure(configuration)
+    }
+}
+
 extension View {
     /// Kart görünümü (yumuşak köşe, hafif gölge).
     func sekineCard(active: Bool = false) -> some View {

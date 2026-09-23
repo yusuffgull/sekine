@@ -1,27 +1,41 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı, Faz 0 (ASO refresh)
-**23 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
+## CURRENT TASK — Büyüme/gelir planı, Faz 1 (yıllık abonelik) kod tarafı bitti
+**23-24 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
 yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
 (kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
 
-Faz 0 (kod dışı, bu oturumda tamamlandı — `docs/aso-refresh-and-growth-plan` branch'i):
+**Faz 0 (ASO refresh) — tamamlandı, `main`'e merge edildi VE ASC'ye canlı işlendi:**
 - Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
   (`docs/store-submission.md`).
-- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`
-  (eskiden ilk sırada onboarding vardı, gerçek uygulama ekranı 2. sıradaydı).
+- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`.
   `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
-- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı
-  (`fastlane/html-screens`, `scripts/{generate-store-screenshots.sh,html-to-png.swift}`)
-  bu turda ilk kez commit edildi.
+- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı commit edildi.
+- **ASC canlı 1.6 sürümünde Promotional Text güncellendi** (Chrome ile, elle onaylı).
+- **ASC'de "1.7 Prepare for Submission" taslağı açıldı**, yeni keywords/promo
+  text/description/what's-new/5 ekran görüntüsü girildi ve kaydedildi — **submit
+  EDİLMEDİ**, sandbox satın alma testi bekliyor (kasıtlı, bkz. NEXT).
 
-**Henüz yapılmadı (kullanıcı aksiyonu gerekli, kod dışı):** yeni keywords/promo
-text/description'ın ASC'ye elle girilmesi, yeni ekran görüntülerinin ASC'ye doğru
-sırayla yüklenmesi, Featuring nomination, Apple Search Ads (10-30$/ay) başvurusu.
+**Faz 1 (yıllık abonelik) — kod tarafı bitti, `feat/yearly-subscription` branch'i
+(main'e merge EDİLMEDİ):**
+- `com.sekineapp.sekine.premium.yearly` eklendi (₺149.99, 7 gün deneme).
+  `Store.entitlementProductIDs` (lifetime+yearly) tek doğruluk kaynağı.
+- `PaywallView`: yıllık (önerilen) + ömürlük yan yana, App Review'ın istediği otomatik
+  yenileme açıklaması eklendi.
+- `Sekine.storekit`'e yerel test için abonelik grubu eklendi.
+- 2 yeni birim testi + mevcut 18'i (72 toplam) yeşil, iOS simülatör derlemesi başarılı.
+- Gerekçe/bilinen sınır (sessiz süre dolumu ancak launch'ta fark edilir):
+  `docs/decisions.md` (2026-09-24).
 
-**Sıradaki kod işi (Faz 1, Ekim):** yıllık abonelik + paywall yenileme — plan
-dosyasının "Faz 1" bölümüne bakılacak, T3 (para akışı) olarak NATASHA review'ından
-geçecek.
+**Henüz yapılmadı:**
+1. Kullanıcı: `feat/yearly-subscription`'ı incele, `main`'e merge et.
+2. Kullanıcı: ASC'de yıllık abonelik ÜRÜNÜNÜ oluştur (kod tarafı hazır ama ASC'de ürün
+   henüz yok — `loadProducts()` bulamadığı sürece yalnızca ömürlük görünür, sessizce
+   bozulmaz).
+3. Kullanıcı: gerçek cihazda hem ömürlük hem yıllık için sandbox satın alma/restore testi.
+4. Kullanıcı: 1.7'yi (yıllık abonelik dahil bir build ile) submit et.
+5. ASC'de: keywords/promo/description, Featuring nomination, Search Ads (10-30$/ay).
+6. Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi.
 
 ---
 
@@ -87,18 +101,21 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. Kullanıcı: yeni ASO metnini ve ekran görüntülerini ASC'ye gir, 1.7'yi sandbox testinden
-   sonra gönder (bkz. CURRENT TASK).
-2. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
+1. Kullanıcı: `feat/yearly-subscription`'ı gözden geçir, `main`'e merge et.
+2. Kullanıcı: ASC'de yıllık abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`).
+3. Kullanıcı: gerçek cihazda sandbox satın alma/restore testi (ömürlük + yıllık).
+4. Kullanıcı: 1.7'yi gönder (ASC taslağı zaten hazır — bkz. CURRENT TASK).
+5. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
    ölç.
-3. Faz 1 (Ekim): yıllık abonelik + paywall yenileme, `Store.swift`'e abonelik durumu.
-4. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
+6. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
    güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-5. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-6. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+7. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
+8. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+9. Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi.
 
 ## BLOCKERS
-Yok.
+Yok — ama 1.7 submit ve yıllık abonelik canlıya çıkışı yukarıdaki kullanıcı
+aksiyonlarına (ASC ürün oluşturma + sandbox test) bağlı.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.

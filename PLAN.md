@@ -8,8 +8,12 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [x] ASC Analytics + rakip yorum analizi
 - [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
 - [x] Ekran görüntüsü sırası değişti + yeniden üretildi
-- [ ] Kullanıcı: yeni metinleri/görselleri ASC'ye gir, 1.7'yi gönder
-- [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
+- [x] ASC'de 1.7 taslak sürümü açıldı, yeni metin/görseller girildi (submit EDİLMEDİ —
+      sandbox test bekliyor)
+- [ ] Kullanıcı: gerçek cihazda sandbox satın alma testi, sonra 1.7'yi submit et
+- [x] Faz 1 (Ekim): yıllık abonelik eklendi (`feat/yearly-subscription` branch) — kod
+      hazır, testler yeşil; gerçek cihaz sandbox testi + ASC'de abonelik ürünü oluşturma
+      hâlâ gerekiyor
 - [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
 - [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
 
