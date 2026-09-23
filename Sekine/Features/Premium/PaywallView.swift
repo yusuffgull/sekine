@@ -171,7 +171,7 @@ struct PaywallView: View {
             // Apple App Review otomatik yenilenen aboneliklerde bu bilgilerin (süre, fiyat,
             // otomatik yenilenme, deneme süresi) açıkça görünmesini şart koşar (Guideline 3.1.2).
             if store.yearlyProduct != nil {
-                Text("Yıllık abonelik otomatik yenilenir, 7 gün ücretsiz deneme içerir. İstediğiniz zaman App Store ayarlarından iptal edebilirsiniz. Ömürlük seçenek tek seferlik ödemedir. İkisi de aile paylaşımını destekler.")
+                Text("Yıllık abonelik 7 gün ücretsiz deneme sonrası \(store.yearlyProduct?.displayPrice ?? "")/yıl olarak otomatik yenilenir; istediğiniz zaman App Store ayarlarından iptal edebilirsiniz. Ömürlük seçenek tek seferlik ödemedir. İkisi de aile paylaşımını destekler.")
                     .font(.footnote)
                     .foregroundStyle(Palette.textSecondary)
                     .multilineTextAlignment(.center)
