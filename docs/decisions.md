@@ -167,6 +167,23 @@ doğrulanamaz), oruç günü takibi, paylaşılabilir imsakiye görseli.
 
 **Doğrulama:** 9 yeni birim testi; simülatörde `-uiTestRamadan` (DEBUG) ile gerçekten
 çalıştırıldı — 13:59'da iftar 19:06 → "5 sa 06 dk" (aritmetik doğru).
+## 2026-09-24 — Paylaşılabilir vakit kartı + AI ezan denemesi ENGELLİ (Faz 1/3 büyüme)
+
+**Paylaşım kartı:** Ana ekrana "Bugünün vakitlerini paylaş" (ücretsiz). `ShareCardView`
+1080×1350 sabit, tema/koyu moddan bağımsız; alt kısımda HER ZAMAN "Sekine · Reklamsız,
+takipsiz namaz vakitleri" + App Store adı (WhatsApp aile gruplarında organik büyüme).
+Saatler konumun kendi saat diliminde biçimlenir (yurt dışında cihaz saati değil).
+Ramazan'da (hicriMonth==9) imsak/akşam "sahur sonu/iftar" adıyla vurgulanır. Paylaşım
+metnine App Store linki eklenir (görüntüdeki yazı tıklanamaz). Doğrulama: DEBUG
+`-uiTestExportShareCard` ile gerçek PNG diske yazılıp gözle kontrol edildi (1080×1350),
+2 birim testi. Bağımsız dal: `RamadanInfo`'ya bağımlı değil (yerel sabit; birleşince
+tek sabite indirilebilir).
+
+**AI ezan denemesi YAPILAMADI (engelli):** (1) youtube-miner `docs/decisions.md`'ye göre
+ElevenLabs'e hiç kaydolunmamış — hesap/anahtar yok, hesap açma/ödeme ajan tarafından
+yapılamaz; (2) mevcut ses altyapısı (edge-TTS / yerel VoiceStudio) KONUŞMA sentezi —
+makamlı ezan okuyamaz; (3) plandaki dinleyici paneli kapısı zaten insan onayı ister.
+Öneri değişmedi: plan B (yerel müezzine ücretli kayıt + yazılı tam kullanım hakkı).
 
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 

@@ -7,6 +7,7 @@ struct HomeView: View {
     @EnvironmentObject private var adhan: AdhanPlayer
 
     @State private var showPaywall = false
+    @State private var shareImage: UIImage?
 
     var body: some View {
         ZStack {
@@ -33,6 +34,7 @@ struct HomeView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
+                    shareButton
                     adhanButton
                 }
                 .padding()
@@ -44,6 +46,41 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showPaywall) { PaywallView() }
+        .task(id: store.today?.dayStart) { renderShareImage() }
+        .onAppear {
+            #if DEBUG
+            // Ekran doğrulaması: kartı diske yazar (bkz. docs/decisions.md 2026-09-24).
+            if ProcessInfo.processInfo.arguments.contains("-uiTestExportShareCard") {
+                renderShareImage()
+                if let data = shareImage?.pngData() {
+                    try? data.write(to: FileManager.default.temporaryDirectory
+                        .appendingPathComponent("sekine-share-card.png"))
+                }
+            }
+            #endif
+        }
+    }
+
+    /// Bugünün vakit kartı: ücretsiz, her zaman filigranlı (organik büyüme).
+    @ViewBuilder private var shareButton: some View {
+        if let shareImage {
+            ShareLink(
+                item: Image(uiImage: shareImage),
+                message: Text("Bugünün namaz vakitleri — Sekine, reklamsız ve takipsiz: \(SettingsView.appStoreURL().absoluteString)"),
+                preview: SharePreview("Bugünün vakitleri", image: Image(uiImage: shareImage))
+            ) {
+                Label("Bugünün vakitlerini paylaş", systemImage: "square.and.arrow.up")
+                    .font(SekineFont.row(settings.fontScale))
+                    .foregroundStyle(Palette.accent)
+            }
+        }
+    }
+
+    private func renderShareImage() {
+        guard let day = store.today, let schedule = store.schedule else { shareImage = nil; return }
+        shareImage = ShareCardRenderer.image(
+            placeName: settings.location?.name ?? schedule.placeName,
+            day: day, timeZone: schedule.timeZone)
     }
 
     /// Ramazan kartı için plan. DEBUG'da `-uiTestRamadan` ile tüm günler Ramazan'mış gibi
