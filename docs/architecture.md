@@ -15,6 +15,7 @@ Core/
                 DiyanetDirectory (il/ilçe + LocationOverrides.json)
   Storage/      AppSettings (app group UserDefaults)
   Premium/      PremiumProviding + Store (StoreKit 2: ömürlük premium + bağış)
+  Kaza/         KazaTracker (kaza namazı sayaç + seri, yerel)
   WatchConnectivity/ WatchSessionManager (iPhone tarafı)
 DesignSystem/   Palette + SekineFont + kart stili (tüm renk/font token'ları burada)
 Features/       Onboarding, Home, Monthly, Qibla, Spiritual (Zikir), Premium (Paywall),

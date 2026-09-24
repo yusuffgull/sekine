@@ -16,6 +16,13 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
       hâlâ gerekiyor
 - [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
 - [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
+  - [x] Kaza namazı takibi eklendi (`feat/kaza-tracking` branch) — kod hazır, testler
+        yeşil, simülatörde görsel doğrulandı
+  - [ ] Çok aylık imsakiye
+  - [ ] Kur'an+meal (metin) — veri kaynağı/lisans araştırması gerekiyor
+  - [ ] Ramazan modu (sahur/iftar ekranı, Live Activity)
+  - [ ] Ezan sesi AI denemesi — dinleyici paneli onayı gerekiyor (kullanıcı aksiyonu)
+  - [ ] In-App Events (ASC, kod dışı)
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir

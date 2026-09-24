@@ -89,6 +89,42 @@ düşmediğini, offset ayrıştırmanın +/-/malformed durumlarını doğrulayan
 suite'i yeşil, iOS simülatör derlemesi (Watch hedefi dahil, tek `Sekine` şeması)
 başarılı. Gerçek cihazda Almanya/Hollanda için Diyanet web sitesiyle birebir
 karşılaştırma HENÜZ yapılmadı — kullanıcı aksiyonu.
+## 2026-09-24 — Kaza namazı takibi eklendi (Faz 3, ilk parça)
+
+**Karar:** `KazaTracker` (yeni, `Sekine/Core/Kaza/`) — 5 vakit için "kalan borç"
+sayacı + tamamlama günlüğünden türetilen seri (streak). `Store.swift`/`PremiumGate`
+ile aynı desen: `AppSettings`'e eklenmedi, kendi başına test edilebilir ayrı bir
+`ObservableObject`. Tamamen yerel (App Group UserDefaults), hiçbir veri cihaz
+dışına çıkmaz.
+
+**Kapsam kararı:** Ücretsiz = sayaçlar + seri. Premium = geçmiş istatistik (son
+7/30 gün ve toplam tamamlama sayısı) — plan dosyasındaki "ücretsiz sayaç, premium
+istatistik" ayrımına birebir uyuyor.
+
+**Seri (streak) mantığı:** Bugün henüz kayıt yoksa ama dün vardıysa seri
+SIFIRLANMAZ (gün bitmeden cezalandırıcı olur) — dünden geriye doğru sayılır. Saf,
+`Date`'e bağımlı olmayan `computeStreak(from:calendar:asOf:)` fonksiyonu ile test
+edildi (boş log, ardışık günler, aynı gün mükerrer kayıt, gün atlama sonrası
+sıfırlanma — hepsi ayrı test).
+
+**Doğrulama:** 11 yeni birim testi yeşil, `xcrun simctl` ile simülatörde GERÇEKTEN
+çalıştırılıp ekran görüntüsü alındı (sayaçlar, "Kıldım" butonunun 0 borçta devre
+dışı kalması, premium istatistik bölümü doğrulandı) — yalnızca statik derleme
+değil. Etkileşimli dokunma bu ortamda otomatikleştirilemediği için (headless,
+GUI/AppleScript erişimi yok) doğrudan `KazaView`'i açan geçici bir DEBUG launch
+argümanı (`-uiTestShowKaza`) eklendi — mevcut `-uiTestShowPaywall` ile aynı desen,
+gelecekte mağaza görseli üretiminde de işe yarayabilir, kaldırılmadı.
+
+**Kapsam dışı (ayrı bir tur):** çok aylık imsakiye, Kur'an+meal, Ramazan modu, AI
+ezan denemesi, In-App Events — plan dosyasının Faz 3 bölümünde sırayla.
+
+**Yan not — bilinen flaky test:** Tam suite çalıştırılırken
+`RollingSchedulerTests.testMarkExpiredRealConcurrencyWithJobCompletionNeverLosesWorkOrLeaksToFutureJobs`
+bir kez başarısız oldu (Kaza değişikliğiyle ilgisiz — RollingScheduler bu dalda hiç
+değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci çalıştırmada
+(83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
+ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
+regresyon değil.
 
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 
