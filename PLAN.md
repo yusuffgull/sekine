@@ -11,18 +11,18 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [x] ASC'de 1.7 taslak sürümü açıldı, yeni metin/görseller girildi (submit EDİLMEDİ —
       sandbox test bekliyor)
 - [ ] Kullanıcı: gerçek cihazda sandbox satın alma testi, sonra 1.7'yi submit et
-- [x] Faz 1 (Ekim): yıllık abonelik eklendi (`feat/yearly-subscription` branch) — kod
-      hazır, testler yeşil; gerçek cihaz sandbox testi + ASC'de abonelik ürünü oluşturma
-      hâlâ gerekiyor
-- [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
-- [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
-  - [x] Kaza namazı takibi eklendi (`feat/kaza-tracking` branch) — kod hazır, testler
-        yeşil, simülatörde görsel doğrulandı
-  - [ ] Çok aylık imsakiye
-  - [ ] Kur'an+meal (metin) — veri kaynağı/lisans araştırması gerekiyor
-  - [ ] Ramazan modu (sahur/iftar ekranı, Live Activity)
-  - [ ] Ezan sesi AI denemesi — dinleyici paneli onayı gerekiyor (kullanıcı aksiyonu)
-  - [ ] In-App Events (ASC, kod dışı)
+- [x] Faz 1: yıllık abonelik (ASC'de ürün oluşturma + sandbox testi kullanıcıda)
+- [x] Faz 2: yurtdışı konum + kritik saat dilimi düzeltmesi (gerçek cihazda Diyanet
+      karşılaştırması kullanıcıda)
+- [ ] Faz 3 (Ramazan 2027 = 8 Şub):
+  - [x] Kaza namazı takibi
+  - [x] Ramazan modu sayacı (sahur/iftar)
+  - [x] Paylaşılabilir vakit kartı
+  - [ ] Çok aylık imsakiye — kullanıcının 2026-09-08 kararıyla ERTELENDİ (decisions 2026-09-24)
+  - [ ] Kur'an+meal — Tanzil Türkçe meal lisansı ticari kullanıma kapalı, ENGELLİ (kullanıcı/hukuki karar)
+  - [ ] Ezan sesi AI denemesi — ENGELLİ (ElevenLabs hesabı yok, TTS makam okuyamaz, panel onayı)
+  - [ ] Ramazan Live Activity, oruç günü takibi (ayrı tur)
+  - [ ] In-App Events (ASC, kod dışı, kullanıcı)
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir

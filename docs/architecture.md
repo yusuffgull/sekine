@@ -57,6 +57,8 @@ cache'ten okur; ağ gerektirmez.
 - **Vakit kaynağı değişimi:** yeni bir `PrayerTimeProvider` uygulaması + `PrayerTimeStore`'da
   `primary`'yi değiştir. Başka hiçbir yer değişmez. (Zincir bugün: Diyanet → Aladhan →
   lokal `adhan-swift` fallback.)
+- **Yurtdışı konum (2026-09-24):** `DiyanetDirectory.countries()`/`cities(countryID:)`; GPS ülkeyi otomatik tespit eder, manuel aramada ülke seçici var. Onboarding/watchOS hâlâ yalnızca Türkiye.
+- **Ramazan modu (2026-09-24):** `Shared/RamadanInfo` — Diyanet hicri verisinden (hicriMonth==9), hicri veri yoksa kapalı.
 - **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı; tam ezan
   `RollingScheduler`'a bildirim olarak eklendi.
 - **Yıllık abonelik (2026-09-24 eklendi):** Ömürlüğün yanına `com.sekineapp.sekine.premium.yearly`

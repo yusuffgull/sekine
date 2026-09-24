@@ -1,41 +1,32 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı, Faz 1 (yıllık abonelik) kod tarafı bitti
-**23-24 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
-yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
-(kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
+## CURRENT TASK — Büyüme/gelir planı: Faz 1/2/3 kod tarafı `integration/all-features`'te birleşik
+**23-24 Eyl 2026.** Plan: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
+Gerekçeler: `docs/decisions.md` (2026-09-23/24 girdileri).
 
-**Faz 0 (ASO refresh) — tamamlandı, `main`'e merge edildi VE ASC'ye canlı işlendi:**
-- Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
-  (`docs/store-submission.md`).
-- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`.
-  `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
-- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı commit edildi.
-- **ASC canlı 1.6 sürümünde Promotional Text güncellendi** (Chrome ile, elle onaylı).
-- **ASC'de "1.7 Prepare for Submission" taslağı açıldı**, yeni keywords/promo
-  text/description/what's-new/5 ekran görüntüsü girildi ve kaydedildi — **submit
-  EDİLMEDİ**, sandbox satın alma testi bekliyor (kasıtlı, bkz. NEXT).
+**Durum:** `main` yalnızca Faz 0 (ASO) içerir. Beş bağımsız feature branch var VE hepsi
+`integration/all-features`'te birleştirildi (yalnızca docs çakışması, koda dokunmadı;
+birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge için tek karar:
+`integration/all-features`'i main'e almak (ya da branch'leri tek tek).
 
-**Faz 1 (yıllık abonelik) — kod tarafı bitti, `feat/yearly-subscription` branch'i
-(main'e merge EDİLMEDİ):**
-- `com.sekineapp.sekine.premium.yearly` eklendi (₺149.99, 7 gün deneme).
-  `Store.entitlementProductIDs` (lifetime+yearly) tek doğruluk kaynağı.
-- `PaywallView`: yıllık (önerilen) + ömürlük yan yana, App Review'ın istediği otomatik
-  yenileme açıklaması eklendi.
-- `Sekine.storekit`'e yerel test için abonelik grubu eklendi.
-- 2 yeni birim testi + mevcut 18'i (72 toplam) yeşil, iOS simülatör derlemesi başarılı.
-- Gerekçe/bilinen sınır (sessiz süre dolumu ancak launch'ta fark edilir):
-  `docs/decisions.md` (2026-09-24).
+| Branch | İçerik | Review |
+|---|---|---|
+| `main` | Faz 0 ASO — ASC'ye canlı (1.6 Promo Text) + 1.7 taslağı (submit EDİLMEDİ) | — |
+| `feat/yearly-subscription` | yıllık abonelik ₺149.99 + 7 gün deneme | NATASHA ✓ |
+| `feat/international-locations` | yurtdışı + KRİTİK tz düzeltmesi (sabit Istanbul) | VISION ✓ |
+| `feat/kaza-tracking` | kaza namazı sayaç/seri (premium istatistik) | test + simülatör |
+| `feat/ramadan-mode` | sahur/iftar geri sayımı, hicri veriden | test + simülatör |
+| `feat/share-card` | paylaşılabilir vakit kartı (filigranlı) | test + PNG gözle |
 
-**Henüz yapılmadı:**
-1. Kullanıcı: `feat/yearly-subscription`'ı incele, `main`'e merge et.
-2. Kullanıcı: ASC'de yıllık abonelik ÜRÜNÜNÜ oluştur (kod tarafı hazır ama ASC'de ürün
-   henüz yok — `loadProducts()` bulamadığı sürece yalnızca ömürlük görünür, sessizce
-   bozulmaz).
-3. Kullanıcı: gerçek cihazda hem ömürlük hem yıllık için sandbox satın alma/restore testi.
-4. Kullanıcı: 1.7'yi (yıllık abonelik dahil bir build ile) submit et.
-5. ASC'de: keywords/promo/description, Featuring nomination, Search Ads (10-30$/ay).
-6. Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi.
+**Bilinçli yapılmayanlar (kayıtlı, kullanıcı kararı gerekir):** çok aylık imsakiye
+(2026-09-08 kararı), Kur'an+meal (Tanzil meal lisansı ticari kullanıma kapalı), AI ezan
+(ElevenLabs hesabı yok + TTS makam okuyamaz), Live Activity/oruç takibi (ayrı tur).
+
+**Kullanıcı aksiyonları:** (1) branch/integration'ı incele ve merge et; (2) ASC'de yıllık
+abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`); (3) gerçek cihazda
+sandbox satın alma/restore + yurt dışı konum vakitlerini Diyanet siteyle karşılaştır;
+(4) 1.7'yi submit et (ASC taslağı hazır); (5) Featuring nomination, Search Ads (10-30$/ay),
+In-App Events, diaspora için İngilizce/Almanca keyword yerelleştirmesi.
 
 ---
 
@@ -101,21 +92,15 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. Kullanıcı: `feat/yearly-subscription`'ı gözden geçir, `main`'e merge et.
-2. Kullanıcı: ASC'de yıllık abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`).
-3. Kullanıcı: gerçek cihazda sandbox satın alma/restore testi (ömürlük + yıllık).
-4. Kullanıcı: 1.7'yi gönder (ASC taslağı zaten hazır — bkz. CURRENT TASK).
-5. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
-   ölç.
-6. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
-   güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-7. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-8. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
-9. Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi.
+1. Kullanıcı: `integration/all-features`'i incele → main'e merge (yukarıdaki aksiyonlar).
+2. 2-3 hafta sonra ASC Analytics: dönüşüm ve "ezan vakti" sırası değişti mi.
+3. Karar bekleyenler: Kur'an lisans yolu, çok-ay imsakiye, ezan (müezzin kaydı).
+4. Ayrı turlar: Ramazan Live Activity, oruç günü takibi, Onboarding/watch ülke seçici.
+5. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası.
+6. Gelir zinciri (kod dışı): 20/B belgesi + özel hesap → ASC IBAN.
 
 ## BLOCKERS
-Yok — ama 1.7 submit ve yıllık abonelik canlıya çıkışı yukarıdaki kullanıcı
-aksiyonlarına (ASC ürün oluşturma + sandbox test) bağlı.
+Yok — ama canlıya çıkış kullanıcı aksiyonlarına (ASC ürün, cihaz testleri, merge) bağlı.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.
