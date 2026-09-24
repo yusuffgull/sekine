@@ -23,7 +23,7 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
   - [ ] Ezan sesi AI denemesi — ENGELLİ (ElevenLabs hesabı yok, TTS makam okuyamaz, panel onayı)
   - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
   - [ ] Ramazan Live Activity (ayrı tur)
-  - [ ] In-App Events (ASC, kod dışı, kullanıcı)
+  - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
