@@ -125,6 +125,18 @@ değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci ça
 (83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
 ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
 regresyon değil.
+## 2026-09-24 — Oruç günü takibi (Faz 3, `feat/fasting-tracker`, integration üstüne)
+
+**Karar:** `FastingTracker` (yerel, hiçbir yere gönderilmez) + Ramazan kartında "Bugün oruç
+tuttum" işareti ve "Bu Ramazan: N / gün". Günler konumun saat diliminde `yyyy-MM-dd`
+anahtarıyla saklanır. Ramazan ilerlemesi hicri yıl ayrıştırılmadan hesaplanır: başlangıç =
+bugün − (gün−1) (gün numarası Diyanet'in hicri verisinden, bkz. `RamadanInfo`) → önceki
+aylarda (Şaban) işaretlenen günler sayılmaz (test). Ücretsiz (Ramazan kitlesini büyütür,
+premium duvarı yok). Doğrulama: 5 yeni test (toplam 104 yeşil), simülatörde `-uiTestRamadan`
+ile kart görsel doğrulandı (18:16'da iftara 49 dk, "0 / 12 gün"). Dokunma etkileşimi bu
+ortamda otomatikleştirilemedi; mantık testli. `RamadanCard` artık `FastingTracker`
+environment nesnesi ister (SekineApp'te enjekte edildi).
+
 ## 2026-09-24 — Kur'an+meal ENGELLENDİ: Tanzil Türkçe meal lisansı ticari kullanıma kapalı (Faz 3)
 
 **Bulgu (tanzil.net/trans, canlı kontrol):** Tanzil'deki 10 Türkçe meal (Diyanet İşleri,

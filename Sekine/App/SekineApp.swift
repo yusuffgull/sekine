@@ -13,6 +13,7 @@ struct SekineApp: App {
     @StateObject private var iap = Store()
     @StateObject private var adhan = AdhanPlayer()
     @StateObject private var kaza = KazaTracker()
+    @StateObject private var fasting = FastingTracker()
     @StateObject private var watchSession = WatchSessionManager()
 
     @Environment(\.scenePhase) private var scenePhase
@@ -45,6 +46,7 @@ struct SekineApp: App {
                 .environmentObject(iap)
                 .environmentObject(adhan)
                 .environmentObject(kaza)
+                .environmentObject(fasting)
                 .tint(Palette.accent)
                 .preferredColorScheme(settings.theme.colorScheme)
                 .task { await bootstrap() }
