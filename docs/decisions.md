@@ -2,6 +2,23 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-24 — Kur'an+meal ENGELLENDİ: Tanzil Türkçe meal lisansı ticari kullanıma kapalı (Faz 3)
+
+**Bulgu (tanzil.net/trans, canlı kontrol):** Tanzil'deki 10 Türkçe meal (Diyanet İşleri,
+Diyanet Vakfı, Elmalılı Hamdi Yazır `tr.yazir`, Ali Bulaç, Süleyman Ateş, Öztürk, vb.)
+için site açıkça "translations ... are for non-commercial purposes only; other uses
+require permission from the translator or publisher" diyor. Sekine ticari (Premium +
+bağış) → bu dosyaları uygulamaya gömmek lisans ihlali riski. `tanzil_terms_of_use`
+sayfası yüklenmedi; Arapça metin lisansı (CC-BY olduğu bilgisi) doğrulanamadı, varsayılmıyor.
+
+**Karar:** Kur'an+meal KODLANMADI. Elmalılı'nın orijinali kamu malı olsa da Tanzil'deki
+`tr.yazir` belirli bir sayısallaştırılmış/sadeleştirilmiş baskı; hukuki durumu kullanıcı
+ya da hukuk danışmanı netleştirmeli. Seçenekler (kullanıcı kararı): (a) yalnızca Arapça
+metin — önce Tanzil'in Arapça metin lisansını birincil kaynaktan doğrula; (b) Diyanet
+Vakfı'ndan yazılı ticari izin; (c) gerçekten kamu malı bir Elmalılı sayısallaştırması
+bulup provenance'ını belgele; (d) Kur'an'ı kapsam dışı bırak (rakip yorumlarında sevilen
+özellik ama ihlal riskine değmez).
+
 ## 2026-09-24 — Ramazan modu (sahur/iftar sayacı) + çok-ay imsakiye KASITLI ATLANDI (Faz 3)
 
 **Karar:** `RamadanInfo` (Shared, saf/test edilmiş) + `RamadanCard` (Ana ekran). Ramazan'ı
