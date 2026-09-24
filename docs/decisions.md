@@ -2,6 +2,32 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-24 — Ramazan modu (sahur/iftar sayacı) + çok-ay imsakiye KASITLI ATLANDI (Faz 3)
+
+**Karar:** `RamadanInfo` (Shared, saf/test edilmiş) + `RamadanCard` (Ana ekran). Ramazan'ı
+tarih tablosundan DEĞİL Diyanet'in kendi hicri verisinden tanır (`hicriMonth == 9`) —
+ru'yet ile ay başı kayarsa otomatik doğru kalır, elle girilmiş tarih yok. Hicri veri
+yalnızca Diyanet kaynağında dolu; Aladhan/yerel fallback'te (nil) mod SESSİZCE kapalı
+kalır, asla tahmin edilmez (test: `testMissingHicriDataReturnsNilNeverGuesses`).
+Faz: gündüz → iftara (akşam) geri sayım; gece/imsak öncesi → imsağa; iftar sonrası →
+ERTESİ günün imsağı (ertesi gün planda yoksa yanlış hedef göstermek yerine nil).
+Pencere içinde Ramazan'a ≤~30 gün varsa "Ramazan'a N gün kaldı" bandı.
+
+**Çok aylık imsakiye bilinçli olarak YAPILMADI:** 2026-09-08'de kullanıcı bunu açıkça
+ertelemişti ("dokunma, mevcut pencereyi koru"; kaynak API sabit 32 gün veriyor, çözümler
+"çevrimdışı/gizli" ya da "Diyanet birebir" vaadini bozuyor). Faz 3 planında bunu "şart"
+diye yazmam yanlıştı: Ramazan başında uygulama açılınca 32 günlük pencere ayın tamamını
+zaten kapsar; eksik olan yalnızca Ramazan ÖNCESİ tam ay önizlemesi (yukarıdaki "N gün
+kaldı" bandı bunu kısmen karşılar). Karar kullanıcıya ait; yeniden açılırsa seçenek:
+`LocalCalculationProvider` ile ileri aylar "yaklaşık" etiketiyle — doğruluk vaadi
+tradeoff'u nedeniyle ayrıca onay gerekir.
+
+**Kapsam dışı (ayrı tur):** iftar Live Activity (ActivityKit hedefi + entitlement, cihazsız
+doğrulanamaz), oruç günü takibi, paylaşılabilir imsakiye görseli.
+
+**Doğrulama:** 9 yeni birim testi; simülatörde `-uiTestRamadan` (DEBUG) ile gerçekten
+çalıştırıldı — 13:59'da iftar 19:06 → "5 sa 06 dk" (aritmetik doğru).
+
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 
 **Karar:** ASC Analytics (24 Haz–21 Eyl 2026, 90 gün) ve 9 rakip uygulamanın 327
