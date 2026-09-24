@@ -125,6 +125,48 @@ değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci ça
 (83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
 ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
 regresyon değil.
+## 2026-09-24 — Kur'an+meal ENGELLENDİ: Tanzil Türkçe meal lisansı ticari kullanıma kapalı (Faz 3)
+
+**Bulgu (tanzil.net/trans, canlı kontrol):** Tanzil'deki 10 Türkçe meal (Diyanet İşleri,
+Diyanet Vakfı, Elmalılı Hamdi Yazır `tr.yazir`, Ali Bulaç, Süleyman Ateş, Öztürk, vb.)
+için site açıkça "translations ... are for non-commercial purposes only; other uses
+require permission from the translator or publisher" diyor. Sekine ticari (Premium +
+bağış) → bu dosyaları uygulamaya gömmek lisans ihlali riski. `tanzil_terms_of_use`
+sayfası yüklenmedi; Arapça metin lisansı (CC-BY olduğu bilgisi) doğrulanamadı, varsayılmıyor.
+
+**Karar:** Kur'an+meal KODLANMADI. Elmalılı'nın orijinali kamu malı olsa da Tanzil'deki
+`tr.yazir` belirli bir sayısallaştırılmış/sadeleştirilmiş baskı; hukuki durumu kullanıcı
+ya da hukuk danışmanı netleştirmeli. Seçenekler (kullanıcı kararı): (a) yalnızca Arapça
+metin — önce Tanzil'in Arapça metin lisansını birincil kaynaktan doğrula; (b) Diyanet
+Vakfı'ndan yazılı ticari izin; (c) gerçekten kamu malı bir Elmalılı sayısallaştırması
+bulup provenance'ını belgele; (d) Kur'an'ı kapsam dışı bırak (rakip yorumlarında sevilen
+özellik ama ihlal riskine değmez).
+
+## 2026-09-24 — Ramazan modu (sahur/iftar sayacı) + çok-ay imsakiye KASITLI ATLANDI (Faz 3)
+
+**Karar:** `RamadanInfo` (Shared, saf/test edilmiş) + `RamadanCard` (Ana ekran). Ramazan'ı
+tarih tablosundan DEĞİL Diyanet'in kendi hicri verisinden tanır (`hicriMonth == 9`) —
+ru'yet ile ay başı kayarsa otomatik doğru kalır, elle girilmiş tarih yok. Hicri veri
+yalnızca Diyanet kaynağında dolu; Aladhan/yerel fallback'te (nil) mod SESSİZCE kapalı
+kalır, asla tahmin edilmez (test: `testMissingHicriDataReturnsNilNeverGuesses`).
+Faz: gündüz → iftara (akşam) geri sayım; gece/imsak öncesi → imsağa; iftar sonrası →
+ERTESİ günün imsağı (ertesi gün planda yoksa yanlış hedef göstermek yerine nil).
+Pencere içinde Ramazan'a ≤~30 gün varsa "Ramazan'a N gün kaldı" bandı.
+
+**Çok aylık imsakiye bilinçli olarak YAPILMADI:** 2026-09-08'de kullanıcı bunu açıkça
+ertelemişti ("dokunma, mevcut pencereyi koru"; kaynak API sabit 32 gün veriyor, çözümler
+"çevrimdışı/gizli" ya da "Diyanet birebir" vaadini bozuyor). Faz 3 planında bunu "şart"
+diye yazmam yanlıştı: Ramazan başında uygulama açılınca 32 günlük pencere ayın tamamını
+zaten kapsar; eksik olan yalnızca Ramazan ÖNCESİ tam ay önizlemesi (yukarıdaki "N gün
+kaldı" bandı bunu kısmen karşılar). Karar kullanıcıya ait; yeniden açılırsa seçenek:
+`LocalCalculationProvider` ile ileri aylar "yaklaşık" etiketiyle — doğruluk vaadi
+tradeoff'u nedeniyle ayrıca onay gerekir.
+
+**Kapsam dışı (ayrı tur):** iftar Live Activity (ActivityKit hedefi + entitlement, cihazsız
+doğrulanamaz), oruç günü takibi, paylaşılabilir imsakiye görseli.
+
+**Doğrulama:** 9 yeni birim testi; simülatörde `-uiTestRamadan` (DEBUG) ile gerçekten
+çalıştırıldı — 13:59'da iftar 19:06 → "5 sa 06 dk" (aritmetik doğru).
 
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 

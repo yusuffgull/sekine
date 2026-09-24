@@ -15,6 +15,9 @@ struct HomeView: View {
                 VStack(spacing: 20) {
                     header
                     if store.today != nil {
+                        if let schedule = ramadanSchedule {
+                            RamadanCard(schedule: schedule)
+                        }
                         nextPrayerCard
                         todayList
                     } else if store.isLoading {
@@ -41,6 +44,26 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showPaywall) { PaywallView() }
+    }
+
+    /// Ramazan kartı için plan. DEBUG'da `-uiTestRamadan` ile tüm günler Ramazan'mış gibi
+    /// işaretlenir (ekran doğrulaması için; gerçek veride hicri ay 9 gerekir).
+    private var ramadanSchedule: PrayerSchedule? {
+        guard let schedule = store.schedule else { return nil }
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestRamadan") {
+            let days = schedule.days.map { day in
+                PrayerDay(dayStart: day.dayStart, times: day.times,
+                          hicriDate: "12 Ramazan 1448", hicriMonth: 9, hicriDay: 12,
+                          qiblaTime: day.qiblaTime)
+            }
+            return PrayerSchedule(
+                placeName: schedule.placeName, latitude: schedule.latitude,
+                longitude: schedule.longitude, timeZoneIdentifier: schedule.timeZoneIdentifier,
+                source: schedule.source, fetchedAt: schedule.fetchedAt, days: days)
+        }
+        #endif
+        return schedule
     }
 
     private var header: some View {
