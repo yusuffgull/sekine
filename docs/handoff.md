@@ -1,27 +1,54 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı, Faz 0 (ASO refresh)
-**23 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
+## CURRENT TASK — Büyüme/gelir planı: Faz 0 canlı, Faz 1/2 kod bitti, Faz 3 başladı
+**23-24 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
 yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
 (kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
 
-Faz 0 (kod dışı, bu oturumda tamamlandı — `docs/aso-refresh-and-growth-plan` branch'i):
-- Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
-  (`docs/store-submission.md`).
-- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`
-  (eskiden ilk sırada onboarding vardı, gerçek uygulama ekranı 2. sıradaydı).
-  `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
-- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı
-  (`fastlane/html-screens`, `scripts/{generate-store-screenshots.sh,html-to-png.swift}`)
-  bu turda ilk kez commit edildi.
+**DÖRT AYRI BRANCH var, main'e HİÇBİRİ merge edilmedi:**
 
-**Henüz yapılmadı (kullanıcı aksiyonu gerekli, kod dışı):** yeni keywords/promo
-text/description'ın ASC'ye elle girilmesi, yeni ekran görüntülerinin ASC'ye doğru
-sırayla yüklenmesi, Featuring nomination, Apple Search Ads (10-30$/ay) başvurusu.
+| Branch | İçerik | Durum |
+|---|---|---|
+| `main` | Faz 0 (ASO) | ASC'ye canlı işlendi |
+| `feat/yearly-subscription` | Faz 1 (yıllık abonelik) | kod hazır, NATASHA ✓ |
+| `feat/international-locations` | Faz 2 (yurtdışı + kritik tz düzeltmesi) | kod hazır, VISION ✓ |
+| `feat/kaza-tracking` | Faz 3'ün ilk parçası (kaza namazı takibi) | kod hazır |
 
-**Sıradaki kod işi (Faz 1, Ekim):** yıllık abonelik + paywall yenileme — plan
-dosyasının "Faz 1" bölümüne bakılacak, T3 (para akışı) olarak NATASHA review'ından
-geçecek.
+**Faz 0 — tamamlandı, `main`'e merge edildi VE ASC'ye canlı işlendi:**
+- Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`).
+- Ekran görüntüsü sırası değişti, yeniden üretildi.
+- **ASC canlı 1.6 sürümünde Promotional Text güncellendi** (Chrome ile, elle onaylı).
+- **ASC'de "1.7 Prepare for Submission" taslağı açıldı** (yeni keywords/promo/açıklama/
+  5 ekran görüntüsü), **submit EDİLMEDİ** — sandbox testi bekliyor.
+
+**Faz 1 (`feat/yearly-subscription`):** `com.sekineapp.sekine.premium.yearly` (₺149.99,
+7 gün deneme) ömürlüğün yanına eklendi. `Store.entitlementProductIDs` tek doğruluk
+kaynağı. NATASHA (T3 güvenlik review) temiz raporu verdi.
+
+**Faz 2 (`feat/international-locations`):** KRİTİK bug düzeltildi — `DiyanetProvider`
+her konum için sabit `Europe/Istanbul` varsayıyordu, yurt dışında sessizce yanlış vakit
+üretiyordu. Artık her günün gerçek UTC ofseti API'den okunuyor. Ülke seçimi eklendi
+(105+ ülke, Diyanet servisi zaten destekliyor). VISION matematiksel doğrulama yaptı,
+itiraz yok.
+
+**Faz 3, ilk parça (`feat/kaza-tracking`):** `KazaTracker` — 5 vakit için kalan kaza
+sayacı + tamamlama günlüğünden türetilen seri (streak). Ücretsiz: sayaçlar + seri.
+Premium: 7/30 gün + toplam istatistik. `Sekine/Features/Spiritual/KazaView.swift`,
+Zikir sekmesine eklendi. 11 yeni birim testi + simülatörde GERÇEKTEN çalıştırılıp
+ekran görüntüsüyle doğrulandı (yalnızca statik derleme değil). Gerekçe:
+`docs/decisions.md` (2026-09-24).
+
+**Faz 3'ün kalanı (henüz başlanmadı):** çok aylık imsakiye, Kur'an+meal (veri/lisans
+araştırması gerekiyor), Ramazan modu (Live Activity dahil), ezan sesi AI denemesi
+(kullanıcının dinleyici paneli onayı gerekiyor), In-App Events (ASC, kod dışı).
+
+**Henüz yapılmadı (ortak, kullanıcı aksiyonu):**
+1. Dört branch'i incele, sırayla `main`'e merge et.
+2. ASC'de yıllık abonelik ürününü oluştur.
+3. Gerçek cihazda: sandbox satın alma testi + yurt dışı konum için Diyanet siteyle
+   karşılaştırma.
+4. 1.7'yi (tüm bu değişikliklerle) submit et.
+5. ASC'de: keywords/promo/description, Featuring nomination, Search Ads.
 
 ---
 
@@ -87,18 +114,22 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
-1. Kullanıcı: yeni ASO metnini ve ekran görüntülerini ASC'ye gir, 1.7'yi sandbox testinden
-   sonra gönder (bkz. CURRENT TASK).
-2. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
-   ölç.
-3. Faz 1 (Ekim): yıllık abonelik + paywall yenileme, `Store.swift`'e abonelik durumu.
-4. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
+1. Kullanıcı: `feat/yearly-subscription`, `feat/international-locations`,
+   `feat/kaza-tracking`'i sırayla incele, `main`'e merge et.
+2. Kullanıcı: ASC'de yıllık abonelik ürününü oluştur.
+3. Kullanıcı: gerçek cihazda sandbox satın alma/restore testi + yurt dışı konum
+   için Diyanet siteyle karşılaştırma.
+4. Kullanıcı: 1.7'yi gönder (ASC taslağı zaten hazır).
+5. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi.
+6. Faz 3'ün kalanı: çok aylık imsakiye → Kur'an+meal → Ramazan modu → ezan AI denemesi
+   → In-App Events (sıra plan dosyasında).
+7. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
    güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-5. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-6. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+8. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
+9. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
 
 ## BLOCKERS
-Yok.
+Yok — dört branch'in main'e merge edilmesi ve ASC/cihaz aksiyonları kullanıcıda.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.

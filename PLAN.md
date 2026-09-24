@@ -9,9 +9,20 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
 - [x] Ekran görüntüsü sırası değişti + yeniden üretildi
 - [ ] Kullanıcı: yeni metinleri/görselleri ASC'ye gir, 1.7'yi gönder
-- [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
-- [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
+- [x] Faz 1 (Ekim): yıllık abonelik eklendi (`feat/yearly-subscription` branch) — kod
+      hazır, testler yeşil; gerçek cihaz sandbox testi + ASC'de abonelik ürünü oluşturma
+      hâlâ gerekiyor
+- [x] Faz 2 (Kasım): yurtdışı konum desteği + KRİTİK timezone düzeltmesi eklendi
+      (`feat/international-locations` branch) — kod hazır, testler yeşil; gerçek cihazda
+      Almanya/Hollanda için Diyanet siteyle karşılaştırma hâlâ gerekiyor
 - [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
+  - [x] Kaza namazı takibi eklendi (`feat/kaza-tracking` branch) — kod hazır, testler
+        yeşil, simülatörde görsel doğrulandı
+  - [ ] Çok aylık imsakiye
+  - [ ] Kur'an+meal (metin) — veri kaynağı/lisans araştırması gerekiyor
+  - [ ] Ramazan modu (sahur/iftar ekranı, Live Activity)
+  - [ ] Ezan sesi AI denemesi — dinleyici paneli onayı gerekiyor (kullanıcı aksiyonu)
+  - [ ] In-App Events (ASC, kod dışı)
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
