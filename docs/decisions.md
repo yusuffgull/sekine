@@ -2,6 +2,36 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-24 — Yıllık abonelik eklendi (Faz 1, T3 — para akışı)
+
+**Karar:** `com.sekineapp.sekine.premium.yearly` (₺149.99, 7 gün ücretsiz deneme) ömürlük
+premium'un yanına eklendi, ikisi birlikte sunuluyor (yıllık önerilen/birincil buton).
+Kapsam: büyüme planının Faz 1'i (bkz. `docs/handoff.md`,
+`~/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`).
+
+**Uygulama:** `Store.entitlementProductIDs` (lifetime + yearly) tek doğruluk kaynağı;
+`applyVerifiedTransactionInfo`, `entitlementsScanProvider`, `loadProducts` hepsi bunu
+kullanıyor — yeni bir entitlement veren ürün eklenmek istenirse tek satır. Mevcut
+generation-korumalı race-condition mimarisine (6 tur review'dan geçmiş, bkz. 2026-09-08
+girdisi) DOKUNULMADI — yalnızca "hangi productID entitlement verir" sorgusu genişletildi.
+
+**Bilinçli kabul edilen sınır:** Abonelik sessizce süresi dolduğunda (kullanıcı
+yenilemedi) bu yalnızca bir sonraki app-launch/restore taramasında fark edilir, anlık
+değil — çünkü StoreKit süre dolumunda `Transaction.updates` event'i GÖNDERMEZ, sadece
+`currentEntitlements`'tan düşer. Yenileme ise anında yakalanır (yeni transaction).
+Gerekirse `expirationDate` bazlı arka plan kontrolüyle sıkılaştırılabilir — v1 için
+gereksiz karmaşıklık.
+
+**Doğrulama:** 72 birim testi (2 yeni: yıllık satın alma entitlement veriyor, bağış
+entitlement VERMİYOR) yeşil, iOS simülatör derlemesi başarılı. Gerçek StoreKit
+satın alma/abonelik yenileme/iptal akışı bu ortamda test edilemiyor (bkz.
+`StoreEntitlementTests.swift` başlık yorumu) — gerçek cihaz sandbox testi hâlâ gerekiyor
+(1.7 ile birlikte, submit öncesi).
+
+**Elenen alternatif:** Yalnızca aboneliğe geçip ömürlüğü kaldırmak — kullanıcı bunu
+onaylı planda reddetti ("Ömürlük + yıllık abonelik"), "abonelik zorunluluğu yok" mevcut
+konumlandırmasıyla çelişir.
+
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 
 **Karar:** ASC Analytics (24 Haz–21 Eyl 2026, 90 gün) ve 9 rakip uygulamanın 327

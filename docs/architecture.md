@@ -51,8 +51,13 @@ cache'ten okur; ağ gerektirmez.
 - **Vakit kaynağı değişimi:** yeni bir `PrayerTimeProvider` uygulaması + `PrayerTimeStore`'da
   `primary`'yi değiştir. Başka hiçbir yer değişmez. (Zincir bugün: Diyanet → Aladhan →
   lokal `adhan-swift` fallback.)
-- **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı (ömürlük
-  premium + bağış, abonelik değil); tam ezan `RollingScheduler`'a bildirim olarak eklendi.
+- **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı; tam ezan
+  `RollingScheduler`'a bildirim olarak eklendi.
+- **Yıllık abonelik (2026-09-24 eklendi):** Ömürlüğün yanına `com.sekineapp.sekine.premium.yearly`
+  eklendi. `Store.entitlementProductIDs` ikisini de kapsar — ömürlük VE aktif abonelik
+  `.owned` sayılır. Abonelik yenilemesi `Transaction.updates`'ten anında yakalanır; sessiz
+  süre dolumu (kullanıcı yenilemedi) ancak bir sonraki app-launch/restore taramasında fark
+  edilir — bilinçli v1 sınırı (bkz. `Store.refreshEntitlements()` doc-comment'i).
 - **Apple Watch (Faz E4, tamamlandı):** `SekineWatch` hedefi, Core katmanını değişikliksiz
   kullanıyor; iPhone↔Watch senkronizasyonu `WatchConnectivity` ile (`WatchSessionManager`,
   her iki tarafta).
