@@ -13,6 +13,7 @@ struct SekineApp: App {
     @StateObject private var iap = Store()
     @StateObject private var adhan = AdhanPlayer()
     @StateObject private var kaza = KazaTracker()
+    @StateObject private var fasting = FastingTracker()
     @StateObject private var watchSession = WatchSessionManager()
 
     @Environment(\.scenePhase) private var scenePhase
@@ -45,16 +46,34 @@ struct SekineApp: App {
                 .environmentObject(iap)
                 .environmentObject(adhan)
                 .environmentObject(kaza)
+                .environmentObject(fasting)
                 .tint(Palette.accent)
                 .preferredColorScheme(settings.theme.colorScheme)
                 .task { await bootstrap() }
         }
+        // İlk açılışta plan bootstrap'tan SONRA yüklenebilir: plan gelince de senkronla.
+        .onChange(of: store.schedule?.fetchedAt) { _, _ in syncLiveActivity() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                Task { await bootstrap() }
+                Task {
+                    await bootstrap()
+                    syncLiveActivity()
+                }
                 BackgroundRefresh.schedule()
             }
         }
+    }
+
+    /// Ramazan'da oruç sürerken iftar Live Activity'sini başlatır/bitirir (bkz. manager).
+    private func syncLiveActivity() {
+        var schedule = store.schedule
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestRamadan") {
+            schedule = schedule?.forcingRamadanForUITest()
+        }
+        #endif
+        IftarLiveActivityManager.sync(
+            schedule: schedule, placeName: settings.location?.name ?? schedule?.placeName ?? "")
     }
 
     /// App açılışında/öne gelince: izin durumunu tazele, veri varsa kapsamı

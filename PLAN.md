@@ -21,8 +21,9 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
   - [ ] Çok aylık imsakiye — kullanıcının 2026-09-08 kararıyla ERTELENDİ (decisions 2026-09-24)
   - [ ] Kur'an+meal — Tanzil Türkçe meal lisansı ticari kullanıma kapalı, ENGELLİ (kullanıcı/hukuki karar)
   - [ ] Ezan sesi AI denemesi — ENGELLİ (ElevenLabs hesabı yok, TTS makam okuyamaz, panel onayı)
-  - [ ] Ramazan Live Activity, oruç günü takibi (ayrı tur)
-  - [ ] In-App Events (ASC, kod dışı, kullanıcı)
+  - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
+  - [x] Ramazan iftar Live Activity (`feat/live-activity`; Dynamic Island cihazda gözle kontrol edilmeli)
+  - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
