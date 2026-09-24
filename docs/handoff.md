@@ -4,8 +4,8 @@
 **23-24 Eyl 2026.** Plan: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
 Gerekçeler: `docs/decisions.md` (2026-09-23/24 girdileri).
 
-**Durum:** `main` yalnızca Faz 0 (ASO) içerir. Beş bağımsız feature branch var VE hepsi
-`integration/all-features`'te birleştirildi (yalnızca docs çakışması, koda dokunmadı;
+**Durum:** `main` yalnızca Faz 0 (ASO) içerir. Yedi bağımsız feature branch var VE hepsi
+`integration/all-features`'te birleştirildi (109 test yeşil) (yalnızca docs çakışması, koda dokunmadı;
 birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge için tek karar:
 `integration/all-features`'i main'e almak (ya da branch'leri tek tek).
 
@@ -17,10 +17,12 @@ birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge i�
 | `feat/kaza-tracking` | kaza namazı sayaç/seri (premium istatistik) | test + simülatör |
 | `feat/ramadan-mode` | sahur/iftar geri sayımı, hicri veriden | test + simülatör |
 | `feat/share-card` | paylaşılabilir vakit kartı (filigranlı) | test + PNG gözle |
+| `feat/fasting-tracker` | oruç günü takibi (Ramazan kartında) | test + simülatör |
+| `feat/live-activity` | iftar Live Activity (kilit ekranı/Dynamic Island) | test + Activity.request simülatörde; Dynamic Island cihazda gözle kontrol edilmeli |
 
 **Bilinçli yapılmayanlar (kayıtlı, kullanıcı kararı gerekir):** çok aylık imsakiye
 (2026-09-08 kararı), Kur'an+meal (Tanzil meal lisansı ticari kullanıma kapalı), AI ezan
-(ElevenLabs hesabı yok + TTS makam okuyamaz), Live Activity/oruç takibi (ayrı tur).
+(ElevenLabs hesabı yok + TTS makam okuyamaz).
 
 **Kullanıcı aksiyonları:** (1) branch/integration'ı incele ve merge et; (2) ASC'de yıllık
 abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`); (3) gerçek cihazda
