@@ -12,6 +12,7 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
 - [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
 - [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
+  - [x] Paylaşılabilir vakit kartı (`feat/share-card`); Kur'an+meal lisans engelli, AI ezan engelli (bkz. decisions 2026-09-24)
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
