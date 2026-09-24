@@ -22,7 +22,7 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
   - [ ] Kur'an+meal — Tanzil Türkçe meal lisansı ticari kullanıma kapalı, ENGELLİ (kullanıcı/hukuki karar)
   - [ ] Ezan sesi AI denemesi — ENGELLİ (ElevenLabs hesabı yok, TTS makam okuyamaz, panel onayı)
   - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
-  - [ ] Ramazan Live Activity (ayrı tur)
+  - [x] Ramazan iftar Live Activity (`feat/live-activity`; Dynamic Island cihazda gözle kontrol edilmeli)
   - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda
 
 ## Durum

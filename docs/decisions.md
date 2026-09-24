@@ -125,6 +125,25 @@ değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci ça
 (83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
 ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
 regresyon değil.
+## 2026-09-24 — Ramazan iftar Live Activity (`feat/live-activity`, fasting-tracker üstüne)
+
+**Karar:** Oruç sürerken (imsak→akşam) kilit ekranı/Dynamic Island'da iftar geri sayımı.
+`IftarActivityAttributes` + `IftarLockScreenView` (Shared, yalnızca iOS), widget uzantısında
+`IftarLiveActivity`, uygulamada `IftarLiveActivityManager` (karar `RamadanInfo`'dan: hicri veri
+yoksa/Ramazan değilse başlatmaz; iftar sonrası bitirir). Geri sayım `Text(timerInterval:)`
+ile SİSTEM çizer → uygulama çalışmasa da akar, push/güncelleme yok. Tetik: uygulama öne
+gelince ve plan yüklenince. `NSSupportsLiveActivities` eklendi (`project.yml` değişti →
+`verify-xcode-cloud.sh` yeşil). Kullanıcı iOS Ayarlar'dan Live Activity'yi kapatırsa sessizce
+hiçbir şey yapılmaz; uygulama içi ayrı anahtar eklenmedi (ayrı tur olabilir).
+
+**Doğrulama ve SINIR (dürüst):** (1) karar mantığı 4 testle; (2) `ImageRenderer` ile
+yerleşim gözle kontrol edildi — ilk sürümde geri sayım ve başlık KESİLİYORDU, düzeltildi;
+(3) simülatörde `-uiTestRamadan` ile `Activity.request` GERÇEKTEN başarılı oldu (log:
+id + iftar 19:06). **Görülemeyen:** sistemin kilit ekranı/Dynamic Island çerçevesi (headless
+simülatör ekran görüntüsünde adacık yok) — Dynamic Island düzeni cihazda gözle kontrol
+edilmeli. Not: Watch/komplikasyon hedefleri `Shared`'i derlediği için ActivityKit kodu
+`#if os(iOS)` ile sarıldı (tam derleme yeşil).
+
 ## 2026-09-24 — Oruç günü takibi (Faz 3, `feat/fasting-tracker`, integration üstüne)
 
 **Karar:** `FastingTracker` (yerel, hiçbir yere gönderilmez) + Ramazan kartında "Bugün oruç

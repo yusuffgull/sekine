@@ -63,3 +63,19 @@ struct RamadanInfo: Equatable {
         return cal.dateComponents([.day], from: today.dayStart, to: firstRamadan.dayStart).day
     }
 }
+
+#if DEBUG
+extension PrayerSchedule {
+    /// `-uiTestRamadan` doğrulaması için: tüm günleri Ramazan 12. günü gibi işaretler.
+    func forcingRamadanForUITest() -> PrayerSchedule {
+        let mapped = days.map { day in
+            PrayerDay(dayStart: day.dayStart, times: day.times,
+                      hicriDate: "12 Ramazan 1448", hicriMonth: 9, hicriDay: 12,
+                      qiblaTime: day.qiblaTime)
+        }
+        return PrayerSchedule(placeName: placeName, latitude: latitude, longitude: longitude,
+                              timeZoneIdentifier: timeZoneIdentifier, source: source,
+                              fetchedAt: fetchedAt, days: mapped)
+    }
+}
+#endif
