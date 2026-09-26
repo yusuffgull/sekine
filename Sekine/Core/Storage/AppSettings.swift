@@ -102,6 +102,7 @@ final class AppSettings: ObservableObject {
         self.fridayReminder = defaults.object(forKey: Keys.fridayReminder) as? Bool ?? true
         self.specialDayGreetings = defaults.object(forKey: Keys.specialDayGreetings) as? Bool ?? true
         self.dailyVerse = defaults.object(forKey: Keys.dailyVerse) as? Bool ?? true
+        self.iftarLiveActivity = defaults.object(forKey: Keys.iftarLiveActivity) as? Bool ?? true
         self.dailyVerseHour = defaults.object(forKey: Keys.dailyVerseHour) as? Int ?? 8
         self.fridayReminderHour = defaults.object(forKey: Keys.fridayReminderHour) as? Int ?? 9
         self.hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarded)
@@ -239,6 +240,10 @@ final class AppSettings: ObservableObject {
     @Published var dailyVerse: Bool {
         didSet { defaults.set(dailyVerse, forKey: Keys.dailyVerse) }
     }
+    /// Ramazan'da oruç sürerken kilit ekranı/Dynamic Island iftar sayacı (Live Activity).
+    @Published var iftarLiveActivity: Bool {
+        didSet { defaults.set(iftarLiveActivity, forKey: Keys.iftarLiveActivity) }
+    }
     /// Günlük ayet/dua bildiriminin saati (0–23).
     @Published var dailyVerseHour: Int {
         didSet { defaults.set(dailyVerseHour, forKey: Keys.dailyVerseHour) }
@@ -318,6 +323,7 @@ final class AppSettings: ObservableObject {
         static let fridayReminder = "settings.fridayReminder"
         static let specialDayGreetings = "settings.specialDayGreetings"
         static let dailyVerse = "settings.dailyVerse"
+        static let iftarLiveActivity = "settings.iftarLiveActivity"
         static let dailyVerseHour = "settings.dailyVerseHour"
         static let fridayReminderHour = "settings.fridayReminderHour"
         static let preReminder = "settings.preReminder"

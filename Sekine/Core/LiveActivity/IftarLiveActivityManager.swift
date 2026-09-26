@@ -14,17 +14,19 @@ enum IftarLiveActivityManager {
         case endAll
     }
 
-    nonisolated static func action(schedule: PrayerSchedule?, now: Date, hasActive: Bool) -> Action {
-        guard let schedule, let info = RamadanInfo.current(schedule: schedule, now: now),
+    nonisolated static func action(
+        schedule: PrayerSchedule?, now: Date, hasActive: Bool, enabled: Bool = true
+    ) -> Action {
+        guard enabled, let schedule, let info = RamadanInfo.current(schedule: schedule, now: now),
               info.phase == .untilIftar else {
             return hasActive ? .endAll : .none
         }
         return hasActive ? .none : .start(dayNumber: info.dayNumber, iftar: info.target)
     }
 
-    static func sync(schedule: PrayerSchedule?, placeName: String, now: Date = Date()) {
+    static func sync(schedule: PrayerSchedule?, placeName: String, enabled: Bool, now: Date = Date()) {
         let active = Activity<IftarActivityAttributes>.activities
-        let decided = action(schedule: schedule, now: now, hasActive: !active.isEmpty)
+        let decided = action(schedule: schedule, now: now, hasActive: !active.isEmpty, enabled: enabled)
         #if DEBUG
         NSLog("IftarLiveActivity: karar=\(decided) aktif=\(active.count) plan=\(schedule == nil ? "yok" : "var")")
         #endif
@@ -55,4 +57,9 @@ enum IftarLiveActivityManager {
             }
         }
     }
+}
+
+extension Notification.Name {
+    /// Ayarlar'da iftar sayacı anahtarı değişince (uygulama yeniden senkronlar).
+    static let iftarLiveActivityPreferenceChanged = Notification.Name("iftarLiveActivityPreferenceChanged")
 }

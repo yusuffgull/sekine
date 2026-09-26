@@ -291,6 +291,10 @@ struct SettingsView: View {
     // MARK: Ek Hatırlatmalar
     private var extraRemindersSection: some View {
         Section {
+            Toggle("Ramazan iftar sayacı (kilit ekranı)", isOn: Binding(
+                get: { settings.iftarLiveActivity },
+                set: { settings.iftarLiveActivity = $0; NotificationCenter.default.post(name: .iftarLiveActivityPreferenceChanged, object: nil) }
+            ))
             Toggle("Cuma hatırlatması", isOn: Binding(
                 get: { settings.fridayReminder },
                 set: { settings.fridayReminder = $0; reschedule() }

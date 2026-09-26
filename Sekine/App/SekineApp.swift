@@ -51,6 +51,7 @@ struct SekineApp: App {
                 .tint(Palette.accent)
                 .preferredColorScheme(settings.theme.colorScheme)
                 .task { await bootstrap() }
+                .onReceive(NotificationCenter.default.publisher(for: .iftarLiveActivityPreferenceChanged)) { _ in syncLiveActivity() }
         }
         // İlk açılışta plan bootstrap'tan SONRA yüklenebilir: plan gelince de senkronla.
         .onChange(of: store.schedule?.fetchedAt) { _, _ in syncLiveActivity() }
@@ -74,7 +75,8 @@ struct SekineApp: App {
         }
         #endif
         IftarLiveActivityManager.sync(
-            schedule: schedule, placeName: settings.location?.name ?? schedule?.placeName ?? "")
+            schedule: schedule, placeName: settings.location?.name ?? schedule?.placeName ?? "",
+            enabled: settings.iftarLiveActivity)
     }
 
     /// App açılışında/öne gelince: izin durumunu tazele, veri varsa kapsamı

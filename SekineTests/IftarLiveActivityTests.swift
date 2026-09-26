@@ -35,6 +35,11 @@ final class IftarLiveActivityTests: XCTestCase {
         XCTAssertEqual(IftarLiveActivityManager.action(schedule: schedule(hicriMonth: nil), now: date(12, 0), hasActive: false), .none)
         XCTAssertEqual(IftarLiveActivityManager.action(schedule: nil, now: date(12, 0), hasActive: true), .endAll)
     }
+    func testDisabledPreferenceEndsOrNeverStarts() {
+        let s = schedule(hicriMonth: 9)
+        XCTAssertEqual(IftarLiveActivityManager.action(schedule: s, now: date(12, 0), hasActive: false, enabled: false), .none)
+        XCTAssertEqual(IftarLiveActivityManager.action(schedule: s, now: date(12, 0), hasActive: true, enabled: false), .endAll)
+    }
     func testLockScreenViewRenders() throws {
         let view = IftarLockScreenView(dayNumber: 12, placeName: "İstanbul",
                                        iftar: Date().addingTimeInterval(3 * 3600 + 25 * 60))
