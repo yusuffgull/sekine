@@ -255,10 +255,21 @@ final class Store: ObservableObject, PremiumProviding {
                 )
             )
             await transaction.finish()
-        case .unverified(_, let error):
-            // Doğrulanamayan bir güncelleme entitlement'ı ASLA değiştirmez, sadece loglanır.
+        case .unverified(let transaction, let error):
+            // Doğrulanamayan bir güncelleme entitlement'ı ASLA `owned`'a çevirmez ve mevcut
+            // `owned`'ı bozmaz; ama sahip DEĞİLKEN "belirsiz" olarak işaretlenir (bkz.
+            // `EntitlementState.indeterminate` sözleşmesi, bilinen risk #6).
             print("Store: Transaction.updates doğrulanamadı: \(error)")
+            applyUnverifiedUpdate(productID: transaction.productID)
         }
+    }
+
+    /// `.unverified` bir `Transaction.updates` olayının entitlement etkisi (saf, testli):
+    /// yalnızca entitlement veren ürünlerde ve zaten `.owned` değilken `.indeterminate`.
+    func applyUnverifiedUpdate(productID: String) {
+        guard Self.entitlementProductIDs.contains(productID), entitlementState != .owned else { return }
+        entitlementState = .indeterminate
+        refreshGeneration += 1
     }
 
     /// `handleVerifiedTransaction`/`handleTransactionUpdate`'in StoreKit'ten bağımsız,
@@ -426,23 +437,12 @@ final class Store: ObservableObject, PremiumProviding {
         let task = Task<RestoreOutcome, Never> { [weak self] () -> RestoreOutcome in
             let outcome: RestoreOutcome
             if let self {
-                do {
-                    try await self.syncProvider()
-                    // Restore'un GERÇEKTEN yeni bir şey doğrulayıp doğrulamadığını
-                    // ayırt edebilmek için tarama öncesi durumu yakala (bkz. `RestoreOutcome
-                    // .alreadyOwned` dokümantasyonu).
-                    let priorState = self.entitlementState
-                    await self.refreshEntitlements()
-                    switch self.entitlementState {
-                    case .owned:
-                        outcome = (priorState == .owned) ? .alreadyOwned : .restored
-                    case .indeterminate:
-                        outcome = .indeterminate
-                    case .notOwned, .loading:
-                        outcome = .noPurchasesFound
-                    }
-                } catch {
-                    outcome = self.restoreOutcome(for: error)
+                // Askıda kalabilen `syncProvider()`/tarama için zaman aşımı: aksi halde
+                // `isRestoring` sonsuza dek true kalır ve sonraki restore()'lar aynı asılı
+                // task'a bağlanırdı (bkz. docs/decisions.md 2026-09-08, bilinen risk #4).
+                outcome = await Self.withTimeout(self.restoreTimeout) { [weak self] in
+                    guard let self else { return .other("Store serbest bırakıldı") }
+                    return await self.performRestore()
                 }
             } else {
                 outcome = .other("Store serbest bırakıldı")
@@ -458,6 +458,56 @@ final class Store: ObservableObject, PremiumProviding {
         }
         restoreTask = task
         return await task.value
+    }
+
+    /// `restore()` içindeki asıl iş (sync + tarama + sonuç sınıflandırma). Zaman aşımı
+    /// sarmalayıcısından ayrıldı; davranışı değişmedi.
+    private func performRestore() async -> RestoreOutcome {
+        do {
+            try await syncProvider()
+            // Restore'un GERÇEKTEN yeni bir şey doğrulayıp doğrulamadığını ayırt edebilmek
+            // için tarama öncesi durumu yakala (bkz. `RestoreOutcome.alreadyOwned`).
+            let priorState = entitlementState
+            await refreshEntitlements()
+            switch entitlementState {
+            case .owned:
+                return (priorState == .owned) ? .alreadyOwned : .restored
+            case .indeterminate:
+                return .indeterminate
+            case .notOwned, .loading:
+                return .noPurchasesFound
+            }
+        } catch {
+            return restoreOutcome(for: error)
+        }
+    }
+
+    /// Zaman aşımı süresi (test seam'i). Aşımda kullanıcıya "internet bağlantınızı
+    /// kontrol edin" mesajı verilir (`.networkError`) — hem gerçek bir ağ askıda kalması
+    /// hem StoreKit sunucusu yanıtsızlığı için en yakın, dürüst açıklama.
+    var restoreTimeout: Duration = .seconds(45)
+
+    /// `work` süre içinde dönmezse `.networkError` döner ve `work` iptal edilir. Yapısal
+    /// (`TaskGroup`) değil: iptale kooperatif olmayan bir iş grubu bekletirdi — burada ilk
+    /// biten kazanır, geç gelen sonuç atılır (`OnceGate`).
+    nonisolated static func withTimeout(
+        _ timeout: Duration,
+        _ work: @escaping @MainActor @Sendable () async -> RestoreOutcome
+    ) async -> RestoreOutcome {
+        await withCheckedContinuation { (cont: CheckedContinuation<RestoreOutcome, Never>) in
+            let gate = OnceGate()
+            let worker = Task { @MainActor in
+                let result = await work()
+                if gate.claim() { cont.resume(returning: result) }
+            }
+            Task {
+                try? await Task.sleep(for: timeout)
+                if gate.claim() {
+                    worker.cancel()
+                    cont.resume(returning: .networkError)
+                }
+            }
+        }
     }
 
     func restoreOutcome(for error: Error) -> RestoreOutcome {
@@ -484,5 +534,17 @@ final class Store: ObservableObject, PremiumProviding {
             return .networkError
         }
         return .other(error.localizedDescription)
+    }
+}
+
+/// Bir `CheckedContinuation`'ın tam bir kez sürdürülmesini sağlar (ilk `claim()` kazanır).
+private final class OnceGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var claimed = false
+    func claim() -> Bool {
+        lock.lock(); defer { lock.unlock() }
+        if claimed { return false }
+        claimed = true
+        return true
     }
 }

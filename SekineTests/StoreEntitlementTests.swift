@@ -288,6 +288,34 @@ final class StoreEntitlementTests: XCTestCase {
         XCTAssertEqual(store.entitlementState, .owned)
     }
 
+    // MARK: - Zaman aşımı + doğrulanamayan güncelleme (bilinen riskler #4, #6)
+
+    func testHangingRestoreTimesOutAndDoesNotWedgeStore() async {
+        store.restoreTimeout = .milliseconds(80)
+        store.syncProvider = { try await Task.sleep(for: .seconds(60)) }   // asılı kalır
+        let outcome = await store.restore()
+        XCTAssertEqual(outcome, .networkError)
+        XCTAssertFalse(store.isRestoring)
+        // Store tıkanmadı: sonraki restore yeni bir task başlatıp normal tamamlanır.
+        store.syncProvider = { }
+        let second = await store.restore()
+        XCTAssertEqual(second, .noPurchasesFound)
+    }
+
+    func testUnverifiedUpdateMarksIndeterminateWhenNotOwned() {
+        store.applyUnverifiedUpdate(productID: Store.lifetimeID)
+        XCTAssertEqual(store.entitlementState, .indeterminate)
+    }
+
+    func testUnverifiedUpdateNeverDowngradesOwnedOrTouchesTips() {
+        store.applyVerifiedTransactionInfo(VerifiedTransactionInfo(productID: Store.lifetimeID, isRevoked: false))
+        store.applyUnverifiedUpdate(productID: Store.lifetimeID)
+        XCTAssertEqual(store.entitlementState, .owned)
+        let fresh = Store()
+        fresh.applyUnverifiedUpdate(productID: Store.tipIDs[0])
+        XCTAssertNotEqual(fresh.entitlementState, .indeterminate)
+    }
+
     // MARK: - RestoreOutcome hata kategorileştirme (StoreKit'ten bağımsız, saf mapping)
 
     func testRestoreOutcomeMapsNetworkErrorToNetworkError() {

@@ -93,8 +93,7 @@ uçtan uca yapıldı, çoklu VISION review turlarından geçti:
 - Kıble pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
 - Watch bildirim dedup'ı (iki cihazda aynı anda tek bildirim) gerçek cihaz/TestFlight
   gerektiriyor, headless doğrulanamadı.
-- Ayrı `DiyanetDirectory` örnekleri (SekineApp/Settings/Onboarding/LocationSearchSheet)
-  il/ilçe listesini ayrı ayrı indirebiliyor → tek örneği paylaştırmak temiz bir iyileştirme.
+- ~~Ayrı `DiyanetDirectory` örnekleri~~ — tek örneğe indirildi (feat/polish-and-hardening).
 - `project.yml` veya `ci_scripts/` değişince push'tan ÖNCE `./scripts/verify-xcode-cloud.sh`.
 
 ## Sonraki (henüz başlanmadı)

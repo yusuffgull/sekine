@@ -125,6 +125,32 @@ değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci ça
 (83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
 ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
 regresyon değil.
+## 2026-09-26 — Sertleştirme: RollingScheduler P1/P2 + StoreKit #4/#6 kapatıldı (`feat/polish-and-hardening`)
+
+**Kök neden buldu:** Tam suite'i `-test-iterations 15` ile döngüye alınca
+`testMarkExpiredRealConcurrency…` ~%13 oranında düştü — "flaky test" sanılan şey 2026-09-08'de
+kayda geçen **RollingScheduler P2 riskinin gerçek belirtisiydi**: kuyrukta bekleyen işi expire
+etmek `RescheduleResult(requested:0, deferred:1)` döndürüyordu, `requested == added+deferred+failed`
+değişmezini bozuyordu. Düzeltme: `requested:1, deferred:1` (hiç başlamamış tek iş birimi).
+
+**RollingScheduler P1:** 60sn'den uzun süren, expire edilmiş AKTİF işin işareti başka bir işin
+`markExpired` çağrısındaki TTL süpürmesiyle siliniyordu → iş expire olmamış gibi devam ederdi.
+Düzeltme: `activeTokens` kümesi; süpürme aktif işlerin işaretine dokunmaz. TTL artık enjekte
+edilebilir (`init(expiredTokenTTL:)`). Mutasyon kontrolü: düzeltme geçici geri alınınca yeni test
+düşüyor (iş expire edilmiş halde 50/50 bildirim ekledi) — test gerçekten hatayı yakalıyor.
+
+**StoreKit #4 (asılı restore):** `restore()` artık 45sn zaman aşımına sahip (test seam'i
+`restoreTimeout`); aşımda `.networkError`, `isRestoring` false, Store tıkanmaz, sonraki restore
+yeni task başlatır. Yapısal `TaskGroup` KULLANILMADI (kooperatif olmayan iş grubu bekletir);
+ilk biten kazanır (`OnceGate`). **#6:** doğrulanamayan `Transaction.updates` olayı, sahip
+DEĞİLKEN durumu `.indeterminate` yapar; `.owned`'ı asla bozmaz, bağış ürünlerine dokunmaz.
+**Kalan bilinen StoreKit riskleri (#1, #2, #3, #5):** kozmetik/UX düzeyi, dokunulmadı.
+
+**Diğer:** watchOS onboarding'e ülke seçici + GPS'te ülke tespiti; `DiyanetDirectory` tek
+örnek (environment); Live Activity için Ayarlar anahtarı. Doğrulama: tam suite 10 tur × 114 test
+= 1140 çalıştırma, 0 hata. Not: paylaşımlı simülatörde başka bir projenin testleri koşarken
+"Mach error -308 server died" alındı; bağımsız cihaz (iPhone 17 Pro) kullanıldı.
+
 ## 2026-09-24 — Ramazan iftar Live Activity (`feat/live-activity`, fasting-tracker üstüne)
 
 **Karar:** Oruç sürerken (imsak→akşam) kilit ekranı/Dynamic Island'da iftar geri sayımı.

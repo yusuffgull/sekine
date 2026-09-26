@@ -152,10 +152,17 @@ actor RollingScheduler {
     /// SINIRLAR: bir iş bitmeden ÖNCE gelen bir işaret normal akışta ~anında tüketilir
     /// (`defer` ile temizlenir); bir iş bittikten SONRA gelen gecikmiş bir işaret en fazla
     /// bu süre kadar Dictionary'de kalır, sonra otomatik süpürülür — kalıcı sızıntı YOK.
-    private static let expiredTokenTTL: TimeInterval = 60
+    private let expiredTokenTTL: TimeInterval
+    /// Şu an `performReschedule` içinde ÇALIŞAN işlerin token'ları. TTL süpürmesi bunların
+    /// expire işaretini ASLA silmez (bilinen risk P1: 60sn'den uzun süren, expire edilmiş
+    /// bir işin işareti başka bir işin `markExpired` çağrısıyla süpürülüp iş expire
+    /// olmamış gibi devam edebiliyordu).
+    private var activeTokens: Set<RescheduleToken> = []
 
-    init(center: NotificationScheduling = UNUserNotificationCenter.current()) {
+    init(center: NotificationScheduling = UNUserNotificationCenter.current(),
+         expiredTokenTTL: TimeInterval = 60) {
         self.center = center
+        self.expiredTokenTTL = expiredTokenTTL
     }
 
     /// `BackgroundRefresh`'in `expirationHandler`'ından (senkron bir closure olduğu için
@@ -175,14 +182,18 @@ actor RollingScheduler {
     /// gelen bir sinyal) işaret en fazla TTL kadar yaşar, kalıcı sızıntı OLMAZ.
     func markExpired(_ token: RescheduleToken) {
         let now = Date()
-        expiredTokens = expiredTokens.filter { now.timeIntervalSince($0.value) < Self.expiredTokenTTL }
+        expiredTokens = expiredTokens.filter {
+            now.timeIntervalSince($0.value) < expiredTokenTTL || activeTokens.contains($0.key)
+        }
 
         // İş hâlâ kuyrukta bekliyorsa (henüz başlamadıysa) sonsuza kadar beklemesin:
         // kuyruktan hemen çıkar, boş/deferred bir sonuçla tamamla (P1 fix #1).
         if let idx = queue.firstIndex(where: { $0.token == token }) {
             let item = queue.remove(at: idx)
+            // `requested == added + deferred + failed` değişmezi (bkz. bilinen risk P2)
+            // bu yolda da korunur: hiç başlamamış tek bir iş birimi = 1 istenen, 1 ertelenen.
             item.continuation.resume(returning: RescheduleResult(
-                requested: 0, added: 0, removed: 0, failed: 0, deferred: 1))
+                requested: 1, added: 0, removed: 0, failed: 0, deferred: 1))
             return
         }
         expiredTokens[token] = now
@@ -242,7 +253,11 @@ actor RollingScheduler {
         // `markExpired(token:)` çağrısı bu satırdan sonra gelirse en fazla TTL kadar
         // yaşayıp kendiliğinden süpürülür (bkz. `markExpired` dokümantasyonu), kalıcı
         // sızıntı OLMAZ.
-        defer { expiredTokens.removeValue(forKey: token) }
+        activeTokens.insert(token)
+        defer {
+            activeTokens.remove(token)
+            expiredTokens.removeValue(forKey: token)
+        }
 
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = schedule.timeZone

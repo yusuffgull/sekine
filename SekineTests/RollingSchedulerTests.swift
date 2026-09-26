@@ -465,7 +465,7 @@ final class RollingSchedulerTests: XCTestCase {
 
         let bResult = await resultB
         XCTAssertEqual(
-            bResult, RescheduleResult(requested: 0, added: 0, removed: 0, failed: 0, deferred: 1),
+            bResult, RescheduleResult(requested: 1, added: 0, removed: 0, failed: 0, deferred: 1),
             "kuyrukta bekleyen expired iş, A'yı beklemeden HEMEN boş/deferred sonuçla tamamlanmalı")
 
         // A hâlâ tamamlanmamış olmalı (gate henüz açılmadı) — B'nin erken tamamlanması
@@ -512,6 +512,24 @@ final class RollingSchedulerTests: XCTestCase {
         let nextResult = await scheduler.reschedule(
             from: makeSchedule(daysFromNow: [10]), config: makeConfig(), token: nextToken)
         XCTAssertTrue(nextResult.isFullSuccess, "önceki yarıştan kalan hiçbir durum sonraki farklı token'lı işi etkilememeli")
+    }
+
+    /// P1 (bilinen risk): expire edilmiş AKTİF bir işin işareti, başka bir işin `markExpired`
+    /// çağrısındaki TTL süpürmesiyle silinmemeli. TTL=0 ile "süre çoktan doldu" simüle edilir:
+    /// düzeltmeden önce A'nın işareti süpürülür, A kalan bütün elemanları eklemeye devam ederdi.
+    func testActiveExpiredJobMarkerSurvivesTTLSweepFromAnotherToken() async {
+        let mock = SweepingExpiryNotificationCenter(triggerAt: 3)
+        let scheduler = RollingScheduler(center: mock, expiredTokenTTL: 0)
+        let token = RollingScheduler.RescheduleToken()
+        mock.scheduler = scheduler
+        mock.tokenToExpire = token
+
+        let result = await scheduler.reschedule(
+            from: makeSchedule(daysFromNow: Array(1...10)), config: makeConfig(), token: token)
+
+        XCTAssertGreaterThan(result.deferred, 0, "expire edilen aktif iş kalanını ertelemeli")
+        XCTAssertLessThan(mock.addCallCount, result.requested)
+        XCTAssertEqual(result.requested, result.added + result.deferred + result.failed)
     }
 
     // MARK: - Başarısız add() sessizce yutulmaz
@@ -640,5 +658,31 @@ private final class GatedNotificationCenter: NotificationScheduling, @unchecked 
 
     func add(_ request: UNNotificationRequest) async throws {
         pending[request.identifier] = request
+    }
+}
+
+/// `add()` N. çağrıda: önce koşuyu expire eder, sonra BAŞKA bir token için `markExpired`
+/// çağırarak (TTL süpürmesi) aktif işin işaretini silmeye çalışır.
+private final class SweepingExpiryNotificationCenter: NotificationScheduling, @unchecked Sendable {
+    private(set) var pending: [String: UNNotificationRequest] = [:]
+    private(set) var addCallCount = 0
+    private let triggerAt: Int
+    var scheduler: RollingScheduler?
+    var tokenToExpire: RollingScheduler.RescheduleToken?
+
+    init(triggerAt: Int) { self.triggerAt = triggerAt }
+
+    func pendingNotificationRequests() async -> [UNNotificationRequest] { Array(pending.values) }
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+        for id in identifiers { pending.removeValue(forKey: id) }
+    }
+    func add(_ request: UNNotificationRequest) async throws {
+        addCallCount += 1
+        pending[request.identifier] = request
+        if addCallCount == triggerAt, let tokenToExpire {
+            await scheduler?.markExpired(tokenToExpire)
+            await scheduler?.markExpired(RollingScheduler.RescheduleToken())   // süpürmeyi tetikler
+            for _ in 0..<20 { await Task.yield() }
+        }
     }
 }
