@@ -105,7 +105,8 @@ struct HomeView: View {
             Text(Self.dateFormatter.string(from: Date()))
                 .font(SekineFont.caption(settings.fontScale))
                 .foregroundStyle(Palette.textSecondary)
-            if let hicri = store.today?.hicriDate {
+            // Ramazan kartıyla AYNI plandan (DEBUG zorlamasında da tutarlı görünsün).
+            if let hicri = ramadanSchedule?.day(containing: Date())?.hicriDate ?? store.today?.hicriDate {
                 Text(hicri)
                     .font(SekineFont.caption(settings.fontScale))
                     .foregroundStyle(Palette.textSecondary.opacity(0.8))

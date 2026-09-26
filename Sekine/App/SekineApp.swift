@@ -83,6 +83,7 @@ struct SekineApp: App {
     /// kontrol et ve bildirimleri yeniden zamanla.
     private func bootstrap() async {
         #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedKaza") { kaza.seedForUITest() }
         if ProcessInfo.processInfo.arguments.contains("-uiTestSeedIstanbul"),
            settings.location == nil {
             settings.location = SavedLocation(name: "İstanbul", latitude: 41.0082,

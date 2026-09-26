@@ -105,6 +105,16 @@ final class KazaTracker: ObservableObject {
         return completionLog.filter { $0 >= cutoff }.count
     }
 
+    #if DEBUG
+    /// `-uiTestSeedKaza`: mağaza ekran görüntüsü için örnek borç + son 5 günde tamamlama.
+    func seedForUITest() {
+        for (prayer, n) in [(Prayer.fajr, 12), (.dhuhr, 30), (.asr, 18), (.maghrib, 7), (.isha, 21)] {
+            setRemaining(prayer, to: n)
+        }
+        completionLog = (0..<5).compactMap { calendar.date(byAdding: .day, value: -$0, to: Date()) }
+    }
+    #endif
+
     // MARK: - Persistence
 
     private func saveRemaining() {
