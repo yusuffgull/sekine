@@ -119,3 +119,6 @@ promo text bunu öne çıkarıyor.
 - Çekim ipucu: değerlendirme istemi çıkmasın diye `-growth.significantOpenCount 0` argümanı;
   `simctl io screenshot` çıktısını /tmp'ye al, sonra kopyala (repo yoluna doğrudan yazmak
   "Operation not permitted" verebilir).
+- **ASC 1.7 taslağı durumu (2026-09-26):** 6 görsel yüklü (6.5"); ASC'deki fiili sıra: 1-home,
+  2-qibla, 3-onboarding, 4-monthly, 5-settings, 6-kaza (çoklu yüklemede sıra dosya sırasıyla
+  gelmez; istenirse ASC'de sürükleyerek değiştir). Ramazan görseli yüklenmedi (yukarıya bak).

@@ -18,6 +18,7 @@ birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge i�
 | `feat/ramadan-mode` | sahur/iftar geri sayımı, hicri veriden | test + simülatör |
 | `feat/share-card` | paylaşılabilir vakit kartı (filigranlı) | test + PNG gözle |
 | `feat/fasting-tracker` | oruç günü takibi (Ramazan kartında) | test + simülatör |
+| `feat/polish-and-hardening` | watch ülke seçici, tek DiyanetDirectory, Live Activity anahtarı, RollingScheduler P1/P2 + StoreKit restore zaman aşımı düzeltmeleri, yeni görseller | 1140 çalıştırma 0 hata; mutasyon kontrolü |
 | `feat/live-activity` | iftar Live Activity (kilit ekranı/Dynamic Island) | test + Activity.request simülatörde; Dynamic Island cihazda gözle kontrol edilmeli |
 
 **Bilinçli yapılmayanlar (kayıtlı, kullanıcı kararı gerekir):** çok aylık imsakiye
