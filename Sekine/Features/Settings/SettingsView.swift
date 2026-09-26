@@ -8,7 +8,7 @@ struct SettingsView: View {
     @EnvironmentObject private var iap: Store
     @EnvironmentObject private var location: LocationManager
 
-    @StateObject private var directory = DiyanetDirectory()
+    @EnvironmentObject private var directory: DiyanetDirectory
     @State private var showSearch = false
     @State private var showPaywall = false
     @State private var currentIcon = AppIconOption.current

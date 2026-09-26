@@ -46,6 +46,7 @@ struct SekineApp: App {
                 .environmentObject(iap)
                 .environmentObject(adhan)
                 .environmentObject(kaza)
+                .environmentObject(locationDirectory)
                 .environmentObject(fasting)
                 .tint(Palette.accent)
                 .preferredColorScheme(settings.theme.colorScheme)

@@ -6,7 +6,7 @@ struct OnboardingView: View {
     @EnvironmentObject private var notifications: NotificationManager
     @EnvironmentObject private var location: LocationManager
 
-    @StateObject private var directory = DiyanetDirectory()
+    @EnvironmentObject private var directory: DiyanetDirectory
     @State private var showSearch = false
     @State private var isResolving = false
     @State private var errorText: String?

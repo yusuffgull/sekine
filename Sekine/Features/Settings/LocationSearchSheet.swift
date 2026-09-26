@@ -7,7 +7,7 @@ import SwiftUI
 struct LocationSearchSheet: View {
     @EnvironmentObject private var location: LocationManager
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var directory = DiyanetDirectory()
+    @EnvironmentObject private var directory: DiyanetDirectory
 
     let onSelect: (SavedLocation) -> Void
 
