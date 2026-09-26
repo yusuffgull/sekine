@@ -18,9 +18,9 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
   - [x] Kaza namazı takibi
   - [x] Ramazan modu sayacı (sahur/iftar)
   - [x] Paylaşılabilir vakit kartı
-  - [ ] Çok aylık imsakiye — kullanıcının 2026-09-08 kararıyla ERTELENDİ (decisions 2026-09-24)
-  - [ ] Kur'an+meal — Tanzil Türkçe meal lisansı ticari kullanıma kapalı, ENGELLİ (kullanıcı/hukuki karar)
-  - [ ] Ezan sesi AI denemesi — ENGELLİ (ElevenLabs hesabı yok, TTS makam okuyamaz, panel onayı)
+  - [ ] Çok aylık/yıllık imsakiye — kullanıcı 2026-09-27'de ONAYLADI: yakın 32 gün Diyanet + ötesi çevrimiçi "yaklaşık" (etiketli, iftar güvenlik payı); sıradaki iş (decisions 2026-09-27)
+  - [ ] Kur'an+meal — lisans engeli; kullanıcıyla TARTIŞMA açık (seçenekler decisions 2026-09-27)
+  - [ ] Ezan sesi AI denemesi — kullanıcı kararı: önce ElevenLabs ücretsiz, olmazsa ücretli; hesap/anahtar kullanıcıda, panel kapısı geçerli (decisions 2026-09-27)
   - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
   - [x] Ramazan iftar Live Activity (`feat/live-activity`; Dynamic Island cihazda gözle kontrol edilmeli)
   - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda

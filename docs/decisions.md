@@ -125,6 +125,50 @@ değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci ça
 (83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
 ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
 regresyon değil.
+## 2026-09-27 — Kullanıcı yönlendirmesi: çok-ay imsakiye, Kur'an, AI ezan (SONRAKİ OTURUM BURADAN DEVAM)
+
+**Çok aylık imsakiye — engel veri boyutu DEĞİLDİ.** Engel kaynağın API sözleşmesi: `ezanvakti
+.emushaf.net` her zaman "bugünden itibaren 32 gün" döndürür, tarih aralığı parametresi yok
+(bu yüzden ileri aylar bu kaynaktan alınamaz). Alternatifler: (a) Diyanet resmî Awqat Salah API
+(aralık destekler; hesap/kimlik bilgisi + kota günde ~5/ayda ~10 istek/konum → uygulamaya
+gömülemez, proxy/cache gerekir — kota ve kimlik detayı DOĞRULANMADI); (b) Aladhan `method=13`
+(anahtarsız, yıllık `calendar` endpoint'i, hesaplama-tabanlı).
+
+**Kullanıcı kararı (2026-09-27): "telefonda büyük veri tutmaya gerek yok; çevrimdışıyken mevcut
+kısıtlı veri, çevrimiçiyken internetten çekip gösterilsin; en azından yıllık gösterilsin."**
+Hedef mimari: yakın 32 gün Diyanet-birebir (mevcut, çevrimdışı çalışır); ötesi çevrimiçiyken
+çekilip **"hesaplanan/yaklaşık" etiketiyle** gösterilir (çevrimdışı ve yoksa mevcut davranış).
+Bu, önceki "çevrimdışı+gizli" vaadini bozmaz (yalnızca koordinat gider; Aladhan zaten yedek
+sağlayıcı) ama "Diyanet birebir" iddiasını ileri aylar için etiketle sınırlar.
+
+**Ölçüm (2026-09-27, İstanbul/9541, Diyanet 23.09–24.10.2026 32 gün vs Aladhan method=13):**
+İmsak +0..+1 dk, Güneş +0..+1, Öğle −1..0, İkindi 0..+1, **Akşam −1..−2 dk (ort −1.2), Yatsı
+−1..−2**. Yani Aladhan iftarı Diyanet'ten 1–2 dk ERKEN veriyor → oruç açmak için güvensiz yön.
+**Tasarım kuralı:** yaklaşık veride iftar (akşam) için güvenli pay ekle (en az +2 dk) VEYA
+Ramazan'da iftar/sahur için yaklaşık veri hiç gösterme/uyar; Ramazan sayacı yalnızca
+Diyanet-birebir pencereden çalışmaya devam etsin. Tek şehir/tek mevsim ölçümü — uygulamadan
+önce birkaç şehir/farklı mevsim (ve yurt dışı) ile genişlet. Kaynak seçimi kararı (Aladhan vs
+Awqat Salah+proxy) sonraki oturumda; uygulama: `PrayerTimeStore` yıllık yaklaşık plan +
+MonthlyView'de "yaklaşık" rozeti + Ramazan güvenlik payı + birim testleri.
+
+**Kur'an+meal — TARTIŞMA AÇIK (kod yok).** Engel lisans (Tanzil Türkçe mealleri "ticari olmayan").
+Konuşulacak seçenekler (hepsinde iddialar birincil kaynaktan DOĞRULANACAK): (1) Uygulama içinden
+resmî Diyanet Kur'an sitesine/Quran.com'a bağlantı (SFSafariViewController) — lisans riski yok,
+en hızlı, sevilen özelliğin bir kısmını karşılar; (2) Yalnızca Arapça metin gömmek — Tanzil Arapça
+metin lisansını (CC-BY olduğu bilgisi doğrulanmadı) birincil kaynaktan oku; (3) Diyanet
+İşleri/Diyanet Vakfı'ndan yazılı ticari kullanım izni; (4) gerçekten kamu malı bir Elmalılı
+sayısallaştırması bul + provenance belgele (sadeleştirilmiş baskılar telifli olabilir). Öneri:
+önce (1), paralelde (3) için yazışma; (2)/(4) lisans netleşince.
+
+**AI ezan — kullanıcı kararı: önce ElevenLabs ÜCRETSİZ hakkıyla dene; olmazsa işimizi görecek kadar
+ödeme yaparak seslendirt.** Uyarılar: (a) hesap açma/anahtar kullanıcıda (ajan hesap açamaz);
+anahtar env değişkeniyle verilmeli, repoya/loga yazılmamalı; (b) ElevenLabs ücretsiz planın
+ticari kullanım/atıf koşulları DOĞRULANMADI — ücretsiz üretim yalnızca dinleme testi sayılmalı,
+ticari uygulamaya gömmeden önce ücretli planın ticari lisansı ve içerik sahipliği koşulları
+okunmalı; (c) TTS konuşma sentezi makamlı ezan okumaz — müzik/şarkı üreten modeller denenmeli,
+kalite garantisi yok; (d) dini hassasiyet: plandaki 3–5 kişilik dinleyici paneli kapısı geçerli,
+oybirliği yoksa yol bırakılır; plan B yerel müezzine ücretli kayıt + yazılı tam hak.
+
 ## 2026-09-26 — Sertleştirme: RollingScheduler P1/P2 + StoreKit #4/#6 kapatıldı (`feat/polish-and-hardening`)
 
 **Kök neden buldu:** Tam suite'i `-test-iterations 15` ile döngüye alınca

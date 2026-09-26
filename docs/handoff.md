@@ -94,13 +94,23 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   Tek `Sekine` şeması iPhone + Widget + Watch + komplikasyonları birlikte derler (Watch
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
-## NEXT
-1. Kullanıcı: `integration/all-features`'i incele → main'e merge (yukarıdaki aksiyonlar).
-2. 2-3 hafta sonra ASC Analytics: dönüşüm ve "ezan vakti" sırası değişti mi.
-3. Karar bekleyenler: Kur'an lisans yolu, çok-ay imsakiye, ezan (müezzin kaydı).
-4. Ayrı turlar: Ramazan Live Activity, oruç günü takibi, Onboarding/watch ülke seçici.
-5. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası.
-6. Gelir zinciri (kod dışı): 20/B belgesi + özel hesap → ASC IBAN.
+## NEXT (2026-09-27 kullanıcı oturumu kapattı — buradan devam)
+1. **Çok-ay/yıllık imsakiye (kullanıcı onayladı, uygulanacak):** yakın 32 gün Diyanet-birebir +
+   ötesi çevrimiçi çekilen "yaklaşık" plan (etiketli). Önce kaynak kararı (Aladhan method=13 vs
+   Awqat Salah+proxy) ve ölçümü genişlet (çok şehir/mevsim/yurt dışı); **iftar için güvenlik payı
+   şart** (Aladhan akşamı 1–2 dk erken veriyor). Bkz. decisions 2026-09-27.
+2. **Kur'an+meal:** kullanıcıyla TARTIŞMA (seçenekler decisions 2026-09-27'de; öneri: önce
+   resmî siteye bağlantı + Diyanet izni yazışması).
+3. **AI ezan:** kullanıcı ElevenLabs hesabı/anahtarını (env) hazırlayınca ücretsiz planla dinleme
+   testi; ticari koşullar doğrulanmadan gömme yok; olmazsa ücretli plan/müezzin (panel kapısı geçerli).
+4. Kullanıcı: `integration/all-features`'i incele → `main`'e merge; ASC'de yıllık abonelik ürünü;
+   gerçek cihaz testleri (sandbox satın alma, yurt dışı vakit karşılaştırması, Dynamic Island);
+   1.7 submit; Ramazan (≈8 Şub 2027) gerçek veriyle Ramazan ekran görüntüsü; In-App Events girişi
+   (tarihler Diyanet'ten doğrulanarak), Featuring, Search Ads.
+5. 2–3 hafta sonra ASC Analytics tekrar ölçüm (dönüşüm, "ezan vakti" sırası).
+6. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası. Gelir zinciri:
+   20/B belgesi + özel hesap → ASC IBAN.
+7. Kalan kozmetik StoreKit riskleri #1/#2/#3/#5 (düşük öncelik).
 
 ## BLOCKERS
 Yok — ama canlıya çıkış kullanıcı aksiyonlarına (ASC ürün, cihaz testleri, merge) bağlı.
