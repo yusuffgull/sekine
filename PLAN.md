@@ -44,7 +44,7 @@ yükseltildi. İçeriği:
 ## Bilinen riskler / açık
 - Gerçek cihaz gerektirenler: uzun süreli bildirim + BG-refresh güvenilirliği, Watch bildirim
   dedup'ı, kıble pusulası (magnetometre).
-- Onboarding (iPhone) manuel arama hâlâ yalnızca Türkiye; GPS akışı ülkeyi otomatik bulur.
+- Konum seçimi Diyanet'in tüm ülkelerini kapsar (Ayarlar, onboarding, Watch, GPS); ek kaynak/karşılaştırma gerekmiyor (kullanıcı kararı 29 Eyl).
 - Abonelik sessiz süre dolumu ancak sonraki açılış/restore taramasında fark edilir (bilinçli).
 - Kalan kozmetik StoreKit riskleri #1/#2/#3/#5 (`docs/decisions.md`, düşük öncelik).
 - `project.yml` / `ci_scripts/` değişince push'tan ÖNCE `./scripts/verify-xcode-cloud.sh`.
