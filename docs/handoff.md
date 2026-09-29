@@ -1,70 +1,13 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı: Faz 1/2/3 kod tarafı `integration/all-features`'te birleşik
-**23-24 Eyl 2026.** Plan: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
-Gerekçeler: `docs/decisions.md` (2026-09-23/24 girdileri).
+## CURRENT TASK — 1.7 (10) gönderime hazırlanıyor
+**29 Eyl 2026.** `integration/all-features` `main`'e alındı (Faz 1–3 kod işlerinin hepsi),
+sürüm `project.yml`'de 1.7 (10). Kapsam ve gönderim öncesi kullanıcı adımları: `PLAN.md`.
+Gerekçeler: `docs/decisions.md` (2026-09-23 → 09-27). Yol haritası:
+`/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
 
-**Durum:** `main` yalnızca Faz 0 (ASO) içerir. Yedi bağımsız feature branch var VE hepsi
-`integration/all-features`'te birleştirildi (109 test yeşil) (yalnızca docs çakışması, koda dokunmadı;
-birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge için tek karar:
-`integration/all-features`'i main'e almak (ya da branch'leri tek tek).
-
-| Branch | İçerik | Review |
-|---|---|---|
-| `main` | Faz 0 ASO — ASC'ye canlı (1.6 Promo Text) + 1.7 taslağı (submit EDİLMEDİ) | — |
-| `feat/yearly-subscription` | yıllık abonelik ₺149.99 + 7 gün deneme | NATASHA ✓ |
-| `feat/international-locations` | yurtdışı + KRİTİK tz düzeltmesi (sabit Istanbul) | VISION ✓ |
-| `feat/kaza-tracking` | kaza namazı sayaç/seri (premium istatistik) | test + simülatör |
-| `feat/ramadan-mode` | sahur/iftar geri sayımı, hicri veriden | test + simülatör |
-| `feat/share-card` | paylaşılabilir vakit kartı (filigranlı) | test + PNG gözle |
-| `feat/fasting-tracker` | oruç günü takibi (Ramazan kartında) | test + simülatör |
-| `feat/polish-and-hardening` | watch ülke seçici, tek DiyanetDirectory, Live Activity anahtarı, RollingScheduler P1/P2 + StoreKit restore zaman aşımı düzeltmeleri, yeni görseller | 1140 çalıştırma 0 hata; mutasyon kontrolü |
-| `feat/live-activity` | iftar Live Activity (kilit ekranı/Dynamic Island) | test + Activity.request simülatörde; Dynamic Island cihazda gözle kontrol edilmeli |
-
-**Bilinçli yapılmayanlar (kayıtlı, kullanıcı kararı gerekir):** çok aylık imsakiye
-(2026-09-08 kararı), Kur'an+meal (Tanzil meal lisansı ticari kullanıma kapalı), AI ezan
-(ElevenLabs hesabı yok + TTS makam okuyamaz).
-
-**Kullanıcı aksiyonları:** (1) branch/integration'ı incele ve merge et; (2) ASC'de yıllık
-abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`); (3) gerçek cihazda
-sandbox satın alma/restore + yurt dışı konum vakitlerini Diyanet siteyle karşılaştır;
-(4) 1.7'yi submit et (ASC taslağı hazır); (5) Featuring nomination, Search Ads (10-30$/ay),
-In-App Events, diaspora için İngilizce/Almanca keyword yerelleştirmesi.
-
----
-
-## Geçmiş — 1.6 (9) yayında
-**1.6 (9) App Review'dan geçti ve yayınlandı** (28 Ağu 2026). İçeriği: Ayarlar ekranına
-"yeni sürüm mevcut" bildirimi (`AppUpdateChecker` — iTunes Lookup API ile kontrol,
-tıklanınca App Store sayfasına yönlendirir, Trendyol tarzı). `xcodegen generate` +
-`./scripts/verify-xcode-cloud.sh` yeşil, 12 yeni birim testi
-(`SekineTests/AppUpdateCheckerTests.swift`) dahil tüm testler geçiyor.
-
-Bu sürümle birlikte mağaza görselleri de güncellendi: `store/screenshots-marketing-6.5/`
-ve `store/screenshots-watch/`'a eklenen yeni AI-üretimi tanıtım görselleri yanlış
-boyutlardaydı (852×1846 / 853×1844) — hepsi kırpılıp doğru ASC boyutlarına
-(6.5": 1284×2778, Watch: 422×514) getirildi.
-
-1.5'in içeriği (1.4'ü review ederken bulunan iki gerçek hata):
-- **Kıble artık asla doğrulanmamış koordinattan çizilmiyor.** İl/ilçe seçicisi geocode
-  başarısız olunca sessizce `39.0/35.0` (Kırşehir civarı) saklıyordu → kullanıcı uyarısız
-  yanlış yöne yöneliyordu. Ayrıca konum hiç yokken açı 0'da kalıp **kuzeyi kıble**
-  gösteriyordu. Koordinatlar opsiyonel yapıldı, placeholder kaldırıldı; izin varsa açı
-  **gerçek GPS'ten** hesaplanıyor, hesaplanamıyorsa yön yerine konum izni isteniyor.
-- **Drift uyarısına 25 km mesafe eşiği.** Yalnızca ilçe ID'si karşılaştırıldığı için,
-  ilçe sınırına yakın oturan kullanıcı evindeyken uyarı alabiliyordu.
-
-Gerekçeler `docs/decisions.md` (2026-08-24). Doğrulama: bağımsız hesaplanan kıble
-açılarıyla karşılaştırıldı (Ankara canlı GPS 160° / beklenen 160.1; legacy 1.4 verisi
-152° / beklenen 151.6), mesafe eşiği kontrol testiyle, 16/16 birim testi, iOS+watchOS
-derlemesi.
-
-**ASO baseline (24 Ağu 2026, 1.4 yayınlanmadan önce):** "ezan vakti" aramasında ~70. sıra.
-1.4 çıktıktan 1-2 hafta sonra aynı aramalar tekrarlanıp karşılaştırılacak.
-
-> 1.4'ün hazırlanış süreci (review bulguları, şema düzeltmesi, ASO metadata gerekçesi)
-> artık kapandı — detay için `docs/decisions.md` (2026-08-23/24) ve git log
-> (`f69c195`, `d52d5e8`, `50850cf`).
+Yayında olan son sürüm 1.6 (9). Bilinçli yapılmayanlar (kullanıcı kararı bekliyor):
+çok aylık imsakiye (onaylı, sıradaki kod işi), Kur'an+meal (lisans), AI ezan (hesap/anahtar).
 
 ## DONE
 Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pahalı olan bağlam:
@@ -94,26 +37,22 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   Tek `Sekine` şeması iPhone + Widget + Watch + komplikasyonları birlikte derler (Watch
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
-## NEXT (2026-09-27 kullanıcı oturumu kapattı — buradan devam)
-1. **Çok-ay/yıllık imsakiye (kullanıcı onayladı, uygulanacak):** yakın 32 gün Diyanet-birebir +
-   ötesi çevrimiçi çekilen "yaklaşık" plan (etiketli). Önce kaynak kararı (Aladhan method=13 vs
-   Awqat Salah+proxy) ve ölçümü genişlet (çok şehir/mevsim/yurt dışı); **iftar için güvenlik payı
-   şart** (Aladhan akşamı 1–2 dk erken veriyor). Bkz. decisions 2026-09-27.
-2. **Kur'an+meal:** kullanıcıyla TARTIŞMA (seçenekler decisions 2026-09-27'de; öneri: önce
-   resmî siteye bağlantı + Diyanet izni yazışması).
-3. **AI ezan:** kullanıcı ElevenLabs hesabı/anahtarını (env) hazırlayınca ücretsiz planla dinleme
-   testi; ticari koşullar doğrulanmadan gömme yok; olmazsa ücretli plan/müezzin (panel kapısı geçerli).
-4. Kullanıcı: `integration/all-features`'i incele → `main`'e merge; ASC'de yıllık abonelik ürünü;
-   gerçek cihaz testleri (sandbox satın alma, yurt dışı vakit karşılaştırması, Dynamic Island);
-   1.7 submit; Ramazan (≈8 Şub 2027) gerçek veriyle Ramazan ekran görüntüsü; In-App Events girişi
-   (tarihler Diyanet'ten doğrulanarak), Featuring, Search Ads.
-5. 2–3 hafta sonra ASC Analytics tekrar ölçüm (dönüşüm, "ezan vakti" sırası).
-6. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası. Gelir zinciri:
-   20/B belgesi + özel hesap → ASC IBAN.
+## NEXT
+1. Kullanıcı: sandbox satın alma/restore testi, ASC yıllık abonelik ürünü, yurtdışı vakit
+   karşılaştırması → Archive → 1.7'yi Submit (bkz. `PLAN.md`).
+2. **Çok-ay/yıllık imsakiye:** yakın 32 gün Diyanet-birebir + ötesi çevrimiçi "yaklaşık"
+   (etiketli). Önce kaynak kararı (Aladhan method=13 vs Awqat Salah+proxy) ve ölçümü genişlet
+   (çok şehir/mevsim/yurt dışı); **iftar için güvenlik payı şart**. Bkz. decisions 2026-09-27.
+3. Kur'an+meal: kullanıcıyla tartışma (seçenekler decisions 2026-09-27; öneri: önce resmî
+   siteye bağlantı + Diyanet izin yazışması). AI ezan: kullanıcı ElevenLabs anahtarını hazırlayınca.
+4. Kullanıcı (kod dışı): In-App Events (`docs/in-app-events.md`, tarih doğrulama), Featuring
+   (Aralık başına kadar), Search Ads, diaspora keyword yerelleştirmesi.
+5. 2–3 hafta sonra ASC Analytics tekrar ölçüm.
+6. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası.
 7. Kalan kozmetik StoreKit riskleri #1/#2/#3/#5 (düşük öncelik).
 
 ## BLOCKERS
-Yok — ama canlıya çıkış kullanıcı aksiyonlarına (ASC ürün, cihaz testleri, merge) bağlı.
+Yok.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.
@@ -132,9 +71,8 @@ gereksinimi); private yapılırsa App Store'daki linkler kırılır. Bilinçli k
 kullanıcı "non-trader" seçti, global erişilebilirlik açıldı, İspanya'dan test indirmesiyle
 doğrulandı (20 Ağu 2026). Kapandı.
 
-**ASC Paid Applications Agreement:** imzalandı (20 Ağu 2026), geçici/başka-iş banka
-hesabıyla — 20/B istisna belgesi + özel hesap gelince IBAN güncellenecek. Artık gelir
-zincirinin önünde engel değil.
+**ASC Paid Applications Agreement + banka:** imzalandı (20 Ağu 2026); geçici hesap yerine
+20/B istisna belgesiyle açılan özel ticari hesap ASC'ye eklendi (29 Eyl 2026). Kapandı.
 
 **Ezan ses dosyaları — ERTELENDİ:** CC0 adaylar bulundu (Madinah Fajr Azan - Sheikh Faisal
 Numan, archive.org; Beautiful adhan.ogg, Wikimedia) ama "makam-bazlı 5 ayrı vakit" seti

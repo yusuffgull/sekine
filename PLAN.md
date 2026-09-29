@@ -1,102 +1,69 @@
 # PLAN
 
-## Faz 0 — Büyüme/gelir planı: ASO refresh (23 Eyl 2026, sürüyor)
-1 yıllık büyüme/gelir yol haritası kabul edildi:
-`/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
-Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
+Yol haritası: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
+(gerekçe: `docs/decisions.md` 2026-09-23). Devir durumu: `docs/handoff.md`.
 
-- [x] ASC Analytics + rakip yorum analizi
-- [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
-- [x] Ekran görüntüsü sırası değişti + yeniden üretildi
-- [x] ASC'de 1.7 taslak sürümü açıldı, yeni metin/görseller girildi (submit EDİLMEDİ —
-      sandbox test bekliyor)
-- [ ] Kullanıcı: gerçek cihazda sandbox satın alma testi, sonra 1.7'yi submit et
-- [x] Faz 1: yıllık abonelik (ASC'de ürün oluşturma + sandbox testi kullanıcıda)
-- [x] Faz 2: yurtdışı konum + kritik saat dilimi düzeltmesi (gerçek cihazda Diyanet
-      karşılaştırması kullanıcıda)
-- [ ] Faz 3 (Ramazan 2027 = 8 Şub):
-  - [x] Kaza namazı takibi
-  - [x] Ramazan modu sayacı (sahur/iftar)
-  - [x] Paylaşılabilir vakit kartı
-  - [ ] Çok aylık/yıllık imsakiye — kullanıcı 2026-09-27'de ONAYLADI: yakın 32 gün Diyanet + ötesi çevrimiçi "yaklaşık" (etiketli, iftar güvenlik payı); sıradaki iş (decisions 2026-09-27)
-  - [ ] Kur'an+meal — lisans engeli; kullanıcıyla TARTIŞMA açık (seçenekler decisions 2026-09-27)
-  - [ ] Ezan sesi AI denemesi — kullanıcı kararı: önce ElevenLabs ücretsiz, olmazsa ücretli; hesap/anahtar kullanıcıda, panel kapısı geçerli (decisions 2026-09-27)
-  - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
-  - [x] Ramazan iftar Live Activity (`feat/live-activity`; Dynamic Island cihazda gözle kontrol edilmeli)
-  - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda
+## Durum (29 Eyl 2026)
+**Yayında: 1.6 (9).** **1.7 (10) hazır, henüz gönderilmedi** — `main`'de, sürüm numarası
+yükseltildi. İçeriği:
+- Yıllık abonelik (₺149.99, 7 gün deneme) + ömürlük yan yana; StoreKit entitlement
+  katmanı baştan yazıldı, restore zaman aşımı düzeltmesi.
+- Yurtdışı konum (ülke seçici, GPS ile ülke tespiti) + **kritik saat dilimi düzeltmesi**
+  (yurtdışı vakitler artık sabit `Europe/Istanbul` ile hesaplanmıyor).
+- Ramazan modu (sahur/iftar sayacı), oruç günü takibi, iftar Live Activity (kilit ekranı +
+  Dynamic Island, uygulama içi anahtarla).
+- Kaza namazı takibi (sayaç + seri ücretsiz, geçmiş istatistik premium).
+- Paylaşılabilir vakit kartı (filigranlı).
+- Bildirim planlayıcı (`RollingScheduler`) baştan yazıldı: sessiz bildirim kaybı ve
+  çoklu-instance race kapandı; ezan sesi seçici + LocationManager race düzeltmeleri.
+- Watch onboarding'e ülke seçici; tek `DiyanetDirectory` örneği.
+- ASO: yeni keywords/promo text/ekran görüntüsü sırası (Faz 0).
 
-## Durum
-**1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
-sekmesi ve Apple Watch companion app dahil. Yani Faz 1, 1.2, 1.3 ve Faz 2'nin tamamı
-(E4 dahil) kullanıcıya ulaştı.
+## Gönderim öncesi kalan (kullanıcı)
+- [ ] Gerçek cihazda sandbox satın alma + restore (yıllık ve ömürlük)
+- [ ] ASC'de yıllık abonelik ürünü: `com.sekineapp.sekine.premium.yearly` (₺149.99, 7 gün deneme)
+- [ ] Yurtdışı konum vakitlerini (Almanya/Hollanda) Diyanet sitesiyle karşılaştır
+- [ ] Dynamic Island'ı cihazda gözle kontrol et
+- [ ] Archive → ASC → What's New → Submit (adımlar: `docs/store-submission.md`)
 
-**1.4 (7) yayında.** İçeriği: rating isteme + Değerlendir/Paylaş, konum otomatik
-güncelleme (seyahat), Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış
-butonu race düzeltmesi.
+## Sonraki işler (Ramazan 2027 ≈ 8 Şub — hedef: 15 Ocak'ta mağazada)
+- [ ] **Çok aylık/yıllık imsakiye** — kullanıcı onayladı (2026-09-27): yakın 32 gün Diyanet
+      birebir + ötesi çevrimiçi "yaklaşık" (etiketli). **İftar için ≥2 dk güvenlik payı şart**
+      (Aladhan akşamı 1–2 dk erken veriyor). Önce kaynak kararı + çok şehir/mevsim ölçümü.
+- [ ] **Kur'an+meal** — lisans engeli (Tanzil meal ticari kullanıma kapalı). Kullanıcıyla
+      tartışma açık; öneri: önce resmî siteye bağlantı + Diyanet izin yazışması
+      (`docs/decisions.md` 2026-09-27).
+- [ ] **Ezan sesi** — kullanıcı ElevenLabs anahtarını hazırlayınca dinleme testi; 3–5 kişilik
+      dinleyici paneli kapısı; olmazsa yerel müezzin kaydı. Kod kapısı hazır: dosya
+      (`ezan.caf`, `ezan-full.m4a` → `Sekine/Resources/Audio/`) eklenince aktifleşir.
+- [ ] **In-App Events** — metinler hazır (`docs/in-app-events.md`); tarih doğrulama + ASC girişi kullanıcıda
+- [ ] Featuring nomination (Aralık başına kadar), Search Ads (10–30$/ay)
+- [ ] Diaspora için İngilizce/Almanca keyword yerelleştirmesi (ASC, kod dışı)
+- [ ] 2–3 hafta sonra ASC Analytics: dönüşüm (hedef ≥%1.6), "ezan vakti" sırası (baseline ~70)
 
-**1.5 (8) yayında** (27 Ağu 2026): kıble artık asla doğrulanmamış koordinattan
-çizilmiyor (geocode başarısızlığında saklanan sahte koordinat kaldırıldı; izin varsa
-gerçek GPS kullanılıyor) + drift uyarısına 25 km mesafe eşiği.
-Detay: `docs/handoff.md`, gerekçe: `docs/decisions.md`.
+## Bilinen riskler / açık
+- Gerçek cihaz gerektirenler: uzun süreli bildirim + BG-refresh güvenilirliği, Watch bildirim
+  dedup'ı, kıble pusulası (magnetometre).
+- Onboarding (iPhone) manuel arama hâlâ yalnızca Türkiye; GPS akışı ülkeyi otomatik bulur.
+- Abonelik sessiz süre dolumu ancak sonraki açılış/restore taramasında fark edilir (bilinçli).
+- Kalan kozmetik StoreKit riskleri #1/#2/#3/#5 (`docs/decisions.md`, düşük öncelik).
+- `project.yml` / `ci_scripts/` değişince push'tan ÖNCE `./scripts/verify-xcode-cloud.sh`.
 
-**1.6 (9) yayında** (28 Ağu 2026): Ayarlar ekranına, App Store'da yeni sürüm varsa
-bildirim gösteren ve tıklanınca App Store sayfasına yönlendiren bir satır eklendi
-(`AppUpdateChecker`, iTunes Lookup API, Trendyol tarzı). Detay: `docs/handoff.md`.
-
-**1.7 (henüz yayınlanmadı, 2026-09-08) — sessiz hata düzeltmeleri + StoreKit
-güvenilirliği.** Stark Industries Avengers kadrosu (JARVIS/VISION/BANNER) ile
-uçtan uca yapıldı, çoklu VISION review turlarından geçti:
-- Ezan bildirim sesi seçici artık dosya yoksa gizleniyor + mevcut kullanıcıların
-  bozuk state'i migrasyonla düzeltildi (commit `9b6e71b`).
-- `LocationManager` race condition single-flight pattern ile çözüldü.
-- `RollingScheduler` (bildirim planlama) baştan yazıldı: actor + gerçek FIFO,
-  stabil identifier + otomatik replace, transactional-benzeri reconciliation,
-  legacy migrasyon. 6 tur review, kalan 3 küçük bulgu (kuyruk-önceliği, markExpired
-  yarışı, injection-hatası-başarı-sayılması) ayrı bir takip turunda ele alınacak.
-- `Store.swift` (StoreKit entitlement) baştan yazıldı: nesil-korumalı single-flight
-  refresh, `EntitlementState` (loading/owned/notOwned/indeterminate), revocation
-  `Transaction.updates`'e taşındı, `RestoreOutcome`. 6 tur review sonrası mevcut
-  haliyle kabul edildi — kalan 6 bilinen risk `docs/decisions.md` 2026-09-08'de
-  kayıtlı, ayrı bir StoreKit-v2 turu gerektiriyor.
-- `RollingScheduler` 7 tur review + bir gerçek test-kilitlenmesi düzeltmesinden
-  sonra mevcut haliyle kabul edildi — kalan 2 bilinen risk (düşük ciddiyet,
-  BGTask zaman-aşımı kenar durumları) `docs/decisions.md` 2026-09-08'de kayıtlı.
-- **Henüz yapılmadı:** gerçek cihazda sandbox satın alma/restore testi, App Store
-  submission. Ezan ses dosyası (CC0 aday bulundu, kullanıcı onayı bekliyor),
-  imsakiye çok-ay genişletmesi (kaynak kısıtı nedeniyle ertelendi) bu sürüme dahil
-  değil.
+## Kapanmış kapılar
+- [x] AB erişilebilirliği (non-trader, global) — 20 Ağu 2026
+- [x] ASC Paid Applications Agreement — 20 Ağu 2026
+- [x] 4 IAP ürünü (1.3 ile onaylı)
+- [x] **20/B istisna belgesi + özel ticari banka hesabı ASC'ye eklendi — 29 Eyl 2026**
+      (geçici hesap değişti; gelir zincirinin önünde engel kalmadı)
+- [x] Faz 0 ASO: ASC'de 1.7 taslağı açıldı, yeni metin/görseller girildi
 
 ## Yayınlanan sürümler
-- **1.0** — vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget. Diyanet
-  birebir vakit kaynağı (DiyanetProvider).
-- **1.1** — yayın sonrası UX: bildirim metinleri, DynamicType, aylık otomatik yükleme,
-  widget tanıtımı, 434 il/ilçe adı düzeltmesi.
-- **1.2** — Time-Sensitive entitlement + "Odak modunda da uyar" (opt-in), kilit ekranı /
-  StandBy widget'ları, hicri tarih, kıble saati; bildirim güvenilirliği (iki-geçişli
-  bütçe, gece BGProcessingTask); Cuma/kandil/günlük ayet hatırlatmaları.
-- **1.3** — Faz 2 tamamı: StoreKit 2 altyapısı, tam ezan mekanizması, premium temalar +
-  alternatif ikon, ücretsiz Zikir sekmesi, çoklu konum, vakit-başına ses, premium widget
-  accent, **Apple Watch app + komplikasyonlar + WatchConnectivity**.
-- **1.4** — growth (rating isteme, Değerlendir/Paylaş) + konum otomatik güncelleme,
-  Ayarlar'da GPS butonu, Cuma/ayet-dua saati açıklamaları, bağış butonu race düzeltmesi.
-
-## Kullanıcı kapıları (kod dışı)
-- [x] AB erişilebilirliği (non-trader, global)
-- [x] ASC Paid Applications Agreement (geçici banka hesabıyla)
-- [x] 4 IAP ürünü ASC'de oluşturuldu ve 1.3 ile onaylandı
-- [ ] 20/B istisna belgesi + özel ticari hesap → gelince ASC'de IBAN güncelle (aciliyeti düşük)
-- [ ] Ezan ses dosyaları — ERTELENDİ (lisans araştırması durduruldu; kod gate'i hazır,
-      dosya eklenince otomatik aktifleşir)
-
-## Açık işler / bilinen riskler
-- Gerçek cihazda uzun süreli bildirim + BG-refresh güvenilirlik testi (kullanıcı).
-- Kıble pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
-- Watch bildirim dedup'ı (iki cihazda aynı anda tek bildirim) gerçek cihaz/TestFlight
-  gerektiriyor, headless doğrulanamadı.
-- ~~Ayrı `DiyanetDirectory` örnekleri~~ — tek örneğe indirildi (feat/polish-and-hardening).
-- `project.yml` veya `ci_scripts/` değişince push'tan ÖNCE `./scripts/verify-xcode-cloud.sh`.
-
-## Sonraki (henüz başlanmadı)
-- ASO: metadata güncellemesi 1.4 ile girilecek; yayından ~1 hafta sonra App Analytics'e
-  bakıp Apple Search Ads'e başvurulup başvurulmayacağına karar verilecek.
-- Android (Kotlin, ayrı repo), globalleşme (i18n, dünya konumları), ayet paylaşımı.
+- **1.0** — vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget; Diyanet birebir.
+- **1.1** — UX: bildirim metinleri, DynamicType, aylık otomatik yükleme, 434 il/ilçe adı düzeltmesi.
+- **1.2** — Time-Sensitive + "Odak modunda da uyar", kilit ekranı/StandBy widget'ları, hicri
+  tarih, bildirim güvenilirliği (iki-geçişli bütçe, gece BGProcessingTask), Cuma/kandil/ayet.
+- **1.3** — StoreKit 2 (Ömürlük Premium + bağış), tam ezan mekanizması, premium temalar,
+  ücretsiz Zikir sekmesi, çoklu konum, **Apple Watch app + komplikasyonlar**.
+- **1.4** — rating isteme, konum otomatik güncelleme, GPS butonu, bağış butonu race düzeltmesi.
+- **1.5 (8)** (27 Ağu) — kıble asla doğrulanmamış koordinattan çizilmez; drift uyarısına 25 km eşiği.
+- **1.6 (9)** (28 Ağu) — "yeni sürüm mevcut" bildirimi (`AppUpdateChecker`).

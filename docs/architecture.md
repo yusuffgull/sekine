@@ -66,6 +66,9 @@ cache'ten okur; ağ gerektirmez.
   `.owned` sayılır. Abonelik yenilemesi `Transaction.updates`'ten anında yakalanır; sessiz
   süre dolumu (kullanıcı yenilemedi) ancak bir sonraki app-launch/restore taramasında fark
   edilir — bilinçli v1 sınırı (bkz. `Store.refreshEntitlements()` doc-comment'i).
+- **Ramazan/oruç/Live Activity (2026-09-24):** `RamadanInfo` sahur/iftar sayacını besler; oruç günü
+  işareti Ramazan kartında; iftar Live Activity (`IftarActivityAttributes`) uygulama içi anahtarla.
+- **Paylaşım kartı:** `ImageRenderer` ile filigranlı vakit kartı (Home'dan paylaşılır).
 - **Apple Watch (Faz E4, tamamlandı):** `SekineWatch` hedefi, Core katmanını değişikliksiz
   kullanıyor; iPhone↔Watch senkronizasyonu `WatchConnectivity` ile (`WatchSessionManager`,
   her iki tarafta).

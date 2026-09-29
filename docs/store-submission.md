@@ -81,19 +81,27 @@ kullanılmaz):**
 > • Apple Watch uygulaması ve komplikasyonlar.
 > • Her yaşa uygun — büyük, net, anlaşılır tasarım.
 >
-> Reklam yok. Abonelik yok. Dilerseniz tek seferlik Premium ile destek olabilirsiniz.
+> Reklam yok. Dilerseniz tek seferlik Premium veya yıllık abonelik ile destek olabilirsiniz.
 
 **Neden bu metinler:** Rakip uygulamaların (9 uygulama, 327 yorum) şikayet analizinde
 açık ara #1 şikayet reklam (uygunsuz reklam, açılışta tam ekran reklam yüzünden
 uzun süreli kullanıcı kaybı). Sekine'nin reklamsız olması en güçlü fark, description ve
 promo text bunu öne çıkarıyor.
 
+**1.7 What's New (taslak):**
+> • Yıllık abonelik seçeneği (7 gün ücretsiz deneme); ömürlük Premium aynen duruyor.
+> • Yurtdışı konum desteği ve doğru saat dilimi.
+> • Ramazan modu: sahur/iftar sayacı, oruç takibi, iftar Live Activity.
+> • Kaza namazı takibi.
+> • Vakit kartını paylaşma.
+> • Bildirimlerin güvenilirliği ve satın alma geri yükleme iyileştirmeleri.
+
 ## Review notları (App Review'a)
 - Hesap/giriş gerektirmez, test hesabı gerekli değildir.
 - Konum izni: yalnızca namaz vakti hesabı için, cihazda kullanılır; sunucuya kimlik
   bilgisi göndermez.
 - Uygulama ücretsizdir; isteğe bağlı IAP: "Sekine Premium" (ömür boyu, tek seferlik,
-  `com.sekineapp.sekine.premium.lifetime`) ve 3 bağış (`tip.small/medium/large`,
+  `com.sekineapp.sekine.premium.lifetime`; yıllık abonelik `com.sekineapp.sekine.premium.yearly`, 7 gün deneme) ve 3 bağış (`tip.small/medium/large`,
   consumable). IAP'siz de uygulama tam işlevseldir (Zikir sekmesi, vakitler, bildirimler
   ücretsiz) — premium yalnızca tam ezan sesi, ek temalar, çoklu konum gibi ekstraları açar.
 - Apple Watch companion app dahildir (`SekineWatch`), iPhone'dan bağımsız da çalışır
