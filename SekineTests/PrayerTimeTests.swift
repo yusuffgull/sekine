@@ -163,8 +163,9 @@ final class PrayerTimeTests: XCTestCase {
             MiladiTarihKisa: "01.08.2026",
             Imsak: "04:08", Gunes: "05:53", Ogle: "13:16",
             Ikindi: "17:10", Aksam: "20:28", Yatsi: "22:05",
-            HicriTarihUzun: "18 Safer 1448", HicriTarihKisa: "18.2.1448", KibleSaati: "12:17")
-        let day = vakit.toPrayerDay(calendar: cal, timeZone: tz)
+            HicriTarihUzun: "18 Safer 1448", HicriTarihKisa: "18.2.1448", KibleSaati: "12:17",
+            MiladiTarihUzunIso8601: nil)
+        let day = vakit.toPrayerDay(calendar: cal, defaultTimeZone: tz)
         XCTAssertNotNil(day)
         XCTAssertEqual(day?.times.count, 6)
         let maghrib = day?.time(for: .maghrib)
@@ -180,6 +181,59 @@ final class PrayerTimeTests: XCTestCase {
         let qc = cal.dateComponents([.hour, .minute], from: day?.qiblaTime ?? Date())
         XCTAssertEqual(qc.hour, 12)
         XCTAssertEqual(qc.minute, 17)
+    }
+
+    /// KRİTİK: yurt dışı bir ilçe için API'nin döndürdüğü GERÇEK ofset (ör. Berlin
+    /// +02:00) kullanılmalı, `defaultTimeZone` (Türkiye +03:00) yedeğine SESSİZCE
+    /// düşülmemeli. Aksi halde Berlin için "19:15" etiketli akşam vakti Türkiye saatiyle
+    /// yorumlanır ve mutlak `Date` 1 saat YANLIŞ olur (bkz. docs/decisions.md 2026-09-24).
+    func testDiyanetVakitUsesLocationOwnOffsetNotTurkeyFallback() throws {
+        let cal = Calendar(identifier: .gregorian)
+        let istanbul = TimeZone(identifier: "Europe/Istanbul")!
+        let berlinVakit = DiyanetVakit(
+            MiladiTarihKisa: "19.09.2026",
+            Imsak: "04:49", Gunes: "06:47", Ogle: "13:05",
+            Ikindi: "16:26", Aksam: "19:21", Yatsi: "20:57",
+            HicriTarihUzun: nil, HicriTarihKisa: nil, KibleSaati: nil,
+            MiladiTarihUzunIso8601: "2026-09-19T00:00:00.0000000+02:00")
+        let day = berlinVakit.toPrayerDay(calendar: cal, defaultTimeZone: istanbul)
+        let maghrib = try XCTUnwrap(day?.time(for: .maghrib))
+
+        // Berlin +02:00'da 19:21 = UTC 17:21 = İstanbul +03:00'te 20:21.
+        var istCal = cal
+        istCal.timeZone = istanbul
+        let comps = istCal.dateComponents([.hour, .minute], from: maghrib)
+        XCTAssertEqual(comps.hour, 20)
+        XCTAssertEqual(comps.minute, 21)
+    }
+
+    /// `defaultTimeZone` yedeği yalnızca ofset ayrıştırılamadığında devreye girer.
+    func testDiyanetVakitFallsBackToDefaultTimeZoneWhenOffsetMissing() {
+        let cal = Calendar(identifier: .gregorian)
+        let istanbul = TimeZone(identifier: "Europe/Istanbul")!
+        let vakit = DiyanetVakit(
+            MiladiTarihKisa: "19.09.2026",
+            Imsak: "04:49", Gunes: "06:47", Ogle: "13:05",
+            Ikindi: "16:26", Aksam: "19:21", Yatsi: "20:57",
+            HicriTarihUzun: nil, HicriTarihKisa: nil, KibleSaati: nil,
+            MiladiTarihUzunIso8601: nil)
+        let day = vakit.toPrayerDay(calendar: cal, defaultTimeZone: istanbul)
+        let maghrib = try? XCTUnwrap(day?.time(for: .maghrib))
+        var istCal = cal
+        istCal.timeZone = istanbul
+        let comps = istCal.dateComponents([.hour, .minute], from: maghrib ?? Date())
+        XCTAssertEqual(comps.hour, 19)
+        XCTAssertEqual(comps.minute, 21)
+    }
+
+    func testParseUTCOffsetSecondsHandlesPositiveNegativeAndMalformed() {
+        XCTAssertEqual(
+            DiyanetVakit.parseUTCOffsetSeconds(fromISO8601: "2026-09-19T00:00:00.0000000+02:00"), 7200)
+        XCTAssertEqual(
+            DiyanetVakit.parseUTCOffsetSeconds(fromISO8601: "2026-09-19T00:00:00.0000000-05:00"), -18000)
+        XCTAssertNil(DiyanetVakit.parseUTCOffsetSeconds(fromISO8601: nil))
+        XCTAssertNil(DiyanetVakit.parseUTCOffsetSeconds(fromISO8601: "2026-09-19T00:00:00.0000000Z"))
+        XCTAssertNil(DiyanetVakit.parseUTCOffsetSeconds(fromISO8601: "kısa"))
     }
 
     func testDiyanetProviderRequiresDistrictID() {

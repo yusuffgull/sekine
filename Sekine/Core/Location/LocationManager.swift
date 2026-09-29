@@ -9,6 +9,7 @@ struct ResolvedPlace {
     var location: SavedLocation
     var cityName: String?      // il (administrativeArea)
     var districtName: String?  // ilçe (subAdministrativeArea/locality)
+    var isoCountryCode: String? // ör. "DE" — Diyanet ülke eşleştirmesi için (bkz. DiyanetDirectory.country(forISOCode:))
 }
 
 @MainActor
@@ -73,11 +74,19 @@ final class LocationManager: NSObject, ObservableObject {
     }
 
     /// GPS'ten okuyup Diyanet il/ilçe listesiyle eşleştirir (birebir vakit için).
-    /// Eşleşme yoksa koordinatla döner (yaklaşık vakit), `matched: false`.
+    /// Önce GPS'in verdiği ülkeyi Diyanet'in ülke listesiyle eşleştirir (bulunamazsa
+    /// Türkiye'ye düşer — eski davranışla geriye dönük uyumlu), SONRA o ülke içinde
+    /// il/ilçe arar. Böylece yurt dışındaki bir kullanıcı sessizce Türkiye il listesinde
+    /// aranıp "eşleşme yok" sonucuna düşmez. Eşleşme yine de yoksa koordinatla döner
+    /// (yaklaşık vakit, `LocalCalculationProvider`), `matched: false`.
     func resolveAndMatchDiyanetLocation(directory: DiyanetDirectory) async throws
         -> (location: SavedLocation, matched: Bool) {
         let resolved = try await resolveCurrentLocation()
-        if let match = await directory.match(cityName: resolved.cityName, districtName: resolved.districtName) {
+        let countryID = await directory.country(forISOCode: resolved.isoCountryCode)?.UlkeID
+            ?? DiyanetDirectory.turkeyCountryID
+        if let match = await directory.match(
+            cityName: resolved.cityName, districtName: resolved.districtName, countryID: countryID
+        ) {
             let locale = Locale(identifier: "tr_TR")
             let name = "\(match.district.name.capitalized(with: locale)), \(match.city.name.capitalized(with: locale))"
             return (SavedLocation(name: name, latitude: resolved.location.latitude,
@@ -91,8 +100,10 @@ final class LocationManager: NSObject, ObservableObject {
     /// Hiçbiri çözülemezse **nil** döner — uydurma bir koordinat ASLA üretilmez.
     /// (Kıble bu koordinattan hesaplandığı için yanlış değer kullanıcıyı sessizce
     /// yanlış yöne yönlendirir; koordinatsız kalmak yanlış olmaktan iyidir.)
-    func geocodeCoordinate(district: String, city: String) async -> (latitude: Double, longitude: Double)? {
-        for query in ["\(district), \(city), Türkiye", "\(city), Türkiye"] {
+    /// `countryName` verilmezse Türkiye varsayılır (eski çağıranlarla geriye dönük uyumlu).
+    func geocodeCoordinate(district: String, city: String, countryName: String? = nil) async -> (latitude: Double, longitude: Double)? {
+        let country = countryName ?? "Türkiye"
+        for query in ["\(district), \(city), \(country)", "\(city), \(country)"] {
             if let hit = await search(query).first,
                let latitude = hit.latitude, let longitude = hit.longitude {
                 return (latitude, longitude)
@@ -145,12 +156,13 @@ extension LocationManager: CLLocationManagerDelegate {
                 let result = ResolvedPlace(
                     location: SavedLocation(name: name, latitude: coord.latitude, longitude: coord.longitude),
                     cityName: mark?.administrativeArea,
-                    districtName: mark?.subAdministrativeArea ?? mark?.locality)
+                    districtName: mark?.subAdministrativeArea ?? mark?.locality,
+                    isoCountryCode: mark?.isoCountryCode)
                 continuation?.resume(returning: result)
             } catch {
                 let result = ResolvedPlace(
                     location: SavedLocation(name: "Konumum", latitude: coord.latitude, longitude: coord.longitude),
-                    cityName: nil, districtName: nil)
+                    cityName: nil, districtName: nil, isoCountryCode: nil)
                 continuation?.resume(returning: result)
             }
             continuation = nil

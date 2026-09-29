@@ -8,7 +8,7 @@ struct SettingsView: View {
     @EnvironmentObject private var iap: Store
     @EnvironmentObject private var location: LocationManager
 
-    @StateObject private var directory = DiyanetDirectory()
+    @EnvironmentObject private var directory: DiyanetDirectory
     @State private var showSearch = false
     @State private var showPaywall = false
     @State private var currentIcon = AppIconOption.current
@@ -291,6 +291,10 @@ struct SettingsView: View {
     // MARK: Ek Hatırlatmalar
     private var extraRemindersSection: some View {
         Section {
+            Toggle("Ramazan iftar sayacı (kilit ekranı)", isOn: Binding(
+                get: { settings.iftarLiveActivity },
+                set: { settings.iftarLiveActivity = $0; NotificationCenter.default.post(name: .iftarLiveActivityPreferenceChanged, object: nil) }
+            ))
             Toggle("Cuma hatırlatması", isOn: Binding(
                 get: { settings.fridayReminder },
                 set: { settings.fridayReminder = $0; reschedule() }

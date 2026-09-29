@@ -61,7 +61,11 @@ struct WatchOnboardingView: View {
         do {
             let resolved = try await location.resolveCurrentLocation()
             var place = resolved.location
-            if let match = await directory.match(cityName: resolved.cityName, districtName: resolved.districtName) {
+            // GPS'in verdiği ülkede ara (yurt dışı kullanıcı sessizce Türkiye'de aranmasın).
+            let countryID = await directory.country(forISOCode: resolved.isoCountryCode)?.UlkeID
+                ?? DiyanetDirectory.turkeyCountryID
+            if let match = await directory.match(
+                cityName: resolved.cityName, districtName: resolved.districtName, countryID: countryID) {
                 place.diyanetDistrictID = match.district.IlceID
                 place.name = match.district.name
             }
@@ -85,6 +89,9 @@ private struct WatchCityPickerView: View {
     let onSelect: (SavedLocation) -> Void
 
     @EnvironmentObject private var location: LocationManager
+    @State private var countries: [DiyanetCountry] = []
+    @State private var selectedCountry: DiyanetCountry?
+    @State private var pickingCountry = false
     @State private var cities: [DiyanetCity] = []
     @State private var selectedCity: DiyanetCity?
     @State private var districts: [DiyanetDistrict] = []
@@ -103,7 +110,20 @@ private struct WatchCityPickerView: View {
                 }
                 .disabled(isResolvingCoordinate)
                 Button("Geri") { self.selectedCity = nil; districts = [] }
+            } else if pickingCountry {
+                ForEach(countries) { country in
+                    Button(country.name.capitalized(with: Locale(identifier: "tr_TR"))) {
+                        selectedCountry = country
+                        pickingCountry = false
+                        Task { await loadCities(for: country) }
+                    }
+                }
             } else {
+                if let selectedCountry {
+                    Button("Ülke: \(selectedCountry.name.capitalized(with: Locale(identifier: "tr_TR")))") {
+                        pickingCountry = true
+                    }
+                }
                 ForEach(cities) { city in
                     Button(city.name) { Task { await select(city) } }
                 }
@@ -116,7 +136,16 @@ private struct WatchCityPickerView: View {
     }
 
     private func loadCities() async {
-        do { cities = try await directory.cities() } catch { errorText = "Liste yüklenemedi." }
+        do {
+            countries = try await directory.countries()
+            selectedCountry = countries.first { $0.UlkeID == DiyanetDirectory.turkeyCountryID } ?? countries.first
+            cities = try await directory.cities(countryID: selectedCountry?.UlkeID ?? DiyanetDirectory.turkeyCountryID)
+        } catch { errorText = "Liste yüklenemedi." }
+    }
+
+    private func loadCities(for country: DiyanetCountry) async {
+        cities = []
+        do { cities = try await directory.cities(countryID: country.UlkeID) } catch { errorText = "Liste yüklenemedi." }
     }
 
     private func select(_ city: DiyanetCity) async {
@@ -128,7 +157,9 @@ private struct WatchCityPickerView: View {
         isResolvingCoordinate = true
         // Kıble + fallback için koordinat çöz (Diyanet vakti için gerekmez).
         // Çözülemezse koordinat nil kalır; placeholder saklanmaz.
-        let coord = await location.geocodeCoordinate(district: district.name, city: city.name)
+        let coord = await location.geocodeCoordinate(
+            district: district.name, city: city.name,
+            countryName: selectedCountry?.name.capitalized(with: Locale(identifier: "tr_TR")))
         isResolvingCoordinate = false
         onSelect(SavedLocation(
             name: "\(district.name), \(city.name)",

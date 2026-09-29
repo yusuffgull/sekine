@@ -33,5 +33,7 @@ render "2-onboarding" "Diyanet vakitleri, çevrimdışı çalışır"
 render "3-qibla"      "Kıble yönünü kolayca bulun"
 render "4-monthly"    "Aylık imsakiye, tek bakışta"
 render "5-settings"   "Bildirimler düzenli yenilenir, susmaz"
+render "6-ramadan"    "Ramazan'da iftar ve sahur sayacı"
+render "7-kaza"       "Kaza namazlarınızı takip edin"
 
 echo "OK: marketing screenshots written to store/screenshots-marketing/ and store/screenshots-marketing-6.5/"

@@ -7,6 +7,7 @@ struct HomeView: View {
     @EnvironmentObject private var adhan: AdhanPlayer
 
     @State private var showPaywall = false
+    @State private var shareImage: UIImage?
 
     var body: some View {
         ZStack {
@@ -15,6 +16,9 @@ struct HomeView: View {
                 VStack(spacing: 20) {
                     header
                     if store.today != nil {
+                        if let schedule = ramadanSchedule {
+                            RamadanCard(schedule: schedule)
+                        }
                         nextPrayerCard
                         todayList
                     } else if store.isLoading {
@@ -30,6 +34,7 @@ struct HomeView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
+                    shareButton
                     adhanButton
                 }
                 .padding()
@@ -41,6 +46,53 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showPaywall) { PaywallView() }
+        .task(id: store.today?.dayStart) { renderShareImage() }
+        .onAppear {
+            #if DEBUG
+            // Ekran doğrulaması: kartı diske yazar (bkz. docs/decisions.md 2026-09-24).
+            if ProcessInfo.processInfo.arguments.contains("-uiTestExportShareCard") {
+                renderShareImage()
+                if let data = shareImage?.pngData() {
+                    try? data.write(to: FileManager.default.temporaryDirectory
+                        .appendingPathComponent("sekine-share-card.png"))
+                }
+            }
+            #endif
+        }
+    }
+
+    /// Bugünün vakit kartı: ücretsiz, her zaman filigranlı (organik büyüme).
+    @ViewBuilder private var shareButton: some View {
+        if let shareImage {
+            ShareLink(
+                item: Image(uiImage: shareImage),
+                message: Text("Bugünün namaz vakitleri — Sekine, reklamsız ve takipsiz: \(SettingsView.appStoreURL().absoluteString)"),
+                preview: SharePreview("Bugünün vakitleri", image: Image(uiImage: shareImage))
+            ) {
+                Label("Bugünün vakitlerini paylaş", systemImage: "square.and.arrow.up")
+                    .font(SekineFont.row(settings.fontScale))
+                    .foregroundStyle(Palette.accent)
+            }
+        }
+    }
+
+    private func renderShareImage() {
+        guard let day = store.today, let schedule = store.schedule else { shareImage = nil; return }
+        shareImage = ShareCardRenderer.image(
+            placeName: settings.location?.name ?? schedule.placeName,
+            day: day, timeZone: schedule.timeZone)
+    }
+
+    /// Ramazan kartı için plan. DEBUG'da `-uiTestRamadan` ile tüm günler Ramazan'mış gibi
+    /// işaretlenir (ekran doğrulaması için; gerçek veride hicri ay 9 gerekir).
+    private var ramadanSchedule: PrayerSchedule? {
+        guard let schedule = store.schedule else { return nil }
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestRamadan") {
+            return schedule.forcingRamadanForUITest()
+        }
+        #endif
+        return schedule
     }
 
     private var header: some View {
@@ -53,7 +105,8 @@ struct HomeView: View {
             Text(Self.dateFormatter.string(from: Date()))
                 .font(SekineFont.caption(settings.fontScale))
                 .foregroundStyle(Palette.textSecondary)
-            if let hicri = store.today?.hicriDate {
+            // Ramazan kartıyla AYNI plandan (DEBUG zorlamasında da tutarlı görünsün).
+            if let hicri = ramadanSchedule?.day(containing: Date())?.hicriDate ?? store.today?.hicriDate {
                 Text(hicri)
                     .font(SekineFont.caption(settings.fontScale))
                     .foregroundStyle(Palette.textSecondary.opacity(0.8))

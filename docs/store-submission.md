@@ -108,3 +108,17 @@ promo text bunu öne çıkarıyor.
 - **Watch App ID capability hatası** → `watchkitapp` ve `.complications` App ID'lerinde
   App Groups (+ Watch app'te Time Sensitive Notifications) Developer portal'da açık olmalı;
   aksi halde Xcode Cloud'un export adımı imzalama hatası verir.
+
+## Yeni özellik görselleri (2026-09-26)
+- `store/screenshots/6-ramadan.png` + `7-kaza.png` ham (6.9", 9:41 status bar, `simctl status_bar
+  override`), `generate-store-screenshots.sh` ile pazarlama görseline çevrildi.
+- **Kaza (7)** ASC'ye yüklenebilir: iç tutarlı örnek veri (`-uiTestSeedKaza`).
+- **Ramazan (6) YÜKLENMEDİ:** DEBUG `-uiTestRamadan` ile simüle (hicri "12 Ramazan" ama cihaz tarihi
+  Eylül, vakitler Eylül'ün) → miladi tarih/saatler tutarsız, yanıltıcı olabilir. **Ramazan'da
+  (≈8 Şub 2027) gerçek veriyle yeniden çek**, ondan sonra yükle; sezon başında 2. sıraya al.
+- Çekim ipucu: değerlendirme istemi çıkmasın diye `-growth.significantOpenCount 0` argümanı;
+  `simctl io screenshot` çıktısını /tmp'ye al, sonra kopyala (repo yoluna doğrudan yazmak
+  "Operation not permitted" verebilir).
+- **ASC 1.7 taslağı durumu (2026-09-26):** 6 görsel yüklü (6.5"); ASC'deki fiili sıra: 1-home,
+  2-qibla, 3-onboarding, 4-monthly, 5-settings, 6-kaza (çoklu yüklemede sıra dosya sırasıyla
+  gelmez; istenirse ASC'de sürükleyerek değiştir). Ramazan görseli yüklenmedi (yukarıya bak).

@@ -2,6 +2,290 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-24 — Yıllık abonelik eklendi (Faz 1, T3 — para akışı)
+
+**Karar:** `com.sekineapp.sekine.premium.yearly` (₺149.99, 7 gün ücretsiz deneme) ömürlük
+premium'un yanına eklendi, ikisi birlikte sunuluyor (yıllık önerilen/birincil buton).
+Kapsam: büyüme planının Faz 1'i (bkz. `docs/handoff.md`,
+`~/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`).
+
+**Uygulama:** `Store.entitlementProductIDs` (lifetime + yearly) tek doğruluk kaynağı;
+`applyVerifiedTransactionInfo`, `entitlementsScanProvider`, `loadProducts` hepsi bunu
+kullanıyor — yeni bir entitlement veren ürün eklenmek istenirse tek satır. Mevcut
+generation-korumalı race-condition mimarisine (6 tur review'dan geçmiş, bkz. 2026-09-08
+girdisi) DOKUNULMADI — yalnızca "hangi productID entitlement verir" sorgusu genişletildi.
+
+**Bilinçli kabul edilen sınır:** Abonelik sessizce süresi dolduğunda (kullanıcı
+yenilemedi) bu yalnızca bir sonraki app-launch/restore taramasında fark edilir, anlık
+değil — çünkü StoreKit süre dolumunda `Transaction.updates` event'i GÖNDERMEZ, sadece
+`currentEntitlements`'tan düşer. Yenileme ise anında yakalanır (yeni transaction).
+Gerekirse `expirationDate` bazlı arka plan kontrolüyle sıkılaştırılabilir — v1 için
+gereksiz karmaşıklık.
+
+**Doğrulama:** 72 birim testi (2 yeni: yıllık satın alma entitlement veriyor, bağış
+entitlement VERMİYOR) yeşil, iOS simülatör derlemesi başarılı. Gerçek StoreKit
+satın alma/abonelik yenileme/iptal akışı bu ortamda test edilemiyor (bkz.
+`StoreEntitlementTests.swift` başlık yorumu) — gerçek cihaz sandbox testi hâlâ gerekiyor
+(1.7 ile birlikte, submit öncesi).
+
+**Elenen alternatif:** Yalnızca aboneliğe geçip ömürlüğü kaldırmak — kullanıcı bunu
+onaylı planda reddetti ("Ömürlük + yıllık abonelik"), "abonelik zorunluluğu yok" mevcut
+konumlandırmasıyla çelişir.
+## 2026-09-24 — Yurtdışı konum desteği + kritik saat dilimi düzeltmesi (Faz 2)
+
+**Karar:** `DiyanetProvider`, Diyanet vakit ID'si seçilen HER konum için sabit
+`Europe/Istanbul` varsayıyordu — Türkiye dışında bu SESSİZCE yanlış vakit demekti
+(bkz. memory: dini veride doğruluk, dar kapsam yok tam düzeltme). Aynı `ezanvakti
+.emushaf.net` servisi zaten 105+ ülkeyi kapsıyor (Almanya, Hollanda, ABD dahil) —
+ayrı bir veri kaynağı gerekmedi, yalnızca (1) ülke seçimi ve (2) doğru saat dilimi
+eklendi.
+
+**Saat dilimi düzeltmesi (kritik, ölçülüp doğrulandı):** API'nin
+`GreenwichOrtalamaZamani` alanı yurt dışı ilçelerde GÖZLEMSEL OLARAK hep Türkiye'nin
+kendi ofsetini döndürüyor (Berlin için de "+3" veriyor — yanlış). Ama aynı yanıttaki
+`MiladiTarihUzunIso8601` alanının sonundaki `±HH:MM` kısmı (ör. Berlin Eylül'de
+`+02:00`, Türkiye `+03:00`) GÜNLÜK ve DOĞRU — hedef ülkenin kendi yaz/kış saati
+kuralına göre hesaplanmış. `curl` ile canlı doğrulandı (Berlin ilçe ID 11002 →
+`+02:00`, Türkiye → `+03:00`, aynı gün). Artık her günün MUTLAK `Date`'i kendi
+GERÇEK ofsetinden hesaplanıyor; ofset ayrıştırılamazsa (alan yok/beklenmedik biçim)
+`Europe/Istanbul`'a düşülüyor (geriye dönük uyumlu, asla crash/veri kaybı yok).
+
+**Bilinen dar sınır (kabul edildi):** `PrayerSchedule.timeZoneIdentifier` tek bir
+alan (şema değişikliği gerektirmeden) — ilk günün ofseti temsilci alınıyor. DST
+uygulayan bir ülkede geçiş günü tam kayan pencerenin ortasına denk gelirse (yılda
+en fazla 2 gün), `day(containing:)` gün sınırını ~1 saatlik dar bir pencerede yanlış
+kovaya düşürebilir. Her günün KENDİ mutlak `Date`'i yine de doğru hesaplanmış
+durumda — yalnızca "hangi gün kovası" sınıflandırması dar bir pencerede kayabilir.
+Şema geniş çaplı değişmeden (her `PrayerDay`'e kendi tz'sini eklemek) tam çözülemez;
+v1 için kabul edilebilir.
+
+**`LocalCalculationProvider`'da da aynı sınıf hata bulundu ve düzeltildi:** ağ/GPS
+yokken devreye giren yerel (adhan-swift) hesaplama da gün sınırını sabit
+`Europe/Istanbul` ile çiziyordu. `TimeZone.current`'a çevrildi — bu fallback yalnızca
+kullanıcının FİZİKSEL olarak bulunduğu an devreye girdiği için cihazın kendi saat
+dilimi en iyi yaklaşık sinyal. Hesaplama METODU (`CalculationMethod.turkey`,
+Diyanet'e en yakın fıkıh parametreleri) bilinçli olarak konumdan bağımsız kalmaya
+devam ediyor.
+
+**Ülke seçimi:** `DiyanetDirectory`'ye `countries()` + `cities(countryID:)` +
+`country(forISOCode:)` eklendi. GPS akışı (`LocationManager.resolveAndMatchDiyanet
+Location`) artık önce GPS'in verdiği ülkeyi (`CLPlacemark.isoCountryCode` →
+`Locale.localizedString(forRegionCode:)` → Diyanet'in İngilizce ülke adıyla
+eşleştirme) bulup O ÜLKE içinde arıyor — önceden yalnızca Türkiye il listesinde
+aranıyordu, yurt dışındaki kullanıcı için her zaman "eşleşme yok" sonucu veriyordu
+(rakip yorum analizinde de "yurtdışı konum kabul etmiyor" sık şikayetti). Manuel
+arama (`LocationSearchSheet`) da bir ülke seçici kazandı, varsayılan Türkiye.
+
+**Bilinçli kapsam dışı bırakılan (ayrı bir tur gerektirir):** Onboarding ve
+watchOS'un kendi `LocationSearchSheet`-benzeri akışları (`OnboardingView`,
+`WatchOnboardingView`) hâlâ yalnızca Türkiye arıyor (`directory.cities()`
+parametresiz çağrılıyor, varsayılan Türkiye'ye düşüyor — davranış DEĞİŞMEDİ, kırılma
+yok). GPS akışı zaten otomatik ülke tespit ediyor; bu iki ekrandaki MANUEL arama
+akışına ülke seçici eklemek ayrı, düşük öncelikli bir iyileştirme (çoğu kullanıcı
+GPS kullanıyor).
+
+**Doğrulama:** yeni birim testleri (Berlin ofsetinin Türkiye'ye sessizce
+düşmediğini, offset ayrıştırmanın +/-/malformed durumlarını doğrulayan) dahil test
+suite'i yeşil, iOS simülatör derlemesi (Watch hedefi dahil, tek `Sekine` şeması)
+başarılı. Gerçek cihazda Almanya/Hollanda için Diyanet web sitesiyle birebir
+karşılaştırma HENÜZ yapılmadı — kullanıcı aksiyonu.
+## 2026-09-24 — Kaza namazı takibi eklendi (Faz 3, ilk parça)
+
+**Karar:** `KazaTracker` (yeni, `Sekine/Core/Kaza/`) — 5 vakit için "kalan borç"
+sayacı + tamamlama günlüğünden türetilen seri (streak). `Store.swift`/`PremiumGate`
+ile aynı desen: `AppSettings`'e eklenmedi, kendi başına test edilebilir ayrı bir
+`ObservableObject`. Tamamen yerel (App Group UserDefaults), hiçbir veri cihaz
+dışına çıkmaz.
+
+**Kapsam kararı:** Ücretsiz = sayaçlar + seri. Premium = geçmiş istatistik (son
+7/30 gün ve toplam tamamlama sayısı) — plan dosyasındaki "ücretsiz sayaç, premium
+istatistik" ayrımına birebir uyuyor.
+
+**Seri (streak) mantığı:** Bugün henüz kayıt yoksa ama dün vardıysa seri
+SIFIRLANMAZ (gün bitmeden cezalandırıcı olur) — dünden geriye doğru sayılır. Saf,
+`Date`'e bağımlı olmayan `computeStreak(from:calendar:asOf:)` fonksiyonu ile test
+edildi (boş log, ardışık günler, aynı gün mükerrer kayıt, gün atlama sonrası
+sıfırlanma — hepsi ayrı test).
+
+**Doğrulama:** 11 yeni birim testi yeşil, `xcrun simctl` ile simülatörde GERÇEKTEN
+çalıştırılıp ekran görüntüsü alındı (sayaçlar, "Kıldım" butonunun 0 borçta devre
+dışı kalması, premium istatistik bölümü doğrulandı) — yalnızca statik derleme
+değil. Etkileşimli dokunma bu ortamda otomatikleştirilemediği için (headless,
+GUI/AppleScript erişimi yok) doğrudan `KazaView`'i açan geçici bir DEBUG launch
+argümanı (`-uiTestShowKaza`) eklendi — mevcut `-uiTestShowPaywall` ile aynı desen,
+gelecekte mağaza görseli üretiminde de işe yarayabilir, kaldırılmadı.
+
+**Kapsam dışı (ayrı bir tur):** çok aylık imsakiye, Kur'an+meal, Ramazan modu, AI
+ezan denemesi, In-App Events — plan dosyasının Faz 3 bölümünde sırayla.
+
+**Yan not — bilinen flaky test:** Tam suite çalıştırılırken
+`RollingSchedulerTests.testMarkExpiredRealConcurrencyWithJobCompletionNeverLosesWorkOrLeaksToFutureJobs`
+bir kez başarısız oldu (Kaza değişikliğiyle ilgisiz — RollingScheduler bu dalda hiç
+değişmedi). İzole çalıştırıldığında (0.011sn) ve tam suite ikinci çalıştırmada
+(83/83) sorunsuz geçti — gerçek eşzamanlılık testi olduğu için ortam yüküne göre
+ara sıra kırılgan olabileceği zaten 2026-09-08 girdisinde belgelenmişti, yeni bir
+regresyon değil.
+## 2026-09-27 — Kullanıcı yönlendirmesi: çok-ay imsakiye, Kur'an, AI ezan (SONRAKİ OTURUM BURADAN DEVAM)
+
+**Çok aylık imsakiye — engel veri boyutu DEĞİLDİ.** Engel kaynağın API sözleşmesi: `ezanvakti
+.emushaf.net` her zaman "bugünden itibaren 32 gün" döndürür, tarih aralığı parametresi yok
+(bu yüzden ileri aylar bu kaynaktan alınamaz). Alternatifler: (a) Diyanet resmî Awqat Salah API
+(aralık destekler; hesap/kimlik bilgisi + kota günde ~5/ayda ~10 istek/konum → uygulamaya
+gömülemez, proxy/cache gerekir — kota ve kimlik detayı DOĞRULANMADI); (b) Aladhan `method=13`
+(anahtarsız, yıllık `calendar` endpoint'i, hesaplama-tabanlı).
+
+**Kullanıcı kararı (2026-09-27): "telefonda büyük veri tutmaya gerek yok; çevrimdışıyken mevcut
+kısıtlı veri, çevrimiçiyken internetten çekip gösterilsin; en azından yıllık gösterilsin."**
+Hedef mimari: yakın 32 gün Diyanet-birebir (mevcut, çevrimdışı çalışır); ötesi çevrimiçiyken
+çekilip **"hesaplanan/yaklaşık" etiketiyle** gösterilir (çevrimdışı ve yoksa mevcut davranış).
+Bu, önceki "çevrimdışı+gizli" vaadini bozmaz (yalnızca koordinat gider; Aladhan zaten yedek
+sağlayıcı) ama "Diyanet birebir" iddiasını ileri aylar için etiketle sınırlar.
+
+**Ölçüm (2026-09-27, İstanbul/9541, Diyanet 23.09–24.10.2026 32 gün vs Aladhan method=13):**
+İmsak +0..+1 dk, Güneş +0..+1, Öğle −1..0, İkindi 0..+1, **Akşam −1..−2 dk (ort −1.2), Yatsı
+−1..−2**. Yani Aladhan iftarı Diyanet'ten 1–2 dk ERKEN veriyor → oruç açmak için güvensiz yön.
+**Tasarım kuralı:** yaklaşık veride iftar (akşam) için güvenli pay ekle (en az +2 dk) VEYA
+Ramazan'da iftar/sahur için yaklaşık veri hiç gösterme/uyar; Ramazan sayacı yalnızca
+Diyanet-birebir pencereden çalışmaya devam etsin. Tek şehir/tek mevsim ölçümü — uygulamadan
+önce birkaç şehir/farklı mevsim (ve yurt dışı) ile genişlet. Kaynak seçimi kararı (Aladhan vs
+Awqat Salah+proxy) sonraki oturumda; uygulama: `PrayerTimeStore` yıllık yaklaşık plan +
+MonthlyView'de "yaklaşık" rozeti + Ramazan güvenlik payı + birim testleri.
+
+**Kur'an+meal — TARTIŞMA AÇIK (kod yok).** Engel lisans (Tanzil Türkçe mealleri "ticari olmayan").
+Konuşulacak seçenekler (hepsinde iddialar birincil kaynaktan DOĞRULANACAK): (1) Uygulama içinden
+resmî Diyanet Kur'an sitesine/Quran.com'a bağlantı (SFSafariViewController) — lisans riski yok,
+en hızlı, sevilen özelliğin bir kısmını karşılar; (2) Yalnızca Arapça metin gömmek — Tanzil Arapça
+metin lisansını (CC-BY olduğu bilgisi doğrulanmadı) birincil kaynaktan oku; (3) Diyanet
+İşleri/Diyanet Vakfı'ndan yazılı ticari kullanım izni; (4) gerçekten kamu malı bir Elmalılı
+sayısallaştırması bul + provenance belgele (sadeleştirilmiş baskılar telifli olabilir). Öneri:
+önce (1), paralelde (3) için yazışma; (2)/(4) lisans netleşince.
+
+**AI ezan — kullanıcı kararı: önce ElevenLabs ÜCRETSİZ hakkıyla dene; olmazsa işimizi görecek kadar
+ödeme yaparak seslendirt.** Uyarılar: (a) hesap açma/anahtar kullanıcıda (ajan hesap açamaz);
+anahtar env değişkeniyle verilmeli, repoya/loga yazılmamalı; (b) ElevenLabs ücretsiz planın
+ticari kullanım/atıf koşulları DOĞRULANMADI — ücretsiz üretim yalnızca dinleme testi sayılmalı,
+ticari uygulamaya gömmeden önce ücretli planın ticari lisansı ve içerik sahipliği koşulları
+okunmalı; (c) TTS konuşma sentezi makamlı ezan okumaz — müzik/şarkı üreten modeller denenmeli,
+kalite garantisi yok; (d) dini hassasiyet: plandaki 3–5 kişilik dinleyici paneli kapısı geçerli,
+oybirliği yoksa yol bırakılır; plan B yerel müezzine ücretli kayıt + yazılı tam hak.
+
+## 2026-09-26 — Sertleştirme: RollingScheduler P1/P2 + StoreKit #4/#6 kapatıldı (`feat/polish-and-hardening`)
+
+**Kök neden buldu:** Tam suite'i `-test-iterations 15` ile döngüye alınca
+`testMarkExpiredRealConcurrency…` ~%13 oranında düştü — "flaky test" sanılan şey 2026-09-08'de
+kayda geçen **RollingScheduler P2 riskinin gerçek belirtisiydi**: kuyrukta bekleyen işi expire
+etmek `RescheduleResult(requested:0, deferred:1)` döndürüyordu, `requested == added+deferred+failed`
+değişmezini bozuyordu. Düzeltme: `requested:1, deferred:1` (hiç başlamamış tek iş birimi).
+
+**RollingScheduler P1:** 60sn'den uzun süren, expire edilmiş AKTİF işin işareti başka bir işin
+`markExpired` çağrısındaki TTL süpürmesiyle siliniyordu → iş expire olmamış gibi devam ederdi.
+Düzeltme: `activeTokens` kümesi; süpürme aktif işlerin işaretine dokunmaz. TTL artık enjekte
+edilebilir (`init(expiredTokenTTL:)`). Mutasyon kontrolü: düzeltme geçici geri alınınca yeni test
+düşüyor (iş expire edilmiş halde 50/50 bildirim ekledi) — test gerçekten hatayı yakalıyor.
+
+**StoreKit #4 (asılı restore):** `restore()` artık 45sn zaman aşımına sahip (test seam'i
+`restoreTimeout`); aşımda `.networkError`, `isRestoring` false, Store tıkanmaz, sonraki restore
+yeni task başlatır. Yapısal `TaskGroup` KULLANILMADI (kooperatif olmayan iş grubu bekletir);
+ilk biten kazanır (`OnceGate`). **#6:** doğrulanamayan `Transaction.updates` olayı, sahip
+DEĞİLKEN durumu `.indeterminate` yapar; `.owned`'ı asla bozmaz, bağış ürünlerine dokunmaz.
+**Kalan bilinen StoreKit riskleri (#1, #2, #3, #5):** kozmetik/UX düzeyi, dokunulmadı.
+
+**Diğer:** watchOS onboarding'e ülke seçici + GPS'te ülke tespiti; `DiyanetDirectory` tek
+örnek (environment); Live Activity için Ayarlar anahtarı. Doğrulama: tam suite 10 tur × 114 test
+= 1140 çalıştırma, 0 hata. Not: paylaşımlı simülatörde başka bir projenin testleri koşarken
+"Mach error -308 server died" alındı; bağımsız cihaz (iPhone 17 Pro) kullanıldı.
+
+## 2026-09-24 — Ramazan iftar Live Activity (`feat/live-activity`, fasting-tracker üstüne)
+
+**Karar:** Oruç sürerken (imsak→akşam) kilit ekranı/Dynamic Island'da iftar geri sayımı.
+`IftarActivityAttributes` + `IftarLockScreenView` (Shared, yalnızca iOS), widget uzantısında
+`IftarLiveActivity`, uygulamada `IftarLiveActivityManager` (karar `RamadanInfo`'dan: hicri veri
+yoksa/Ramazan değilse başlatmaz; iftar sonrası bitirir). Geri sayım `Text(timerInterval:)`
+ile SİSTEM çizer → uygulama çalışmasa da akar, push/güncelleme yok. Tetik: uygulama öne
+gelince ve plan yüklenince. `NSSupportsLiveActivities` eklendi (`project.yml` değişti →
+`verify-xcode-cloud.sh` yeşil). Kullanıcı iOS Ayarlar'dan Live Activity'yi kapatırsa sessizce
+hiçbir şey yapılmaz; uygulama içi ayrı anahtar eklenmedi (ayrı tur olabilir).
+
+**Doğrulama ve SINIR (dürüst):** (1) karar mantığı 4 testle; (2) `ImageRenderer` ile
+yerleşim gözle kontrol edildi — ilk sürümde geri sayım ve başlık KESİLİYORDU, düzeltildi;
+(3) simülatörde `-uiTestRamadan` ile `Activity.request` GERÇEKTEN başarılı oldu (log:
+id + iftar 19:06). **Görülemeyen:** sistemin kilit ekranı/Dynamic Island çerçevesi (headless
+simülatör ekran görüntüsünde adacık yok) — Dynamic Island düzeni cihazda gözle kontrol
+edilmeli. Not: Watch/komplikasyon hedefleri `Shared`'i derlediği için ActivityKit kodu
+`#if os(iOS)` ile sarıldı (tam derleme yeşil).
+
+## 2026-09-24 — Oruç günü takibi (Faz 3, `feat/fasting-tracker`, integration üstüne)
+
+**Karar:** `FastingTracker` (yerel, hiçbir yere gönderilmez) + Ramazan kartında "Bugün oruç
+tuttum" işareti ve "Bu Ramazan: N / gün". Günler konumun saat diliminde `yyyy-MM-dd`
+anahtarıyla saklanır. Ramazan ilerlemesi hicri yıl ayrıştırılmadan hesaplanır: başlangıç =
+bugün − (gün−1) (gün numarası Diyanet'in hicri verisinden, bkz. `RamadanInfo`) → önceki
+aylarda (Şaban) işaretlenen günler sayılmaz (test). Ücretsiz (Ramazan kitlesini büyütür,
+premium duvarı yok). Doğrulama: 5 yeni test (toplam 104 yeşil), simülatörde `-uiTestRamadan`
+ile kart görsel doğrulandı (18:16'da iftara 49 dk, "0 / 12 gün"). Dokunma etkileşimi bu
+ortamda otomatikleştirilemedi; mantık testli. `RamadanCard` artık `FastingTracker`
+environment nesnesi ister (SekineApp'te enjekte edildi).
+
+## 2026-09-24 — Kur'an+meal ENGELLENDİ: Tanzil Türkçe meal lisansı ticari kullanıma kapalı (Faz 3)
+
+**Bulgu (tanzil.net/trans, canlı kontrol):** Tanzil'deki 10 Türkçe meal (Diyanet İşleri,
+Diyanet Vakfı, Elmalılı Hamdi Yazır `tr.yazir`, Ali Bulaç, Süleyman Ateş, Öztürk, vb.)
+için site açıkça "translations ... are for non-commercial purposes only; other uses
+require permission from the translator or publisher" diyor. Sekine ticari (Premium +
+bağış) → bu dosyaları uygulamaya gömmek lisans ihlali riski. `tanzil_terms_of_use`
+sayfası yüklenmedi; Arapça metin lisansı (CC-BY olduğu bilgisi) doğrulanamadı, varsayılmıyor.
+
+**Karar:** Kur'an+meal KODLANMADI. Elmalılı'nın orijinali kamu malı olsa da Tanzil'deki
+`tr.yazir` belirli bir sayısallaştırılmış/sadeleştirilmiş baskı; hukuki durumu kullanıcı
+ya da hukuk danışmanı netleştirmeli. Seçenekler (kullanıcı kararı): (a) yalnızca Arapça
+metin — önce Tanzil'in Arapça metin lisansını birincil kaynaktan doğrula; (b) Diyanet
+Vakfı'ndan yazılı ticari izin; (c) gerçekten kamu malı bir Elmalılı sayısallaştırması
+bulup provenance'ını belgele; (d) Kur'an'ı kapsam dışı bırak (rakip yorumlarında sevilen
+özellik ama ihlal riskine değmez).
+
+## 2026-09-24 — Ramazan modu (sahur/iftar sayacı) + çok-ay imsakiye KASITLI ATLANDI (Faz 3)
+
+**Karar:** `RamadanInfo` (Shared, saf/test edilmiş) + `RamadanCard` (Ana ekran). Ramazan'ı
+tarih tablosundan DEĞİL Diyanet'in kendi hicri verisinden tanır (`hicriMonth == 9`) —
+ru'yet ile ay başı kayarsa otomatik doğru kalır, elle girilmiş tarih yok. Hicri veri
+yalnızca Diyanet kaynağında dolu; Aladhan/yerel fallback'te (nil) mod SESSİZCE kapalı
+kalır, asla tahmin edilmez (test: `testMissingHicriDataReturnsNilNeverGuesses`).
+Faz: gündüz → iftara (akşam) geri sayım; gece/imsak öncesi → imsağa; iftar sonrası →
+ERTESİ günün imsağı (ertesi gün planda yoksa yanlış hedef göstermek yerine nil).
+Pencere içinde Ramazan'a ≤~30 gün varsa "Ramazan'a N gün kaldı" bandı.
+
+**Çok aylık imsakiye bilinçli olarak YAPILMADI:** 2026-09-08'de kullanıcı bunu açıkça
+ertelemişti ("dokunma, mevcut pencereyi koru"; kaynak API sabit 32 gün veriyor, çözümler
+"çevrimdışı/gizli" ya da "Diyanet birebir" vaadini bozuyor). Faz 3 planında bunu "şart"
+diye yazmam yanlıştı: Ramazan başında uygulama açılınca 32 günlük pencere ayın tamamını
+zaten kapsar; eksik olan yalnızca Ramazan ÖNCESİ tam ay önizlemesi (yukarıdaki "N gün
+kaldı" bandı bunu kısmen karşılar). Karar kullanıcıya ait; yeniden açılırsa seçenek:
+`LocalCalculationProvider` ile ileri aylar "yaklaşık" etiketiyle — doğruluk vaadi
+tradeoff'u nedeniyle ayrıca onay gerekir.
+
+**Kapsam dışı (ayrı tur):** iftar Live Activity (ActivityKit hedefi + entitlement, cihazsız
+doğrulanamaz), oruç günü takibi, paylaşılabilir imsakiye görseli.
+
+**Doğrulama:** 9 yeni birim testi; simülatörde `-uiTestRamadan` (DEBUG) ile gerçekten
+çalıştırıldı — 13:59'da iftar 19:06 → "5 sa 06 dk" (aritmetik doğru).
+## 2026-09-24 — Paylaşılabilir vakit kartı + AI ezan denemesi ENGELLİ (Faz 1/3 büyüme)
+
+**Paylaşım kartı:** Ana ekrana "Bugünün vakitlerini paylaş" (ücretsiz). `ShareCardView`
+1080×1350 sabit, tema/koyu moddan bağımsız; alt kısımda HER ZAMAN "Sekine · Reklamsız,
+takipsiz namaz vakitleri" + App Store adı (WhatsApp aile gruplarında organik büyüme).
+Saatler konumun kendi saat diliminde biçimlenir (yurt dışında cihaz saati değil).
+Ramazan'da (hicriMonth==9) imsak/akşam "sahur sonu/iftar" adıyla vurgulanır. Paylaşım
+metnine App Store linki eklenir (görüntüdeki yazı tıklanamaz). Doğrulama: DEBUG
+`-uiTestExportShareCard` ile gerçek PNG diske yazılıp gözle kontrol edildi (1080×1350),
+2 birim testi. Bağımsız dal: `RamadanInfo`'ya bağımlı değil (yerel sabit; birleşince
+tek sabite indirilebilir).
+
+**AI ezan denemesi YAPILAMADI (engelli):** (1) youtube-miner `docs/decisions.md`'ye göre
+ElevenLabs'e hiç kaydolunmamış — hesap/anahtar yok, hesap açma/ödeme ajan tarafından
+yapılamaz; (2) mevcut ses altyapısı (edge-TTS / yerel VoiceStudio) KONUŞMA sentezi —
+makamlı ezan okuyamaz; (3) plandaki dinleyici paneli kapısı zaten insan onayı ister.
+Öneri değişmedi: plan B (yerel müezzine ücretli kayıt + yazılı tam kullanım hakkı).
+
 ## 2026-09-23 — Büyüme/gelir planı: ürün değil dağıtım sorunu; ASO ilk faz
 
 **Karar:** ASC Analytics (24 Haz–21 Eyl 2026, 90 gün) ve 9 rakip uygulamanın 327

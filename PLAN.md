@@ -8,10 +8,22 @@ Gerekçe: `docs/decisions.md` (2026-09-23). Detay: `docs/handoff.md`.
 - [x] ASC Analytics + rakip yorum analizi
 - [x] Keywords, Promotional Text, açıklama gerekçesi güncellendi (`docs/store-submission.md`)
 - [x] Ekran görüntüsü sırası değişti + yeniden üretildi
-- [ ] Kullanıcı: yeni metinleri/görselleri ASC'ye gir, 1.7'yi gönder
-- [ ] Faz 1 (Ekim): yıllık abonelik + paywall yenileme
-- [ ] Faz 2 (Kasım): yurtdışı konum desteği + timezone düzeltmesi
-- [ ] Faz 3 (Aralık-Ocak, Ramazan 2027 = 8 Şub): Ramazan modu, Kur'an+meal, kaza takibi
+- [x] ASC'de 1.7 taslak sürümü açıldı, yeni metin/görseller girildi (submit EDİLMEDİ —
+      sandbox test bekliyor)
+- [ ] Kullanıcı: gerçek cihazda sandbox satın alma testi, sonra 1.7'yi submit et
+- [x] Faz 1: yıllık abonelik (ASC'de ürün oluşturma + sandbox testi kullanıcıda)
+- [x] Faz 2: yurtdışı konum + kritik saat dilimi düzeltmesi (gerçek cihazda Diyanet
+      karşılaştırması kullanıcıda)
+- [ ] Faz 3 (Ramazan 2027 = 8 Şub):
+  - [x] Kaza namazı takibi
+  - [x] Ramazan modu sayacı (sahur/iftar)
+  - [x] Paylaşılabilir vakit kartı
+  - [ ] Çok aylık/yıllık imsakiye — kullanıcı 2026-09-27'de ONAYLADI: yakın 32 gün Diyanet + ötesi çevrimiçi "yaklaşık" (etiketli, iftar güvenlik payı); sıradaki iş (decisions 2026-09-27)
+  - [ ] Kur'an+meal — lisans engeli; kullanıcıyla TARTIŞMA açık (seçenekler decisions 2026-09-27)
+  - [ ] Ezan sesi AI denemesi — kullanıcı kararı: önce ElevenLabs ücretsiz, olmazsa ücretli; hesap/anahtar kullanıcıda, panel kapısı geçerli (decisions 2026-09-27)
+  - [x] Oruç günü takibi (`feat/fasting-tracker`, integration üstünde)
+  - [x] Ramazan iftar Live Activity (`feat/live-activity`; Dynamic Island cihazda gözle kontrol edilmeli)
+  - [ ] In-App Events — metin taslakları hazır (`docs/in-app-events.md`), tarih doğrulama + ASC girişi kullanıcıda
 
 ## Durum
 **1.3 App Store'da yayında** — Ömürlük Premium + Bağış (StoreKit 2), ücretsiz Zikir
@@ -81,8 +93,7 @@ uçtan uca yapıldı, çoklu VISION review turlarından geçti:
 - Kıble pusulası gerçek cihaz gerektirir (magnetometre); simülatörde yalnızca açı gösterilir.
 - Watch bildirim dedup'ı (iki cihazda aynı anda tek bildirim) gerçek cihaz/TestFlight
   gerektiriyor, headless doğrulanamadı.
-- Ayrı `DiyanetDirectory` örnekleri (SekineApp/Settings/Onboarding/LocationSearchSheet)
-  il/ilçe listesini ayrı ayrı indirebiliyor → tek örneği paylaştırmak temiz bir iyileştirme.
+- ~~Ayrı `DiyanetDirectory` örnekleri~~ — tek örneğe indirildi (feat/polish-and-hardening).
 - `project.yml` veya `ci_scripts/` değişince push'tan ÖNCE `./scripts/verify-xcode-cloud.sh`.
 
 ## Sonraki (henüz başlanmadı)

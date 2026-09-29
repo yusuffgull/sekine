@@ -3,6 +3,7 @@ import SwiftUI
 /// "Zikir" sekmesi — tesbih, Esmaül Hüsna ve dualara giriş. Hepsi ücretsiz.
 struct SpiritualView: View {
     @EnvironmentObject private var settings: AppSettings
+    @State private var showKaza = false
 
     var body: some View {
         NavigationStack {
@@ -16,8 +17,17 @@ struct SpiritualView: View {
                 NavigationLink { DuaView() } label: {
                     row("Dualar", "book.fill", "Yaygın dualar ve anlamları")
                 }
+                NavigationLink { KazaView() } label: {
+                    row("Kaza Takibi", "checkmark.circle.fill", "Kaza namazı sayaç ve seri")
+                }
             }
             .navigationTitle("Zikir")
+            .navigationDestination(isPresented: $showKaza) { KazaView() }
+            .task {
+                #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("-uiTestShowKaza") { showKaza = true }
+                #endif
+            }
         }
     }
 

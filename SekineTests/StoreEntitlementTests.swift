@@ -47,7 +47,7 @@ final class StoreEntitlementTests: XCTestCase {
         // StoreKit Testing daemon'ı çalışmadığından bu tarama da `purchase()`/
         // `AppStore.sync()` gibi süresiz askıda kalabiliyor — anında dönen sahte bir
         // sonuçla değiştirerek TÜM testleri bu hataya bağımlı olmaktan kurtarıyoruz.
-        store.entitlementsScanProvider = { (foundOwnedLifetime: false, sawUnverifiedLifetime: false) }
+        store.entitlementsScanProvider = { (foundOwnedEntitlement: false, sawUnverifiedEntitlement: false) }
     }
 
     override func tearDownWithError() throws {
@@ -65,6 +65,25 @@ final class StoreEntitlementTests: XCTestCase {
         )
         XCTAssertEqual(store.entitlementState, .owned)
         XCTAssertTrue(store.isPremium)
+    }
+
+    /// Yıllık abonelik de ömürlük gibi entitlement vermeli — `entitlementProductIDs`
+    /// ikisini de kapsar (bkz. `Store.entitlementProductIDs`).
+    func testVerifiedYearlySubscriptionPurchaseAppliesEntitlement() {
+        store.applyVerifiedTransactionInfo(
+            VerifiedTransactionInfo(productID: Store.yearlyID, isRevoked: false)
+        )
+        XCTAssertEqual(store.entitlementState, .owned)
+        XCTAssertTrue(store.isPremium)
+    }
+
+    /// Bağış (consumable) ürünleri entitlement mantığına hiç girmemeli — `guard` bunları
+    /// sessizce yok sayar, state'e dokunmaz.
+    func testVerifiedTipPurchaseNeverGrantsEntitlement() {
+        store.applyVerifiedTransactionInfo(
+            VerifiedTransactionInfo(productID: Store.tipIDs[0], isRevoked: false)
+        )
+        XCTAssertNotEqual(store.entitlementState, .owned)
     }
 
     /// KRİTİK: generation sayacı SADECE stale bir refresh taramasını atmalı — verified bir
@@ -88,8 +107,8 @@ final class StoreEntitlementTests: XCTestCase {
         //    Bu, gerçek `refreshEntitlements()`'ın stale generation ile
         //    `applyRefreshResult` çağırmasıyla birebir aynı kod yolu.
         store.applyRefreshResult(
-            foundOwnedLifetime: false,
-            sawUnverifiedLifetime: false,
+            foundOwnedEntitlement: false,
+            sawUnverifiedEntitlement: false,
             generation: staleGeneration
         )
 
@@ -102,7 +121,7 @@ final class StoreEntitlementTests: XCTestCase {
     /// purchase/update girmemiş) sonucunu normal şekilde yazabilmeli.
     func testFreshRefreshResultIsApplied() {
         let myGeneration = store.refreshGeneration
-        store.applyRefreshResult(foundOwnedLifetime: true, sawUnverifiedLifetime: false, generation: myGeneration)
+        store.applyRefreshResult(foundOwnedEntitlement: true, sawUnverifiedEntitlement: false, generation: myGeneration)
         XCTAssertEqual(store.entitlementState, .owned)
     }
 
@@ -125,10 +144,10 @@ final class StoreEntitlementTests: XCTestCase {
                 await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
                     releaseFirstScan = continuation
                 }
-                return (foundOwnedLifetime: false, sawUnverifiedLifetime: false)
+                return (foundOwnedEntitlement: false, sawUnverifiedEntitlement: false)
             } else {
                 // İkinci (sonra başlayan, daha güncel) refresh: hemen "owned" bulur.
-                return (foundOwnedLifetime: true, sawUnverifiedLifetime: false)
+                return (foundOwnedEntitlement: true, sawUnverifiedEntitlement: false)
             }
         }
 
@@ -160,7 +179,7 @@ final class StoreEntitlementTests: XCTestCase {
         XCTAssertEqual(store.entitlementState, .owned)
 
         let myGeneration = store.refreshGeneration
-        store.applyRefreshResult(foundOwnedLifetime: false, sawUnverifiedLifetime: true, generation: myGeneration)
+        store.applyRefreshResult(foundOwnedEntitlement: false, sawUnverifiedEntitlement: true, generation: myGeneration)
 
         XCTAssertEqual(store.entitlementState, .owned, "unverified, zaten owned olan durumu ASLA ezmemeli")
     }
@@ -171,14 +190,14 @@ final class StoreEntitlementTests: XCTestCase {
     func testUnverifiedWithoutOwnershipBecomesIndeterminate() {
         XCTAssertNotEqual(store.entitlementState, .owned)
         let myGeneration = store.refreshGeneration
-        store.applyRefreshResult(foundOwnedLifetime: false, sawUnverifiedLifetime: true, generation: myGeneration)
+        store.applyRefreshResult(foundOwnedEntitlement: false, sawUnverifiedEntitlement: true, generation: myGeneration)
         XCTAssertEqual(store.entitlementState, .indeterminate)
     }
 
     /// Hiçbir transaction (ne verified ne unverified) yoksa `notOwned` yazılmalı.
     func testNoEntitlementsBecomesNotOwned() {
         let myGeneration = store.refreshGeneration
-        store.applyRefreshResult(foundOwnedLifetime: false, sawUnverifiedLifetime: false, generation: myGeneration)
+        store.applyRefreshResult(foundOwnedEntitlement: false, sawUnverifiedEntitlement: false, generation: myGeneration)
         XCTAssertEqual(store.entitlementState, .notOwned)
         XCTAssertFalse(store.isPremium)
     }
@@ -247,7 +266,7 @@ final class StoreEntitlementTests: XCTestCase {
         XCTAssertEqual(store.entitlementState, .owned)
 
         store.syncProvider = {}
-        store.entitlementsScanProvider = { (foundOwnedLifetime: false, sawUnverifiedLifetime: true) }
+        store.entitlementsScanProvider = { (foundOwnedEntitlement: false, sawUnverifiedEntitlement: true) }
 
         let outcome = await store.restore()
 
@@ -261,12 +280,40 @@ final class StoreEntitlementTests: XCTestCase {
     func testRestoreOfNotOwnedStoreWithVerifiedScanReportsRestored() async {
         XCTAssertNotEqual(store.entitlementState, .owned)
         store.syncProvider = {}
-        store.entitlementsScanProvider = { (foundOwnedLifetime: true, sawUnverifiedLifetime: false) }
+        store.entitlementsScanProvider = { (foundOwnedEntitlement: true, sawUnverifiedEntitlement: false) }
 
         let outcome = await store.restore()
 
         XCTAssertEqual(outcome, .restored)
         XCTAssertEqual(store.entitlementState, .owned)
+    }
+
+    // MARK: - Zaman aşımı + doğrulanamayan güncelleme (bilinen riskler #4, #6)
+
+    func testHangingRestoreTimesOutAndDoesNotWedgeStore() async {
+        store.restoreTimeout = .milliseconds(80)
+        store.syncProvider = { try await Task.sleep(for: .seconds(60)) }   // asılı kalır
+        let outcome = await store.restore()
+        XCTAssertEqual(outcome, .networkError)
+        XCTAssertFalse(store.isRestoring)
+        // Store tıkanmadı: sonraki restore yeni bir task başlatıp normal tamamlanır.
+        store.syncProvider = { }
+        let second = await store.restore()
+        XCTAssertEqual(second, .noPurchasesFound)
+    }
+
+    func testUnverifiedUpdateMarksIndeterminateWhenNotOwned() {
+        store.applyUnverifiedUpdate(productID: Store.lifetimeID)
+        XCTAssertEqual(store.entitlementState, .indeterminate)
+    }
+
+    func testUnverifiedUpdateNeverDowngradesOwnedOrTouchesTips() {
+        store.applyVerifiedTransactionInfo(VerifiedTransactionInfo(productID: Store.lifetimeID, isRevoked: false))
+        store.applyUnverifiedUpdate(productID: Store.lifetimeID)
+        XCTAssertEqual(store.entitlementState, .owned)
+        let fresh = Store()
+        fresh.applyUnverifiedUpdate(productID: Store.tipIDs[0])
+        XCTAssertNotEqual(fresh.entitlementState, .indeterminate)
     }
 
     // MARK: - RestoreOutcome hata kategorileştirme (StoreKit'ten bağımsız, saf mapping)

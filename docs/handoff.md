@@ -1,27 +1,35 @@
 # Handoff
 
-## CURRENT TASK — Büyüme/gelir planı, Faz 0 (ASO refresh)
-**23 Eyl 2026:** ASC Analytics + 9 rakip uygulamanın 327 yorumu incelendi, 1 yıllık
-yol haritası çıkarıldı: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`
-(kullanıcı onayladı). Gerekçe özeti: `docs/decisions.md` (2026-09-23).
+## CURRENT TASK — Büyüme/gelir planı: Faz 1/2/3 kod tarafı `integration/all-features`'te birleşik
+**23-24 Eyl 2026.** Plan: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
+Gerekçeler: `docs/decisions.md` (2026-09-23/24 girdileri).
 
-Faz 0 (kod dışı, bu oturumda tamamlandı — `docs/aso-refresh-and-growth-plan` branch'i):
-- Keywords ve Promotional Text yenilendi, açıklamaya gerekçe eklendi
-  (`docs/store-submission.md`).
-- Ekran görüntüsü sırası değişti: `1-home, 2-onboarding, 3-qibla, 4-monthly, 5-settings`
-  (eskiden ilk sırada onboarding vardı, gerçek uygulama ekranı 2. sıradaydı).
-  `scripts/generate-store-screenshots.sh` ile yeniden üretildi.
-- Daha önce hiç commit edilmemiş ekran görüntüsü üretim altyapısı
-  (`fastlane/html-screens`, `scripts/{generate-store-screenshots.sh,html-to-png.swift}`)
-  bu turda ilk kez commit edildi.
+**Durum:** `main` yalnızca Faz 0 (ASO) içerir. Yedi bağımsız feature branch var VE hepsi
+`integration/all-features`'te birleştirildi (109 test yeşil) (yalnızca docs çakışması, koda dokunmadı;
+birlikte derleniyor/testler geçiyor — bkz. aşağıdaki doğrulama). Merge için tek karar:
+`integration/all-features`'i main'e almak (ya da branch'leri tek tek).
 
-**Henüz yapılmadı (kullanıcı aksiyonu gerekli, kod dışı):** yeni keywords/promo
-text/description'ın ASC'ye elle girilmesi, yeni ekran görüntülerinin ASC'ye doğru
-sırayla yüklenmesi, Featuring nomination, Apple Search Ads (10-30$/ay) başvurusu.
+| Branch | İçerik | Review |
+|---|---|---|
+| `main` | Faz 0 ASO — ASC'ye canlı (1.6 Promo Text) + 1.7 taslağı (submit EDİLMEDİ) | — |
+| `feat/yearly-subscription` | yıllık abonelik ₺149.99 + 7 gün deneme | NATASHA ✓ |
+| `feat/international-locations` | yurtdışı + KRİTİK tz düzeltmesi (sabit Istanbul) | VISION ✓ |
+| `feat/kaza-tracking` | kaza namazı sayaç/seri (premium istatistik) | test + simülatör |
+| `feat/ramadan-mode` | sahur/iftar geri sayımı, hicri veriden | test + simülatör |
+| `feat/share-card` | paylaşılabilir vakit kartı (filigranlı) | test + PNG gözle |
+| `feat/fasting-tracker` | oruç günü takibi (Ramazan kartında) | test + simülatör |
+| `feat/polish-and-hardening` | watch ülke seçici, tek DiyanetDirectory, Live Activity anahtarı, RollingScheduler P1/P2 + StoreKit restore zaman aşımı düzeltmeleri, yeni görseller | 1140 çalıştırma 0 hata; mutasyon kontrolü |
+| `feat/live-activity` | iftar Live Activity (kilit ekranı/Dynamic Island) | test + Activity.request simülatörde; Dynamic Island cihazda gözle kontrol edilmeli |
 
-**Sıradaki kod işi (Faz 1, Ekim):** yıllık abonelik + paywall yenileme — plan
-dosyasının "Faz 1" bölümüne bakılacak, T3 (para akışı) olarak NATASHA review'ından
-geçecek.
+**Bilinçli yapılmayanlar (kayıtlı, kullanıcı kararı gerekir):** çok aylık imsakiye
+(2026-09-08 kararı), Kur'an+meal (Tanzil meal lisansı ticari kullanıma kapalı), AI ezan
+(ElevenLabs hesabı yok + TTS makam okuyamaz).
+
+**Kullanıcı aksiyonları:** (1) branch/integration'ı incele ve merge et; (2) ASC'de yıllık
+abonelik ürününü oluştur (`com.sekineapp.sekine.premium.yearly`); (3) gerçek cihazda
+sandbox satın alma/restore + yurt dışı konum vakitlerini Diyanet siteyle karşılaştır;
+(4) 1.7'yi submit et (ASC taslağı hazır); (5) Featuring nomination, Search Ads (10-30$/ay),
+In-App Events, diaspora için İngilizce/Almanca keyword yerelleştirmesi.
 
 ---
 
@@ -86,19 +94,26 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   Tek `Sekine` şeması iPhone + Widget + Watch + komplikasyonları birlikte derler (Watch
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
-## NEXT
-1. Kullanıcı: yeni ASO metnini ve ekran görüntülerini ASC'ye gir, 1.7'yi sandbox testinden
-   sonra gönder (bkz. CURRENT TASK).
-2. 2-3 hafta sonra ASC Analytics'e tekrar bak: dönüşüm ve "ezan vakti" sırası değişti mi,
-   ölç.
-3. Faz 1 (Ekim): yıllık abonelik + paywall yenileme, `Store.swift`'e abonelik durumu.
-4. Gerçek cihaz/TestFlight gerektiren doğrulamalar: uzun süreli bildirim + BG-refresh
-   güvenilirliği, Watch bildirim dedup'ı, kıble pusulası.
-5. Gelir zinciri (kod dışı): 20/B istisna belgesi + özel hesap gelince ASC'de IBAN güncelle.
-6. (Opsiyonel) İstanbul dışı illerde eksik ilçe talebi gelirse il-bazlı doğrulayarak alias ekle.
+## NEXT (2026-09-27 kullanıcı oturumu kapattı — buradan devam)
+1. **Çok-ay/yıllık imsakiye (kullanıcı onayladı, uygulanacak):** yakın 32 gün Diyanet-birebir +
+   ötesi çevrimiçi çekilen "yaklaşık" plan (etiketli). Önce kaynak kararı (Aladhan method=13 vs
+   Awqat Salah+proxy) ve ölçümü genişlet (çok şehir/mevsim/yurt dışı); **iftar için güvenlik payı
+   şart** (Aladhan akşamı 1–2 dk erken veriyor). Bkz. decisions 2026-09-27.
+2. **Kur'an+meal:** kullanıcıyla TARTIŞMA (seçenekler decisions 2026-09-27'de; öneri: önce
+   resmî siteye bağlantı + Diyanet izni yazışması).
+3. **AI ezan:** kullanıcı ElevenLabs hesabı/anahtarını (env) hazırlayınca ücretsiz planla dinleme
+   testi; ticari koşullar doğrulanmadan gömme yok; olmazsa ücretli plan/müezzin (panel kapısı geçerli).
+4. Kullanıcı: `integration/all-features`'i incele → `main`'e merge; ASC'de yıllık abonelik ürünü;
+   gerçek cihaz testleri (sandbox satın alma, yurt dışı vakit karşılaştırması, Dynamic Island);
+   1.7 submit; Ramazan (≈8 Şub 2027) gerçek veriyle Ramazan ekran görüntüsü; In-App Events girişi
+   (tarihler Diyanet'ten doğrulanarak), Featuring, Search Ads.
+5. 2–3 hafta sonra ASC Analytics tekrar ölçüm (dönüşüm, "ezan vakti" sırası).
+6. Gerçek cihaz: uzun süreli bildirim + BG-refresh, Watch dedup, kıble pusulası. Gelir zinciri:
+   20/B belgesi + özel hesap → ASC IBAN.
+7. Kalan kozmetik StoreKit riskleri #1/#2/#3/#5 (düşük öncelik).
 
 ## BLOCKERS
-Yok.
+Yok — ama canlıya çıkış kullanıcı aksiyonlarına (ASC ürün, cihaz testleri, merge) bağlı.
 
 ## BEST AGENT NOW
 Claude — ürün/veri kararı gerektiren işler sürüyor.

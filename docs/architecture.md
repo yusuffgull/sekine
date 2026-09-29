@@ -15,6 +15,7 @@ Core/
                 DiyanetDirectory (il/ilçe + LocationOverrides.json)
   Storage/      AppSettings (app group UserDefaults)
   Premium/      PremiumProviding + Store (StoreKit 2: ömürlük premium + bağış)
+  Kaza/         KazaTracker (kaza namazı sayaç + seri, yerel)
   WatchConnectivity/ WatchSessionManager (iPhone tarafı)
 DesignSystem/   Palette + SekineFont + kart stili (tüm renk/font token'ları burada)
 Features/       Onboarding, Home, Monthly, Qibla, Spiritual (Zikir), Premium (Paywall),
@@ -37,9 +38,14 @@ güvenilmez — bkz. `docs/decisions.md`, 2026-08-23).
    watch kendi lokal cache'inden).
 
 ## Zamanlar mutlak Date olarak saklanır
-API'den gelen "HH:mm" değerleri, günün tarihi + timezone (Europe/Istanbul) ile mutlak
-`Date`'e çevrilip öyle saklanır. Böylece timezone hataları ve "negatif geri sayım"
-sınıfı buglar önlenir.
+API'den gelen "HH:mm" değerleri, günün tarihi + timezone ile mutlak `Date`'e çevrilip
+öyle saklanır. Böylece timezone hataları ve "negatif geri sayım" sınıfı buglar önlenir.
+
+**Timezone kaynağı (2026-09-24'ten beri, yurtdışı desteği):** `Europe/Istanbul` SABİT
+DEĞİL — `DiyanetProvider` her günün GERÇEK UTC ofsetini Diyanet API'sinin kendi
+`MiladiTarihUzunIso8601` alanından ayrıştırır (yalnızca ayrıştırılamazsa Istanbul'a
+düşer). `LocalCalculationProvider` (ağsız fallback) cihazın kendi saat dilimini
+kullanır. Detay ve bilinen dar sınır: `docs/decisions.md` (2026-09-24).
 
 ## Bildirim güvenilirliği (kritik)
 iOS max 64 pending bildirim tutar. `RollingScheduler` her tetiklenişte pending'leri temizler
@@ -51,8 +57,15 @@ cache'ten okur; ağ gerektirmez.
 - **Vakit kaynağı değişimi:** yeni bir `PrayerTimeProvider` uygulaması + `PrayerTimeStore`'da
   `primary`'yi değiştir. Başka hiçbir yer değişmez. (Zincir bugün: Diyanet → Aladhan →
   lokal `adhan-swift` fallback.)
-- **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı (ömürlük
-  premium + bağış, abonelik değil); tam ezan `RollingScheduler`'a bildirim olarak eklendi.
+- **Yurtdışı konum (2026-09-24):** `DiyanetDirectory.countries()`/`cities(countryID:)`; GPS ülkeyi otomatik tespit eder, manuel aramada ülke seçici var. Onboarding/watchOS hâlâ yalnızca Türkiye.
+- **Ramazan modu (2026-09-24):** `Shared/RamadanInfo` — Diyanet hicri verisinden (hicriMonth==9), hicri veri yoksa kapalı.
+- **Premium (Faz 2, tamamlandı):** `PremiumProviding`, StoreKit 2 ile uygulandı; tam ezan
+  `RollingScheduler`'a bildirim olarak eklendi.
+- **Yıllık abonelik (2026-09-24 eklendi):** Ömürlüğün yanına `com.sekineapp.sekine.premium.yearly`
+  eklendi. `Store.entitlementProductIDs` ikisini de kapsar — ömürlük VE aktif abonelik
+  `.owned` sayılır. Abonelik yenilemesi `Transaction.updates`'ten anında yakalanır; sessiz
+  süre dolumu (kullanıcı yenilemedi) ancak bir sonraki app-launch/restore taramasında fark
+  edilir — bilinçli v1 sınırı (bkz. `Store.refreshEntitlements()` doc-comment'i).
 - **Apple Watch (Faz E4, tamamlandı):** `SekineWatch` hedefi, Core katmanını değişikliksiz
   kullanıyor; iPhone↔Watch senkronizasyonu `WatchConnectivity` ile (`WatchSessionManager`,
   her iki tarafta).
