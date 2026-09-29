@@ -1,11 +1,15 @@
 # Handoff
 
-## CURRENT TASK — 1.7 (10) gönderime hazırlanıyor
+## CURRENT TASK — 1.7 (10) ASC'de, incelemeye gönderilmeyi bekliyor
 **29 Eyl 2026.** `integration/all-features` `main`'e alındı (Faz 1–3 kod işlerinin hepsi),
 sürüm `project.yml`'de 1.7 (10). Kapsam ve gönderim öncesi kullanıcı adımları: `PLAN.md`.
 Gerekçeler: `docs/decisions.md` (2026-09-23 → 09-27). Yol haritası:
 `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immutable-firefly.md`.
 
+**29 Eyl gecesi:** cihaz sandbox testi yapıldı (yıllık $2.99 + ömürlük paywall'da göründü); yıllık abonelik
+ASC'de oluşturuldu (bkz. PLAN.md); 1.7 (10) `xcodebuild archive` + `-exportArchive` (method app-store-connect,
+destination upload, automatic signing, `-allowProvisioningUpdates`) ile yüklendi — bu yöntem Xcode GUI'siz çalışıyor.
+Kalan: build işlenince 1.7 sayfasında seçmek, yıllık ürünü sürüme bağlamak, Submit for Review (kullanıcı onayı).
 Yayında olan son sürüm 1.6 (9). Bilinçli yapılmayanlar (kullanıcı kararı bekliyor):
 çok aylık imsakiye (onaylı, sıradaki kod işi), Kur'an+meal (lisans), AI ezan (hesap/anahtar).
 

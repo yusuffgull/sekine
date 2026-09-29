@@ -20,7 +20,8 @@ tekrarlanan adımların ve değişmeyen referans bilgilerin listesi.
    Yayına çıkmış bir versiyona yeni build EKLENEMEZ → yayındaysa versiyonu yükselt.
    Gömülü Watch app'in sürümü iOS ile aynı olmalı (XcodeGen `settings.base`'ten geliyor).
 2. `xcodegen generate` → `./scripts/verify-xcode-cloud.sh` (derleme + CI senaryosu).
-3. Xcode → scheme **Sekine** + "Any iOS Device" → Product → Archive → Distribute App →
+3. (Komut satırı alternatifi: `xcodebuild archive -scheme Sekine -destination generic/platform=iOS -archivePath X -allowProvisioningUpdates`, sonra `-exportArchive` + exportOptions `{method: app-store-connect, destination: upload, teamID: 33L468BTR2}`.)
+   Xcode → scheme **Sekine** + "Any iOS Device" → Product → Archive → Distribute App →
    App Store Connect. (Şemalar `project.yml`'de tanımlı; yanlış şemayla extension
    arşivlememeye dikkat.)
 4. ASC'de yeni sürümü oluştur → build'i seç → **What's New** yaz.

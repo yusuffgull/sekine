@@ -4,7 +4,7 @@ Yol haritası: `/Users/yusufgul/.claude/plans/sekinenin-app-store-analytics-immu
 (gerekçe: `docs/decisions.md` 2026-09-23). Devir durumu: `docs/handoff.md`.
 
 ## Durum (29 Eyl 2026)
-**Yayında: 1.6 (9).** **1.7 (10) hazır, henüz gönderilmedi** — `main`'de, sürüm numarası
+**Yayında: 1.6 (9).** **1.7 (10) ASC'ye yüklendi (29 Eyl 2026, komut satırından archive+upload), incelemeye GÖNDERİLMEDİ** — `main`'de, sürüm numarası
 yükseltildi. İçeriği:
 - Yıllık abonelik (₺149.99, 7 gün deneme) + ömürlük yan yana; StoreKit entitlement
   katmanı baştan yazıldı, restore zaman aşımı düzeltmesi.
