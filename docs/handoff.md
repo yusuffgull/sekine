@@ -42,6 +42,7 @@ Sürüm bazlı özet `PLAN.md`'de. Buraya yalnızca tekrar araştırılması pah
   gömülü bağımlılık); ayrı watchOS action'a gerek yok.
 
 ## NEXT
+0. **AI ezan (30 Eyl):** ElevenLabs Free planda (10k kredi) Music v2 ile 2 aday üretildi ("The Call of Hijaz", "Adhan in Hijaz Makam", elevenlabs.io/app/music/history). Ajan ses dinleyemez → kalite kararı kullanıcı + 3-5 kişilik panel. Free planda MUSIC İNDİRİLEMİYOR ve ticari kullanım yok (arayüz: "indirme ve ticari kullanım için upgrade"); gömmek için ücretli plan (Starter $6/ay) gerekir — kullanıcı satın alır. Onay çıkarsa: `ezan.caf` (≤30sn) + `ezan-full.m4a` → `Sekine/Resources/Audio/`, kod kapısı otomatik açılır.
 1. Kullanıcı: sandbox satın alma/restore testi, ASC yıllık abonelik ürünü, yurtdışı vakit
    karşılaştırması → Archive → 1.7'yi Submit (bkz. `PLAN.md`).
 2. **Çok-ay/yıllık imsakiye:** yakın 32 gün Diyanet-birebir + ötesi çevrimiçi "yaklaşık"
