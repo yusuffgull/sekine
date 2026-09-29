@@ -9,7 +9,7 @@ Gerekçeler: `docs/decisions.md` (2026-09-23 → 09-27). Yol haritası:
 **29 Eyl gecesi:** cihaz sandbox testi yapıldı (yıllık $2.99 + ömürlük paywall'da göründü); yıllık abonelik
 ASC'de oluşturuldu (bkz. PLAN.md); 1.7 (10) `xcodebuild archive` + `-exportArchive` (method app-store-connect,
 destination upload, automatic signing, `-allowProvisioningUpdates`) ile yüklendi — bu yöntem Xcode GUI'siz çalışıyor.
-Kalan: build işlenince 1.7 sayfasında seçmek, yıllık ürünü sürüme bağlamak, Submit for Review (kullanıcı onayı).
+30 Eyl 00:10: build işlendi, ihracat beyanı 'None of the algorithms' (kullanıcı onayıyla), 1.7'ye bağlandı; iOS App 1.7 + Premium Yearly ASC 'Draft Submission'da. Kalan: Draft Submission panelinden Submit for Review (kullanıcı onayı). Not: sürüm 'Automatically release' — onaydan sonra kendiliğinden yayına çıkar.
 Yayında olan son sürüm 1.6 (9). Bilinçli yapılmayanlar (kullanıcı kararı bekliyor):
 çok aylık imsakiye (onaylı, sıradaki kod işi), Kur'an+meal (lisans), AI ezan (hesap/anahtar).
 
