@@ -181,6 +181,15 @@ struct PaywallView: View {
                     .foregroundStyle(Palette.textSecondary)
                     .multilineTextAlignment(.center)
             }
+            // Guideline 3.1.2: abonelikli uygulamada işlevsel Kullanım Koşulları + Gizlilik linki şart.
+            HStack(spacing: 16) {
+                Link("Kullanım Koşulları", destination: Self.termsURL)
+                Link("Gizlilik Politikası", destination: Self.privacyURL)
+            }
+            .font(.footnote)
         }
     }
+
+    private static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
+    private static let privacyURL = URL(string: "https://github.com/yusuffgull/sekine/blob/main/PRIVACY.md")!
 }

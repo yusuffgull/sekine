@@ -42,12 +42,13 @@ xcodebuild -project Sekine.xcodeproj -scheme Sekine \
 
 ## Yol Haritası
 
-- **Yayında (1.3):** vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget'lar;
-  ücretsiz Zikir sekmesi (tesbih + Esmaül Hüsna + dualar); Apple Watch companion app;
-  isteğe bağlı Ömürlük Premium + bağış (StoreKit 2, abonelik yok).
-- **Sıradaki (1.4):** seyahatte konum otomatik algılama, Ayarlar'da GPS ile konum yenileme,
-  hatırlatma saatlerinin açıklanması, çeşitli düzeltmeler.
-- **Sonraki:** Android (Kotlin, ayrı repo), globalleşme, ayet paylaşımı, dini içerik.
+- **Yayında (1.6):** vakitler, geri sayım, aylık imsakiye, kıble, bildirimler, widget'lar;
+  ücretsiz Zikir sekmesi; Apple Watch companion app; isteğe bağlı Ömürlük Premium + bağış.
+- **Sıradaki (1.7):** yıllık abonelik, yurtdışı konum + saat dilimi düzeltmesi, Ramazan modu
+  (sahur/iftar sayacı, oruç takibi, Live Activity), kaza namazı takibi, paylaşılabilir vakit kartı.
+- **Sonra:** çok aylık imsakiye (yaklaşık, etiketli), Kur'an (lisans çözülünce), ezan sesi, Android.
+
+Ayrıntı: `PLAN.md`.
 
 ## Destek & Gizlilik
 
