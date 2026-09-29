@@ -1,6 +1,6 @@
 # Handoff
 
-## CURRENT TASK — 1.7 (10) ASC'de, incelemeye gönderilmeyi bekliyor
+## CURRENT TASK — 1.7 (10) App Review'da (30 Eyl 2026'da gönderildi; sonuç e-postayla)
 **29 Eyl 2026.** `integration/all-features` `main`'e alındı (Faz 1–3 kod işlerinin hepsi),
 sürüm `project.yml`'de 1.7 (10). Kapsam ve gönderim öncesi kullanıcı adımları: `PLAN.md`.
 Gerekçeler: `docs/decisions.md` (2026-09-23 → 09-27). Yol haritası:
@@ -9,7 +9,7 @@ Gerekçeler: `docs/decisions.md` (2026-09-23 → 09-27). Yol haritası:
 **29 Eyl gecesi:** cihaz sandbox testi yapıldı (yıllık $2.99 + ömürlük paywall'da göründü); yıllık abonelik
 ASC'de oluşturuldu (bkz. PLAN.md); 1.7 (10) `xcodebuild archive` + `-exportArchive` (method app-store-connect,
 destination upload, automatic signing, `-allowProvisioningUpdates`) ile yüklendi — bu yöntem Xcode GUI'siz çalışıyor.
-30 Eyl 00:10: build işlendi, ihracat beyanı 'None of the algorithms' (kullanıcı onayıyla), 1.7'ye bağlandı; iOS App 1.7 + Premium Yearly ASC 'Draft Submission'da. Kalan: Draft Submission panelinden Submit for Review (kullanıcı onayı). Not: sürüm 'Automatically release' — onaydan sonra kendiliğinden yayına çıkar.
+30 Eyl 00:10: build işlendi, ihracat beyanı 'None of the algorithms' (kullanıcı onayıyla), 1.7'ye bağlandı; iOS App 1.7 + Premium Yearly ASC 'Draft Submission'da. GÖNDERİLDİ (30 Eyl, kullanıcı onayıyla; abonelik grubu da taslağa eklenmek zorundaydı). Onaylanınca sürüm otomatik yayınlanır. Reddedilirse: bildirim e-postasını oku, paywall/abonelik metni ve Guideline 3.1.2 ilk şüpheli. Not: sürüm 'Automatically release' — onaydan sonra kendiliğinden yayına çıkar.
 Yayında olan son sürüm 1.6 (9). Bilinçli yapılmayanlar (kullanıcı kararı bekliyor):
 çok aylık imsakiye (onaylı, sıradaki kod işi), Kur'an+meal (lisans), AI ezan (hesap/anahtar).
 
