@@ -21,7 +21,7 @@ yükseltildi. İçeriği:
 
 ## Gönderim öncesi kalan (kullanıcı)
 - [ ] Gerçek cihazda sandbox satın alma + restore (yıllık ve ömürlük)
-- [ ] ASC'de yıllık abonelik ürünü: `com.sekineapp.sekine.premium.yearly` (₺149.99, 7 gün deneme)
+- [x] ASC'de yıllık abonelik oluşturuldu (29 Eyl 2026, Claude/Chrome): grup `Sekine Premium`, `com.sekineapp.sekine.premium.yearly`, ₺149.99 (US $2.99, EUR €2.99 otomatik), 7 gün ücretsiz deneme, Aile Paylaşımı AÇIK (geri alınamaz), 175 ülke. **Kalan:** inceleme ekran görüntüsü (paywall, ürün yüklüyken gerçek cihazdan) + 1.7 sürümüne bağlama; ürün sandbox'ta görünmesi birkaç saat sürebilir
 - [ ] Yurtdışı konum vakitlerini (Almanya/Hollanda) Diyanet sitesiyle karşılaştır
 - [ ] Dynamic Island'ı cihazda gözle kontrol et
 - [ ] Archive → ASC → What's New → Submit (adımlar: `docs/store-submission.md`)
