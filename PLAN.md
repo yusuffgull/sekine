@@ -27,9 +27,9 @@ yükseltildi. İçeriği:
 - [ ] Archive → ASC → What's New → Submit (adımlar: `docs/store-submission.md`)
 
 ## Sonraki işler (Ramazan 2027 ≈ 8 Şub — hedef: 15 Ocak'ta mağazada)
-- [ ] **Çok aylık/yıllık imsakiye** — kullanıcı onayladı (2026-09-27): yakın 32 gün Diyanet
-      birebir + ötesi çevrimiçi "yaklaşık" (etiketli). **İftar için ≥2 dk güvenlik payı şart**
-      (Aladhan akşamı 1–2 dk erken veriyor). Önce kaynak kararı + çok şehir/mevsim ölçümü.
+- [x] **Çok aylık/yıllık imsakiye** (`feat/approx-calendar`, 1.8): yakın 32 gün Diyanet, ötesi
+      çevrimiçi "yaklaşık" (soluk satır, iftar +3 dk pay). Bildirim/widget/Ramazan sayacına karışmaz.
+      Kalan: Aralık/Mart/Haziran'da `scripts/compare-sources.py` ile mevsim ölçümü tekrarı.
 - [ ] **Kur'an+meal** — lisans engeli (Tanzil meal ticari kullanıma kapalı). Kullanıcıyla
       tartışma açık; öneri: önce resmî siteye bağlantı + Diyanet izin yazışması
       (`docs/decisions.md` 2026-09-27).

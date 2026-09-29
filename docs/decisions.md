@@ -2,6 +2,35 @@
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-09-29 — Çok aylık imsakiye: yaklaşık takvim ayrı cache'te + yurtdışı kaynak ölçümü (T3)
+
+**Yurtdışı kaynak sorusu (ölçüldü):** Diyanet servisi (`ezanvakti.emushaf.net`) zaten 200+ ülke
+için resmî Diyanet vakti veriyor; Türk diaspora için doğru otorite bu. Global hesaplama
+alternatifi Aladhan method=13. İkisi 14 şehirde (Berlin, Köln, München, Amsterdam, Viyana,
+Brüksel, Paris, Zürih, Londra, New York, Toronto, Bakü, Stockholm, Kopenhag; Eyl–Eki 2026, 32 gün)
+karşılaştırıldı (Aladhan − Diyanet, dk): İmsak 0..+1, Güneş 0..+1, Öğle −1..0, İkindi −1..+1,
+**Akşam −1..−3 (iftar için güvensiz yön)**, Yatsı Avrupa/K.Amerika +3..+7, İstanbul/Bakü −2..0.
+Sonuç: kaynak değişikliği gerekmedi — yakın günler Diyanet-birebir, ötesi Aladhan (yaklaşık).
+Ülke bazlı resmî kurumlar (ör. Malezya JAKIM) uygulamanın hedef kitlesi için gereksiz; Türk
+diasporası Diyanet takvimini izler. Kapsam genişletme: `scripts/compare-sources.py` ile yeni
+şehir/mevsim ölçülür. **Sınır:** yalnızca tek mevsim (sonbahar) ölçüldü — Diyanet 32 günden
+fazlasını vermediği için diğer mevsimler ancak zamanla tekrar ölçülerek doğrulanır (Aralık/Mart/Haziran'da tekrarla).
+Güney yarımküre (Sidney) ölçülemedi (servis 502).
+
+**Tasarım:** `ApproxCalendar.swift`. Yaklaşık takvim `PrayerTimeStore.schedule`'dan AYRI cache'te
+(`approx-calendar.json`); bildirim, widget, Watch ve Ramazan sayacı ona ASLA dokunmaz — yaklaşık
+vakitle bildirim/iftar sayacı riski yok. Yalnızca `MonthlyView` kullanır: Diyanet penceresi
+kesin, sonrası soluk satır + açıklama notu; kesin veri gelince (pencere kayınca) gün otomatik
+kesinleşir. Güvenlik payı (dk): İmsak −2, Güneş −1, Öğle +1, İkindi +1, **Akşam +3**, Yatsı +2 —
+hepsi oruç/namaz için güvenli yöne. Çevrimdışı/koordinatsız → davranış öncekiyle aynı (yalnızca
+kesin veri). Yenileme: konum değişince, 14 günden eskiyse veya kapsam <60 gün kalırsa; cari + gelecek yıl.
+Ay/gün gruplaması ve saat gösterimi artık her satırın kendi saat diliminde (önceden cihaz saati).
+
+**Elenen:** (a) yaklaşık günleri ana cache'e katmak — bildirime sızma riski; (b) Awqat Salah
+resmî API — kimlik/kota belirsiz, proxy gerekir (Kasım öncesi gerekmedi); (c) yaklaşık veride
+Ramazan'da hiç iftar göstermemek — takvim satırı etiketli ve paylı, sayaç zaten yalnızca kesin veriden.
+
+
 ## 2026-09-24 — Yıllık abonelik eklendi (Faz 1, T3 — para akışı)
 
 **Karar:** `com.sekineapp.sekine.premium.yearly` (₺149.99, 7 gün ücretsiz deneme) ömürlük

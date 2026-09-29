@@ -17,9 +17,24 @@ struct AladhanProvider: PrayerTimeProvider {
         guard let latitude = location.latitude, let longitude = location.longitude else {
             throw PrayerProviderError.emptyResult
         }
-        let placeName = location.name
         let year = Calendar(identifier: .gregorian).component(.year, from: Date())
+        let (days, tz) = try await fetchYear(latitude: latitude, longitude: longitude, year: year)
 
+        return PrayerSchedule(
+            placeName: location.name,
+            latitude: latitude,
+            longitude: longitude,
+            timeZoneIdentifier: tz.identifier,
+            source: sourceIdentifier,
+            fetchedAt: Date(),
+            days: days
+        )
+    }
+
+    /// Bir takvim yılının tüm günleri (method=13, Diyanet'e en yakın hesap). `safetyMinutes`
+    /// verilirse her vakite eklenir (bkz. `ApproxSafetyMargin`); normal yedek zincirde boştur.
+    func fetchYear(latitude: Double, longitude: Double, year: Int,
+                   safetyMinutes: [Prayer: Int] = [:]) async throws -> (days: [PrayerDay], timeZone: TimeZone) {
         var comps = URLComponents(string: "https://api.aladhan.com/v1/calendar")!
         comps.queryItems = [
             .init(name: "latitude", value: String(latitude)),
@@ -55,22 +70,14 @@ struct AladhanProvider: PrayerTimeProvider {
         for month in 1...12 {
             guard let monthDays = response.data[String(month)] else { continue }
             for raw in monthDays {
-                guard let day = raw.toPrayerDay(calendar: cal, timeZone: tz) else { continue }
+                guard let day = raw.toPrayerDay(calendar: cal, timeZone: tz,
+                                                safetyMinutes: safetyMinutes) else { continue }
                 days.append(day)
             }
         }
         days.sort { $0.dayStart < $1.dayStart }
         guard !days.isEmpty else { throw PrayerProviderError.emptyResult }
-
-        return PrayerSchedule(
-            placeName: placeName,
-            latitude: latitude,
-            longitude: longitude,
-            timeZoneIdentifier: tz.identifier,
-            source: sourceIdentifier,
-            fetchedAt: Date(),
-            days: days
-        )
+        return (days, tz)
     }
 }
 
@@ -85,7 +92,8 @@ private struct AladhanDay: Decodable {
     let date: AladhanDate
     let meta: AladhanMeta
 
-    func toPrayerDay(calendar cal: Calendar, timeZone tz: TimeZone) -> PrayerDay? {
+    func toPrayerDay(calendar cal: Calendar, timeZone tz: TimeZone,
+                     safetyMinutes: [Prayer: Int] = [:]) -> PrayerDay? {
         // date.gregorian.date = "dd-MM-yyyy"
         let parts = date.gregorian.date.split(separator: "-").compactMap { Int($0) }
         guard parts.count == 3 else { return nil }
@@ -102,7 +110,8 @@ private struct AladhanDay: Decodable {
                   let d = cal.date(from: DateComponents(
                       timeZone: tz, year: yyyy, month: mm, day: dd, hour: h, minute: m))
             else { continue }
-            times.append(PrayerTime(prayer: prayer, date: d))
+            let adjusted = d.addingTimeInterval(TimeInterval((safetyMinutes[prayer] ?? 0) * 60))
+            times.append(PrayerTime(prayer: prayer, date: adjusted))
         }
         guard let dayStart = cal.date(from: DateComponents(
             timeZone: tz, year: yyyy, month: mm, day: dd, hour: 0, minute: 0))

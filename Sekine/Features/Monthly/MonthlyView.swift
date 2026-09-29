@@ -3,8 +3,18 @@ import SwiftUI
 struct MonthlyView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var store: PrayerTimeStore
+    @StateObject private var approx = ApproxCalendarStore()
 
-    @State private var monthOffset = 0
+    @State private var monthOffset = MonthlyView.initialMonthOffset
+
+    /// DEBUG'da ekran görüntüsü/doğrulama için başlangıç ayı (`-uiTestMonthOffset 4`).
+    private static var initialMonthOffset: Int {
+        #if DEBUG
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-uiTestMonthOffset"), i + 1 < args.count, let n = Int(args[i + 1]) { return n }
+        #endif
+        return 0
+    }
 
     var body: some View {
         NavigationStack {
@@ -14,13 +24,14 @@ struct MonthlyView: View {
                     ScrollView {
                         LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                             Section {
-                                ForEach(days) { day in dayRow(day) }
+                                ForEach(days) { entry in dayRow(entry) }
                             } header: {
                                 columnHeader
                             }
                         }
                         .sekineCard()
                         .padding()
+                        if days.contains(where: \.isApproximate) { approxFootnote }
                     }
                 } else {
                     emptyState
@@ -43,6 +54,8 @@ struct MonthlyView: View {
                 if store.schedule == nil, let loc = settings.location {
                     await store.ensureData(for: loc, settings: settings)
                 }
+                // Diyanet penceresinin ötesi için çevrimiçi "yaklaşık" takvim (sessiz, en iyi çaba).
+                if let loc = settings.location { await approx.ensure(for: loc) }
             }
         }
     }
@@ -60,19 +73,43 @@ struct MonthlyView: View {
         }
     }
 
+    /// Kesin + yaklaşık günler (kesin veri yoksa hiçbiri gösterilmez).
+    private var entries: [MonthlyEntry] {
+        guard let schedule = store.schedule else { return [] }
+        var approxDays: [PrayerDay] = []
+        var approxTZ = schedule.timeZone
+        // Yaklaşık takvim yalnızca aktif konuma aitse kullanılır (eski konumun verisi karışmasın).
+        if let a = approx.schedule, let loc = settings.location,
+           let lat = loc.latitude, let lon = loc.longitude,
+           abs(a.latitude - lat) < 0.01, abs(a.longitude - lon) < 0.01 {
+            approxDays = a.days
+            approxTZ = a.timeZone
+        }
+        return ApproxCalendar.merge(exact: schedule.days, exactTimeZone: schedule.timeZone,
+                                    approx: approxDays, approxTimeZone: approxTZ)
+    }
+
+    private func monthKey(_ e: MonthlyEntry) -> Int {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = e.timeZone
+        let c = cal.dateComponents([.year, .month], from: e.day.dayStart)
+        return c.year! * 12 + (c.month! - 1)
+    }
+
+    /// Bugüne göre ay farkı (0 = bu ay) — bugünün ayı, konumun saat diliminde hesaplanır.
+    private func currentMonthKey() -> Int {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = store.schedule?.timeZone ?? .current
+        let c = cal.dateComponents([.year, .month], from: Date())
+        return c.year! * 12 + (c.month! - 1)
+    }
+
     /// Yüklü verinin kapsadığı ay aralığı (bugüne göre ay farkı olarak).
     private var monthBounds: (min: Int, max: Int)? {
-        guard let schedule = store.schedule,
-              let first = schedule.days.map(\.dayStart).min(),
-              let last = schedule.days.map(\.dayStart).max() else { return nil }
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = schedule.timeZone
-        let cur = cal.dateComponents([.year, .month], from: Date())
-        func diff(_ d: Date) -> Int {
-            let c = cal.dateComponents([.year, .month], from: d)
-            return (c.year! - cur.year!) * 12 + (c.month! - cur.month!)
-        }
-        return (diff(first), diff(last))
+        let keys = entries.map(monthKey)
+        guard let lo = keys.min(), let hi = keys.max() else { return nil }
+        let cur = currentMonthKey()
+        return (lo - cur, hi - cur)
     }
 
     private var canGoPrev: Bool { monthOffset > (monthBounds?.min ?? 0) }
@@ -92,17 +129,22 @@ struct MonthlyView: View {
         .background(Palette.card)
     }
 
-    private func dayRow(_ day: PrayerDay) -> some View {
-        let isToday = Calendar.current.isDateInToday(day.dayStart)
+    private func dayRow(_ entry: MonthlyEntry) -> some View {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = entry.timeZone
+        let day = entry.day
+        let isToday = cal.isDateInToday(day.dayStart)
+        let timeFmt = Self.formatter("HH:mm", entry.timeZone)
+        let dayFmt = Self.formatter("d EEE", entry.timeZone)
         return HStack(spacing: 4) {
-            Text(Self.dayFormatter.string(from: day.dayStart))
+            Text(dayFmt.string(from: day.dayStart))
                 .frame(width: 54, alignment: .leading)
                 .foregroundStyle(isToday ? Palette.accent : Palette.textPrimary)
                 .fontWeight(isToday ? .bold : .regular)
             ForEach(Prayer.ordered) { p in
-                Text(day.time(for: p).map(Self.timeFormatter.string(from:)) ?? "–")
+                Text(day.time(for: p).map(timeFmt.string(from:)) ?? "–")
                     .frame(maxWidth: .infinity)
-                    .foregroundStyle(Palette.textPrimary)
+                    .foregroundStyle(entry.isApproximate ? Palette.textSecondary : Palette.textPrimary)
             }
         }
         // Yoğun tablo: büyük fontta hücreler sığmazsa satır atlamak yerine küçülsün.
@@ -112,24 +154,30 @@ struct MonthlyView: View {
         .padding(.vertical, 9)
         .padding(.horizontal, 12)
         .background(isToday ? Palette.cardActive : Color.clear)
+        .accessibilityLabel(entry.isApproximate ? "Yaklaşık vakitler" : "")
     }
 
-    private var monthDays: [PrayerDay]? {
-        guard let schedule = store.schedule else { return nil }
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = schedule.timeZone
-        guard let base = cal.date(byAdding: .month, value: monthOffset, to: Date()) else { return nil }
-        let comps = cal.dateComponents([.year, .month], from: base)
-        return schedule.days.filter {
-            let dc = cal.dateComponents([.year, .month], from: $0.dayStart)
-            return dc.year == comps.year && dc.month == comps.month
-        }
+    private var approxFootnote: some View {
+        Text("≈ Soluk satırlar çevrimiçi hesaplanan yaklaşık vakitlerdir (imsak erken, iftar geç olacak şekilde güvenli paylı). Diyanet vakitleri yayımlandıkça günler kesinleşir; oruç ve namaz için Diyanet takvimi esastır.")
+            .font(.footnote)
+            .foregroundStyle(Palette.textSecondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
+            .padding(.bottom)
+    }
+
+    private var monthDays: [MonthlyEntry]? {
+        let all = entries
+        guard !all.isEmpty else { return nil }
+        let target = currentMonthKey() + monthOffset
+        return all.filter { monthKey($0) == target }
     }
 
     private var monthTitle: String {
-        let cal = Calendar(identifier: .gregorian)
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = store.schedule?.timeZone ?? .current
         let base = cal.date(byAdding: .month, value: monthOffset, to: Date()) ?? Date()
-        return Self.monthFormatter.string(from: base)
+        return Self.formatter("MMMM yyyy", cal.timeZone).string(from: base)
     }
 
     private func shortName(_ p: Prayer) -> String {
@@ -143,13 +191,16 @@ struct MonthlyView: View {
         }
     }
 
-    static let timeFormatter: DateFormatter = {
-        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "HH:mm"; return f
-    }()
-    static let dayFormatter: DateFormatter = {
-        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "d EEE"; return f
-    }()
-    static let monthFormatter: DateFormatter = {
-        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "MMMM yyyy"; return f
-    }()
+    private static var formatterCache: [String: DateFormatter] = [:]
+    /// (biçim, saat dilimi) başına önbellekli formatter — satır başına yeniden yaratılmaz.
+    static func formatter(_ format: String, _ tz: TimeZone) -> DateFormatter {
+        let key = format + "|" + tz.identifier
+        if let f = formatterCache[key] { return f }
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = format
+        f.timeZone = tz
+        formatterCache[key] = f
+        return f
+    }
 }
