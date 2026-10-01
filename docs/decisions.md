@@ -1,5 +1,13 @@
 # Kararlar (ADR-lite)
 
+## 2026-09-30 — Gizlilik/destek URL'leri kendi alan adına taşındı
+**Karar:** Sekine'nin Support/Marketing/Privacy URL'leri GitHub repo/PRIVACY.md'den https://yusuffiratgul.com/sekine/
+adresine taşındı (ASC 1.7 kaydı). **Neden:** tüm uygulamalar tek geliştirici sitesinde toplandı; AdMob app-ads.txt
+doğrulaması mağazadaki geliştirici web sitesinin kökünü okuyor (oyunlar için gerekli, Sekine reklamsız ama tutarlılık).
+**Elenen:** GitHub blob URL'si (kök alan adı yok, değişken), claude.ai Artifact (Apple 1.5 reddi). `PRIVACY.md`
+repoda kalıyor; iki kaynak değişirse ikisi de güncellenmeli.
+
+
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
 ## 2026-09-29 — Çok aylık imsakiye: yaklaşık takvim ayrı cache'te + yurtdışı kaynak ölçümü (T3)

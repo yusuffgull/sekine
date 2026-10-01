@@ -1,5 +1,20 @@
 # Handoff
 
+## CURRENT TASK — 1.7 hazır değil: build yok (30 Eyl 2026)
+ASC'de **1.7 "Prepare for Submission"** kaydı var ama **Build bölümü boş**: metadata (Türkçe "Yenilikler",
+keyword'ler, açıklama, ekran görüntüleri) ASO turunda dolduruldu, kod tarafı yüklenmedi. `project.yml` hâlâ
+1.6 (9). 1.6'dan sonra `main`'de yayınlanmamış düzeltmeler birikti: `6ec1846` RollingScheduler baştan yazımı
+(sessiz bildirim kaybı), `0cebaeb` StoreKit entitlement güvenilirliği, `9b6e71b` Ezan seçici fallback/konum
+yarışı, `c5be592` ASO (reklamsız mesajı, keyword). Bunlar T3 (para akışı + bildirim): 1.7 (10) bump →
+`xcodegen generate` + `./scripts/verify-xcode-cloud.sh` → NATASHA review → arşiv/yükle → ASC'de build seç → submit.
+**Yapıldı (30 Eyl):** ASC 1.7'de Support URL = https://yusuffiratgul.com/sekine/, Marketing URL =
+https://yusuffiratgul.com/, Privacy Policy URL = https://yusuffiratgul.com/sekine/#gizlilik (eskiden GitHub
+PRIVACY.md / repo). Site kaynağı: `~/Documents/repos/yusuffiratgul-com` (GitHub Pages). İletişim e-postası artık
+yusuff.gull@icloud.com (sitede; uygulama içi/ASC iletişim alanları ayrıca kontrol edilmeli).
+**Kullanıcı aksiyonu hâlâ gerekli:** Featuring nomination, Apple Search Ads. Sonraki kod işi: Faz 1 (yıllık abonelik).
+
+---
+
 ## CURRENT TASK — 1.7 (10) App Review'da (30 Eyl 2026'da gönderildi; sonuç e-postayla)
 **29 Eyl 2026.** `integration/all-features` `main`'e alındı (Faz 1–3 kod işlerinin hepsi),
 sürüm `project.yml`'de 1.7 (10). Kapsam ve gönderim öncesi kullanıcı adımları: `PLAN.md`.
