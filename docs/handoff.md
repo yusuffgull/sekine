@@ -10,7 +10,7 @@ yarışı, `c5be592` ASO (reklamsız mesajı, keyword). Bunlar T3 (para akışı
 **Yapıldı (30 Eyl):** ASC 1.7'de Support URL = https://yusuffiratgul.com/sekine/, Marketing URL =
 https://yusuffiratgul.com/, Privacy Policy URL = https://yusuffiratgul.com/sekine/#gizlilik (eskiden GitHub
 PRIVACY.md / repo). Site kaynağı: `~/Documents/repos/yusuffiratgul-com` (GitHub Pages). İletişim e-postası artık
-yusuff.gull@icloud.com (sitede; uygulama içi/ASC iletişim alanları ayrıca kontrol edilmeli).
+yusuff.gull@icloud.com (KANONİK iletişim maili — kullanıcı kararı 3 Eki 2026; README/PRIVACY güncellendi, ASC iletişim alanları ayrıca kontrol edilecek).
 **Kullanıcı aksiyonu hâlâ gerekli:** Featuring nomination, Apple Search Ads. Sonraki kod işi: Faz 1 (yıllık abonelik).
 
 ---

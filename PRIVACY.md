@@ -40,7 +40,7 @@ da veri toplamaz.
 Bu politika güncellenirse bu sayfada yayımlanır ve "Son güncelleme" tarihi değiştirilir.
 
 ## İletişim
-Soru veya talepleriniz için: **gull.yusuff@gmail.com**
+Soru veya talepleriniz için: **yusuff.gull@icloud.com**
 
 ---
 
@@ -64,4 +64,4 @@ your personal data.**
 - **Purchases** (lifetime Premium and tips) are handled entirely by Apple. We never see,
   collect, or store your payment details; entitlement is kept on-device only.
 
-Contact: **gull.yusuff@gmail.com**
+Contact: **yusuff.gull@icloud.com**

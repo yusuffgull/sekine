@@ -52,7 +52,7 @@ Ayrıntı: `PLAN.md`.
 
 ## Destek & Gizlilik
 
-- **Destek:** Soru ve geri bildirim için gull.yusuff@gmail.com
+- **Destek:** Soru ve geri bildirim için yusuff.gull@icloud.com
 - **Gizlilik Politikası:** [PRIVACY.md](PRIVACY.md) — Sekine hiçbir kişisel veri toplamaz,
   saklamaz veya paylaşmaz.
 
