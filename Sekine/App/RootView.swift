@@ -59,28 +59,20 @@ struct MainTabView: View {
         }
     }
 
-    /// Birkaç günlük düzenli kullanımdan sonra, sürüm başına en fazla bir kez sorar
-    /// (sistem zaten yılda birkaç kezle sınırlar) — App Store rating sayısını artırmak
-    /// organik arama sıralamasında önemli bir sinyal.
+    /// Açılış yolu yalnızca "yedek" politika için: 7 farklı günde kullanmış ama hiç olumlu an
+    /// (ör. tesbih turu, bkz. `TesbihView`) tetiklememiş kullanıcıya sorar. Politika: `ReviewPrompt`.
     private func maybeAskForReview() async {
-        let defaults = UserDefaults.standard
-        let countKey = "growth.significantOpenCount"
-        let askedVersionKey = "growth.reviewAskedVersion"
-
-        let count = defaults.integer(forKey: countKey) + 1
-        defaults.set(count, forKey: countKey)
-
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        guard count >= 5, defaults.string(forKey: askedVersionKey) != currentVersion else { return }
+        let prompt = ReviewPrompt()
+        prompt.recordOpen()
+        let version = ReviewPrompt.currentVersion
+        guard prompt.shouldAsk(version: version, positiveMoment: false) else { return }
 
         // Açılış ve konum sürüklenme kontrolü (SekineApp.bootstrap) otursun: ikisi aynı
         // anda modal açarsa rating diyalogu konum uyarısını yutuyor.
         try? await Task.sleep(for: .seconds(4))
         guard settings.pendingLocationSuggestion == nil else { return }
 
-        // Sürüm kapısı yalnızca gerçekten sorduğumuzda yazılır; atladıysak sonraki
-        // açılışta tekrar denenebilsin.
-        defaults.set(currentVersion, forKey: askedVersionKey)
+        prompt.markAsked(version: version)
         requestReview()
     }
 
