@@ -10,6 +10,14 @@ repoda kalıyor; iki kaynak değişirse ikisi de güncellenmeli.
 
 > Yeni girdi en üste. Geçmiş girdiler geriye dönük düzenlenmez.
 
+## 2026-10-03 — Puan isteme politikası: farklı gün sayısı + olumlu an
+
+**Karar:** Eski mantık 5 açılışta (aynı gün olabilir) doğrudan açılışta soruyordu. Yeni (`Core/Growth/ReviewPrompt.swift`):
+en az 5 açılış VE 3 FARKLI gün; tesbih turu bitince (olumlu an) sorulur; hiç tur tamamlamayan kullanıcıya 7 farklı günden
+sonra açılışta yedek olarak sorulur; sürüm başına en fazla bir kez. **Neden:** hedef 3 → ≥50 puan (Ocak); ama düşük puan/erken
+pencere riski ve Apple'ın "kullanıcıyı bölme" yönergesi. **Not:** ~44 indirme/ay ile bu tek başına puan sayısını sürmez —
+asıl kaldıraç görünürlük/indirme; puan isteği bunun çarpanı.
+
 ## 2026-09-29 — Çok aylık imsakiye: yaklaşık takvim ayrı cache'te + yurtdışı kaynak ölçümü (T3)
 
 **Yurtdışı kaynak sorusu (ölçüldü):** Diyanet servisi (`ezanvakti.emushaf.net`) zaten 200+ ülke

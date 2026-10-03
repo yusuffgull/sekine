@@ -1,9 +1,11 @@
 import SwiftUI
+import StoreKit
 
 /// Dijital tesbih (zikir sayacı) — ücretsiz. Dokun-say, hedef (33/99), zikir döngüsü,
 /// haptik, sıfırla. Sayaç ve tur cihazda saklanır.
 struct TesbihView: View {
     @EnvironmentObject private var settings: AppSettings
+    @Environment(\.requestReview) private var requestReview
 
     @AppStorage("tesbih.count") private var count = 0
     @AppStorage("tesbih.target") private var target = 33
@@ -86,8 +88,22 @@ struct TesbihView: View {
             rounds += 1
             zikirIndex += 1
             haptic(.heavy)
+            askForReviewAfterRound()
         } else {
             haptic(.light)
+        }
+    }
+
+    /// Tur bitmesi olumlu bir an: eşik sağlanmışsa (en az 3 farklı gün) sistem puan penceresini
+    /// biraz gecikmeyle ister, böylece tur animasyonunu/haptic'i kesmez.
+    private func askForReviewAfterRound() {
+        let prompt = ReviewPrompt()
+        let version = ReviewPrompt.currentVersion
+        guard prompt.shouldAsk(version: version, positiveMoment: true) else { return }
+        prompt.markAsked(version: version)
+        Task {
+            try? await Task.sleep(for: .seconds(1.2))
+            requestReview()
         }
     }
 
