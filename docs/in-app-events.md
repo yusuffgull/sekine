@@ -1,4 +1,9 @@
-# In-App Events taslakları (ASC — girişi/yayını kullanıcı yapar)
+# In-App Events (ASC'de DRAFT olarak girildi, 4 Eki 2026 — incelemeye gönderim kullanıcı onayıyla)
+
+**Tarihler Diyanet'in kendi tablosundan DOĞRULANDI** (https://vakithesaplama.diyanet.gov.tr/dinigunler.php, 2026 tablosu + icerik.php?icerik=154, 2027): Regaib/Üç Aylar 1 Receb 1448 = 10 Ara 2026 Per; Miraç 26 Receb = 4 Oca 2027 Pzt; Berat 14 Şaban = 22 Oca Cum; Ramazan başı 8 Şub Pzt; Arefe 8 Mar; Bayram 9–11 Mar. ASC'de girilen aralıklar: Regaib 10–12 Ara (yayın 28 Kas), Miraç 4–6 Oca (22 Ara), Berat 22–24 Oca (8 Oca), Ramazan'a Hazırlık 18 Oca–8 Şub (4 Oca, Premiere), Ramazan Başladı 8 Şub–9 Mar (25 Oca, Major Update). Kandil gecesi o gün AKŞAMI başlar. Görseller: `scripts/generate-event-images.sh` → `store/events/`.
+
+---
+(Aşağıdaki orijinal taslak notu:)
 
 Uygulamadaki dini gün verisi (`Sekine/Resources/HolyDays.json`) HİCRİ ay/gün tutuyor;
 miladi karşılıkları burada TAHMİN edilmedi. **Her event'in tarihini Diyanet'in resmi
