@@ -1,5 +1,7 @@
 # Handoff
 
+> **8 Eki 2026:** 1.8 (11) App Review'a gönderildi (Waiting for Review). İçerik: Zikir sekmesinde kuran.diyanet.gov.tr bağlantısı, rating politikası, konum/gizlilik metinleri (PRIVACY.md + site + Info.plist), export compliance anahtarı. 5 In-App Event hâlâ DRAFT (gönderilmedi). Backlog: ezan sesi, Android.
+
 ## CURRENT TASK — 1.7 hazır değil: build yok (30 Eyl 2026)
 ASC'de **1.7 "Prepare for Submission"** kaydı var ama **Build bölümü boş**: metadata (Türkçe "Yenilikler",
 keyword'ler, açıklama, ekran görüntüleri) ASO turunda dolduruldu, kod tarafı yüklenmedi. `project.yml` hâlâ
