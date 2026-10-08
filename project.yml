@@ -9,8 +9,8 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.7"
-    CURRENT_PROJECT_VERSION: "10"
+    MARKETING_VERSION: "1.8"
+    CURRENT_PROJECT_VERSION: "11"
     DEVELOPMENT_TEAM: "33L468BTR2"
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1"
@@ -48,10 +48,11 @@ targets:
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Cinar
         INFOPLIST_KEY_CFBundleDisplayName: Sekine
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
-        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Namaz vakitlerini bulunduğunuz konuma göre Diyanet'e uygun hesaplamak için konumunuz kullanılır. Konum cihazınızdan dışarı gönderilmez."
-        INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription: "Namaz vakitlerini konumunuza göre hesaplamak için konum izni kullanılır. Konum cihazınızdan dışarı gönderilmez."
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Namaz vakitlerini bulunduğunuz konuma göre Diyanet'e uygun hesaplamak için konumunuz kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz (il/ilçe veya yaklaşık koordinat) iletilir."
+        INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription: "Namaz vakitlerini konumunuza göre hesaplamak için konum izni kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz iletilir."
         CODE_SIGN_ENTITLEMENTS: Sekine/Sekine.entitlements
     info:
       path: Sekine/Info.plist

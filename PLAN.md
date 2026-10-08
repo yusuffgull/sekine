@@ -30,9 +30,7 @@ yükseltildi. İçeriği:
 - [x] **Çok aylık/yıllık imsakiye** (`feat/approx-calendar`, 1.8): yakın 32 gün Diyanet, ötesi
       çevrimiçi "yaklaşık" (soluk satır, iftar +3 dk pay). Bildirim/widget/Ramazan sayacına karışmaz.
       Kalan: Aralık/Mart/Haziran'da `scripts/compare-sources.py` ile mevsim ölçümü tekrarı.
-- [ ] **Kur'an+meal** — lisans engeli (Tanzil meal ticari kullanıma kapalı). Kullanıcıyla
-      tartışma açık; öneri: önce resmî siteye bağlantı + Diyanet izin yazışması
-      (`docs/decisions.md` 2026-09-27).
+- [x] **Kur'an:** metin gömülmedi (lisans); Zikir sekmesinde resmî Diyanet sitesine (kuran.diyanet.gov.tr) bağlantı satırı eklendi (1.8). Gömülü Kur'an+meal için Diyanet'ten yazılı izin hâlâ gerekir.
 - [ ] **Ezan sesi** — kullanıcı ElevenLabs anahtarını hazırlayınca dinleme testi; 3–5 kişilik
       dinleyici paneli kapısı; olmazsa yerel müezzin kaydı. Kod kapısı hazır: dosya
       (`ezan.caf`, `ezan-full.m4a` → `Sekine/Resources/Audio/`) eklenince aktifleşir.
@@ -40,6 +38,10 @@ yükseltildi. İçeriği:
 - [ ] Featuring nomination (Aralık başına kadar), Search Ads (10–30$/ay)
 - [ ] Diaspora için İngilizce/Almanca keyword yerelleştirmesi (ASC, kod dışı)
 - [ ] 2–3 hafta sonra ASC Analytics: dönüşüm (hedef ≥%1.6), "ezan vakti" sırası (baseline ~70)
+
+## Backlog (kullanıcı kararı bekliyor — 8 Eki 2026'da ertelendi)
+- **Ezan sesi:** ElevenLabs adayları üretildi (`docs/handoff.md`); kullanıcı dinleyip seçecek, doğruluğu bir hocaya onaylatılacak, Starter plan (indirme+ticari lisans) gerekir. Dosya gelince `Sekine/Resources/Audio/` → kod kapısı açılır.
+- **Android:** 12 tester × 14 gün kapalı test (kişisel hesap) + stack kararı; Gate #1 ≈17 Eki. Plan: `/Users/yusufgul/.claude/plans/uygulamalar-n-asc-analytcs-ve-mighty-dream.md`.
 
 ## Bilinen riskler / açık
 - Gerçek cihaz gerektirenler: uzun süreli bildirim + BG-refresh güvenilirliği, Watch bildirim
