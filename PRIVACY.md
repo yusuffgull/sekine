@@ -10,9 +10,9 @@ verinizi toplamıyor, saklamıyor veya paylaşmıyoruz.**
 (SDK) yoktur. Reklam göstermez, reklam ağı içermez.
 
 ## Konum
-- Konumunuz yalnızca **cihazınızda**, bulunduğunuz yere göre namaz vakitlerini belirlemek
-  için kullanılır.
-- Konumunuz tarafımıza veya üçüncü bir tarafa **gönderilmez, saklanmaz, satılmaz**.
+- Konumunuz, bulunduğunuz yere göre namaz vakitlerini belirlemek için **cihazınızda** işlenir.
+- Konumunuz tarafımızca **toplanmaz, saklanmaz, satılmaz** ve kimliğinizle ilişkilendirilmez.
+  Vakit servislerine iletilen bilgi aşağıdaki "İnternet bağlantısı" bölümünde açıklanmıştır.
 
 ## İnternet bağlantısı
 Sekine, seçtiğiniz il/ilçe için namaz vakitlerini bir kez indirip cihazınızda saklar ve
@@ -20,7 +20,9 @@ ardından çevrimdışı çalışır. Vakitleri indirmek için:
 - **Diyanet İşleri Başkanlığı** kaynaklı vakit servisine (ezanvakti / namazvakti.diyanet.gov.tr),
 - ve yedek olarak **Aladhan** vakit servisine
 
-yalnızca **seçtiğiniz konumun bilgisi (il/ilçe veya koordinat)** iletilir. Kimliğinizi
+yalnızca **seçtiğiniz konumun bilgisi (il/ilçe veya koordinat)** iletilir. Aylık imsakiyede Diyanet'in
+yayımladığı pencerenin ötesindeki günler için ("yaklaşık" vakitler) aynı konumun koordinatı Aladhan
+servisine iletilir. Kimliğinizi
 belirleyen hiçbir bilgi (isim, e-posta, cihaz kimliği vb.) gönderilmez.
 
 ## Bildirimler
@@ -28,7 +30,7 @@ Namaz vakti bildirimleri tamamen cihazınızda, yerel olarak zamanlanır. Bildir
 cihazınızdan dışarı çıkmaz.
 
 ## Satın almalar
-Uygulama içi satın almalar (Ömürlük Premium ve bağışlar) tamamen **Apple** tarafından
+Uygulama içi satın almalar (Ömürlük Premium, yıllık abonelik ve bağışlar) tamamen **Apple** tarafından
 yürütülür. Ödeme bilgilerinizi görmez, toplamaz ve saklamayız; satın alma durumu yalnızca
 cihazınızda tutulur. Kendi sunucumuz veya hesap sistemimiz yoktur.
 
