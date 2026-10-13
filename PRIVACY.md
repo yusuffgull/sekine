@@ -21,8 +21,8 @@ ardından çevrimdışı çalışır. Vakitleri indirmek için:
 - ve yedek olarak **Aladhan** vakit servisine
 
 yalnızca **seçtiğiniz konumun bilgisi (il/ilçe veya koordinat)** iletilir. Aylık imsakiyede Diyanet'in
-yayımladığı pencerenin ötesindeki günler için ("yaklaşık" vakitler) aynı konumun koordinatı Aladhan
-servisine iletilir. Kimliğinizi
+yayımladığı pencerenin ötesindeki günler için ("yaklaşık" vakitler) aynı konumun koordinatı (yaklaşık 1 km'ye
+yuvarlanmış olarak) Aladhan servisine iletilir. Kimliğinizi
 belirleyen hiçbir bilgi (isim, e-posta, cihaz kimliği vb.) gönderilmez.
 
 ## Bildirimler

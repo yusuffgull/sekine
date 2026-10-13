@@ -1,7 +1,8 @@
 import Foundation
 
 /// Aladhan API (method=13, Diyanet İşleri Başkanlığı) üzerinden yıllık vakitleri çeker.
-/// Tek harici çağrı budur; konum dışında kişisel veri gönderilmez, tracking yoktur.
+/// Tek harici çağrı budur; yalnızca ~1 km'ye yuvarlanmış koordinat gönderilir, başka
+/// kişisel veri/kimlik yoktur, tracking yoktur.
 struct AladhanProvider: PrayerTimeProvider {
     let sourceIdentifier = "aladhan-13"
 
@@ -31,14 +32,20 @@ struct AladhanProvider: PrayerTimeProvider {
         )
     }
 
+    /// Gizlilik: koordinat 2 ondalığa (~1 km) yuvarlanır. Vakit etkisi saniyeler mertebesinde
+    /// (0.005° boylam ≈ 1-2 sn), ApproxCalendar yenileme eşiği (0.01°) ile uyumlu.
+    static func coarse(_ degrees: Double) -> String {
+        String(format: "%.2f", locale: Locale(identifier: "en_US_POSIX"), degrees)
+    }
+
     /// Bir takvim yılının tüm günleri (method=13, Diyanet'e en yakın hesap). `safetyMinutes`
     /// verilirse her vakite eklenir (bkz. `ApproxSafetyMargin`); normal yedek zincirde boştur.
     func fetchYear(latitude: Double, longitude: Double, year: Int,
                    safetyMinutes: [Prayer: Int] = [:]) async throws -> (days: [PrayerDay], timeZone: TimeZone) {
         var comps = URLComponents(string: "https://api.aladhan.com/v1/calendar")!
         comps.queryItems = [
-            .init(name: "latitude", value: String(latitude)),
-            .init(name: "longitude", value: String(longitude)),
+            .init(name: "latitude", value: Self.coarse(latitude)),
+            .init(name: "longitude", value: Self.coarse(longitude)),
             .init(name: "method", value: "13"),
             .init(name: "annual", value: "true"),
             .init(name: "year", value: String(year))
