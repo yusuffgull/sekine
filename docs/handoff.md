@@ -1,5 +1,7 @@
 # Handoff
 
+> **13 Eki 2026:** ASC listesinde Sekine 1.8 "Ready for Distribution" (onaylandı, otomatik yayında). Düzenlenebilir sürüm yok: 6.5" ekran görüntüsü (Ramazan/Kaza yüklenmedi) ve diğer metadata düzeltmeleri için 1.9 kaydı gerekir. `yusuffiratgul-com` repo'sunda gizlilik düzeltmesi 2 commit local, push bekliyor (kullanıcı onayı).
+>
 > **8 Eki 2026:** 1.8 (11) App Review'a gönderildi (Waiting for Review). İçerik: Zikir sekmesinde kuran.diyanet.gov.tr bağlantısı, rating politikası, konum/gizlilik metinleri (PRIVACY.md + site + Info.plist), export compliance anahtarı. 5 In-App Event hâlâ DRAFT (gönderilmedi). Backlog: ezan sesi, Android.
 
 ## CURRENT TASK — 1.7 hazır değil: build yok (30 Eyl 2026)
