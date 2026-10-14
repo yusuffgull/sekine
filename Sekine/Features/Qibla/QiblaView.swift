@@ -84,7 +84,7 @@ struct QiblaView: View {
                 .font(SekineFont.row(settings.fontScale))
                 .foregroundStyle(Palette.textPrimary)
                 .multilineTextAlignment(.center)
-            Text("Doğru yönü gösterebilmek için konumunuzu bilmemiz gerekiyor. Konumunuz cihazınızdan dışarı çıkmaz. Namaz vakitleri konum izni olmadan da çalışmaya devam eder.")
+            Text("Doğru yönü gösterebilmek için konumunuzu bilmemiz gerekiyor. Kıble yönü cihazınızda hesaplanır. Namaz vakitleri konum izni olmadan da çalışmaya devam eder.")
                 .font(SekineFont.caption(settings.fontScale))
                 .foregroundStyle(Palette.textSecondary)
                 .multilineTextAlignment(.center)

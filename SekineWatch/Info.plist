@@ -24,7 +24,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Namaz vakitlerini bulunduğunuz konuma göre hesaplamak için konumunuz kullanılır. Konum cihazınızdan dışarı gönderilmez.</string>
+	<string>Namaz vakitlerini bulunduğunuz konuma göre hesaplamak için konumunuz kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz (il/ilçe veya yaklaşık koordinat) iletilir.</string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>

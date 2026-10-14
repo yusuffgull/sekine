@@ -9,8 +9,8 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.8"
-    CURRENT_PROJECT_VERSION: "11"
+    MARKETING_VERSION: "1.9"
+    CURRENT_PROJECT_VERSION: "12"
     DEVELOPMENT_TEAM: "33L468BTR2"
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1"
@@ -117,7 +117,7 @@ targets:
         WKApplication: true
         WKCompanionAppBundleIdentifier: com.sekineapp.sekine
         WKRunsIndependentlyOfCompanionApp: true
-        NSLocationWhenInUseUsageDescription: "Namaz vakitlerini bulunduğunuz konuma göre hesaplamak için konumunuz kullanılır. Konum cihazınızdan dışarı gönderilmez."
+        NSLocationWhenInUseUsageDescription: "Namaz vakitlerini bulunduğunuz konuma göre hesaplamak için konumunuz kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz (il/ilçe veya yaklaşık koordinat) iletilir."
         CFBundleLocalizations:
           - tr
           - en

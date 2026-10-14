@@ -1,5 +1,7 @@
 # Handoff
 
+> **14 Eki 2026 — 1.9 (12) hazırlığı (branch `fix/aladhan-coordinate-rounding`, main'e merge edildi, push YOK):** Aladhan koordinatı ~1 km'ye yuvarlanıyor; gizlilik metinleri (Info.plist/Watch plist, PRIVACY, README, in-app, Kıble) düzeltildi; 124 test yeşil; NATASHA review uygulandı. **Engelli (kullanıcı eli gerekli):** (1) `yusuffiratgul-com` push — 3 commit local; ilk 2'si (`dcd9a74` dahil) hemen yayınlanabilir, 3.sü (yuvarlama cümlesi) 1.9 yayınlanınca; (2) ASC'de 1.9 kaydı + 6.5" Ramazan/Kaza ekran görüntüsü + App Privacy cevapları (Location: coarse, not linked, no tracking); (3) 1.9 arşiv/yükleme/submit. Sıradaki kod işi: çok aylık imsakiye.
+>
 > **13 Eki 2026:** ASC listesinde Sekine 1.8 "Ready for Distribution" (onaylandı, otomatik yayında). Düzenlenebilir sürüm yok: 6.5" ekran görüntüsü (Ramazan/Kaza yüklenmedi) ve diğer metadata düzeltmeleri için 1.9 kaydı gerekir. `yusuffiratgul-com` repo'sunda gizlilik düzeltmesi 2 commit local, push bekliyor (kullanıcı onayı).
 >
 > **8 Eki 2026:** 1.8 (11) App Review'a gönderildi (Waiting for Review). İçerik: Zikir sekmesinde kuran.diyanet.gov.tr bağlantısı, rating politikası, konum/gizlilik metinleri (PRIVACY.md + site + Info.plist), export compliance anahtarı. 5 In-App Event hâlâ DRAFT (gönderilmedi). Backlog: ezan sesi, Android.

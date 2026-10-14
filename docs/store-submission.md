@@ -73,7 +73,7 @@ kullanılmaz):**
 > Sekine; namaz vakitlerini sade, huzurlu ve güvenilir biçimde sunar.
 >
 > • Reklamsız — hiçbir reklam, hiçbir dikkat dağıtıcı yok.
-> • Gizli — verileriniz cihazınızdan çıkmaz, hiçbir takip yok.
+> • Gizli — kimlik bilgisi toplanmaz, hiçbir takip yok.
 > • Diyanet uyumlu — Türkiye vakitleri, çevrimdışı çalışır.
 > • Güvenilir bildirimler — vakit bildirimleri düzenli yenilenir, susmaz.
 > • Widget'lar — ana ekran, kilit ekranı ve StandBy'da sonraki vakit ve geri sayım.
