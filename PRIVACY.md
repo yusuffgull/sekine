@@ -22,7 +22,9 @@ ardından çevrimdışı çalışır. Vakitleri indirmek için:
 
 yalnızca **seçtiğiniz konumun bilgisi (il/ilçe veya koordinat)** iletilir. Aylık imsakiyede Diyanet'in
 yayımladığı pencerenin ötesindeki günler için ("yaklaşık" vakitler) aynı konumun koordinatı (yaklaşık 1 km'ye
-yuvarlanmış olarak) Aladhan servisine iletilir. Kimliğinizi
+yuvarlanmış olarak) Aladhan servisine iletilir. Konumdan il/ilçe adını bulmak ve ilçe aramak için
+cihazın konum çözümleme servisi (Apple) kullanılır; Sekine ayrıca App Store sürüm kontrolü için Apple'a
+yalnızca uygulama kimliğini ve ülke kodunu gönderir. Kimliğinizi
 belirleyen hiçbir bilgi (isim, e-posta, cihaz kimliği vb.) gönderilmez.
 
 ## Bildirimler

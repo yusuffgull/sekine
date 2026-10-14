@@ -2,8 +2,8 @@ import Foundation
 import CoreLocation
 
 /// Konum izni + GPS + ilçe adı çözümleme ve manuel arama.
-/// Konum yalnızca cihazda vakit hesabı için kullanılır; hiçbir sunucuya
-/// gönderilmez (Aladhan çağrısı hariç, o da yalnızca koordinat + tracking yok).
+/// Konum cihazda işlenir. Dışarı yalnızca yer bilgisi gider: Apple geocoder
+/// (koordinat/arama metni), Diyanet (il/ilçe ID), Aladhan (~1 km'ye yuvarlanmış koordinat).
 /// GPS çözümlemesinin sonucu: koordinat + Diyanet eşleştirmesi için il/ilçe adı.
 struct ResolvedPlace {
     var location: SavedLocation
