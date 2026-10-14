@@ -12,7 +12,7 @@ tasarım ilkeleri hâline geldi:
   scheduler) + arka plan yenileme + app açılışı tazelemesiyle sürekli doldurulur.
 - **Sıfır reklam, sıfır takip.** Hiçbir reklam/analytics SDK'sı yok.
 - **%100 çevrimdışı & gizli.** Vakitler ilk kurulumda bir kez indirilip cihazda
-  saklanır; konumunuz cihazdan çıkmaz.
+  saklanır; konumunuz cihazda işlenir, servislere yalnızca yeriniz iletilir.
 - **Diyanet uyumlu.** Vakit kaynağı birebir Diyanet (ezanvakti/namazvakti.diyanet.gov.tr
   aynası), yedek Aladhan `method=13`; mimari kaynak-bağımsızdır (bkz. `docs/decisions.md`).
 - **Widget.** Ana ekranda, kilit ekranında ve StandBy'da sonraki vakit + geri sayım.

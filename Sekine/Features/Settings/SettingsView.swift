@@ -456,7 +456,7 @@ struct SettingsView: View {
             LabeledContent("Sürüm", value: Self.appVersion)
             HStack {
                 Image(systemName: "lock.shield.fill").foregroundStyle(Palette.accent)
-                Text("Reklamsız · Verileriniz cihazınızdan çıkmaz")
+                Text("Reklamsız · Kimlik bilgisi toplanmaz, takip yok")
                     .font(.footnote)
                     .foregroundStyle(Palette.textSecondary)
             }

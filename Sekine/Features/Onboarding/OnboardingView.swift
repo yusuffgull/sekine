@@ -32,7 +32,7 @@ struct OnboardingView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
                     promise("checkmark.seal.fill", "Reklamsız", "Hiçbir reklam yok, hiçbir dikkat dağıtıcı yok.")
-                    promise("lock.shield.fill", "Gizli", "Verileriniz cihazınızdan çıkmaz. Takip yok.")
+                    promise("lock.shield.fill", "Gizli", "Kimlik bilgisi toplanmaz. Takip yok.")
                     promise("checkmark.circle.fill", "Diyanet uyumlu", "Diyanet'e göre vakitler, çevrimdışı çalışır.")
                     promise("apps.iphone", "Ana ekran widget'ı", "Sonraki vakti ve geri sayımı ana ekranından takip edin.")
                 }
