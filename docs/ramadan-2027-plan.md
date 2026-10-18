@@ -63,3 +63,12 @@ Her adım ayrı branch; T3'ler NATASHA + VISION. Sıra bağımlılıktan gelir.
   (kesin satırlar Diyanet hicri günü; Diyanet penceresi dışı `HijriEstimate` ile `≈` + soluk, numaralama
   kesin satırlardan devam eder), paylaşılabilir 1080×1920 kart (≈ açıklamalı, uygulama adı daima görünür).
   Ramazan 29 gün ise 29 satır. HijriEstimate'in ilk tüketicisi bu; bildirim tüketicisi hâlâ yok.
+
+## PARK: Diyanet-dışı kaynakta tahmini Ramazan bildirimi (18 Eki 2026)
+Dal `feat/ramadan-estimated-notifications` (3 commit, 162 test yeşil) **main'e ALINMADI**; VISION 3 turda RET.
+Geçerli kalan engeller: (1) Aladhan iftar/imsak vakti Diyanet'ten 1–3 dk erken olabilir → tahmini kaynakta
+"İftar Vakti" için güvenlik payı (+3 dk iftar, −3 dk imsak) şart; (2) plandaki "Ramazan başladı mı?"
+kullanıcı onay kapısı yok (en az: tahmini bildirim OPT-IN, varsayılan KAPALI). Gerekçe park: Diyanet
+yurtdışı şehirleri de kapsıyor → Aladhan yalnızca yedek yol, değer düşük/risk yüksek. Dalda yeniden
+kullanılabilir iyileştirmeler var (enjekte edilebilir `clock`, tembel çekirdek üretimi, DST/geceyarısı
+sahur testleri, `HijriEstimate.isSafeInterior`) — main'e ayrı küçük commit'lerle taşınabilir.
