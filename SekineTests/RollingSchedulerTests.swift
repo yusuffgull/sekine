@@ -810,3 +810,13 @@ final class RamadanNotificationTests: XCTestCase {
         XCTAssertEqual(mock.pending[id]?.content.body, "İftara 15 dakika kaldı.")
     }
 }
+
+final class SahurLeadSanitizingTests: XCTestCase {
+    func testOutOfSetValuesFallBackToDefault() {
+        XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(100_000), 45)
+        XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(-5), 45)
+        XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(nil), 45)
+        XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(60), 60)
+        XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(0), 0)
+    }
+}

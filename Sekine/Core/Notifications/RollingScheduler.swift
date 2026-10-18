@@ -21,7 +21,16 @@ struct SchedulerConfig: Sendable {
     /// tetiklenmez (bkz. `HijriEstimate`, docs/ramadan-2027-plan.md R0).
     var ramadanReminders: Bool = true
     /// Sahur hatırlatmasının imsaktan kaç dakika önce geleceği (0 = sahur bildirimi yok).
-    var sahurLeadMinutes: Int = 45
+    var sahurLeadMinutes: Int = SchedulerConfig.defaultSahurLead
+
+    static let defaultSahurLead = 45
+    static let allowedSahurLeads: Set<Int> = [0, 30, 45, 60, 90]
+    /// Bozuk/eski/elle değiştirilmiş bir değer asla zamanlayıcıya ulaşmaz: izinli küme
+    /// dışı → varsayılan.
+    static func sanitizedSahurLead(_ value: Int?) -> Int {
+        guard let value, allowedSahurLeads.contains(value) else { return defaultSahurLead }
+        return value
+    }
 }
 
 /// `RollingScheduler`'ın kullandığı `UNUserNotificationCenter` yüzeyi. Testlerde gerçek
@@ -415,10 +424,11 @@ actor RollingScheduler {
                                     ramadanDayKeys: ramadanKeys),
                      prayerTime: t)
             }
-        if config.ramadanReminders, config.sahurLeadMinutes > 0 {
+        let sahurLead = SchedulerConfig.sanitizedSahurLead(config.sahurLeadMinutes)
+        if config.ramadanReminders, sahurLead > 0 {
             for day in schedule.days where day.hicriMonth == RamadanInfo.ramadanHicriMonth {
                 guard let fajr = day.time(for: .fajr),
-                      let fire = cal.date(byAdding: .minute, value: -config.sahurLeadMinutes, to: fajr),
+                      let fire = cal.date(byAdding: .minute, value: -sahurLead, to: fajr),
                       fire > now else { continue }
                 cores.append(Core(date: fire, item: sahurItem(fireDate: fire, fastingDay: day.dayStart,
                                                                calendar: cal, config: config),
@@ -538,8 +548,9 @@ actor RollingScheduler {
         fireDate: Date, fastingDay: Date, calendar cal: Calendar, config: SchedulerConfig
     ) -> DesiredItem {
         let content = UNMutableNotificationContent()
+        let lead = SchedulerConfig.sanitizedSahurLead(config.sahurLeadMinutes)
         let title = "Sahur Vakti"
-        let body = "İmsağa \(config.sahurLeadMinutes) dakika kaldı. Sahura kalkın."
+        let body = "İmsağa \(lead) dakika kaldı. Sahura kalkın."
         content.title = title
         content.body = body
         let sound = config.perPrayerSounds[.fajr] ?? config.sound

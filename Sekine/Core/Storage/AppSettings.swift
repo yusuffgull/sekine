@@ -103,7 +103,7 @@ final class AppSettings: ObservableObject {
         self.specialDayGreetings = defaults.object(forKey: Keys.specialDayGreetings) as? Bool ?? true
         self.dailyVerse = defaults.object(forKey: Keys.dailyVerse) as? Bool ?? true
         self.ramadanReminders = defaults.object(forKey: Keys.ramadanReminders) as? Bool ?? true
-        self.sahurLeadMinutes = defaults.object(forKey: Keys.sahurLead) as? Int ?? 45
+        self.sahurLeadMinutes = SchedulerConfig.sanitizedSahurLead(defaults.object(forKey: Keys.sahurLead) as? Int)
         self.iftarLiveActivity = defaults.object(forKey: Keys.iftarLiveActivity) as? Bool ?? true
         self.dailyVerseHour = defaults.object(forKey: Keys.dailyVerseHour) as? Int ?? 8
         self.fridayReminderHour = defaults.object(forKey: Keys.fridayReminderHour) as? Int ?? 9
