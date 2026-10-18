@@ -129,7 +129,9 @@ enum BackgroundRefresh {
             fridayReminderHour: defaults.object(forKey: "settings.fridayReminderHour") as? Int ?? 9,
             specialDayGreetings: flag("settings.specialDayGreetings", default: true),
             dailyVerse: flag("settings.dailyVerse", default: true),
-            dailyVerseHour: defaults.object(forKey: "settings.dailyVerseHour") as? Int ?? 8)
+            dailyVerseHour: defaults.object(forKey: "settings.dailyVerseHour") as? Int ?? 8,
+            ramadanReminders: flag("settings.ramadanReminders", default: true),
+            sahurLeadMinutes: defaults.object(forKey: "settings.sahurLeadMinutes") as? Int ?? 45)
 
         let result = await scheduler.reschedule(from: schedule, config: config, token: token)
         if !result.isFullSuccess {

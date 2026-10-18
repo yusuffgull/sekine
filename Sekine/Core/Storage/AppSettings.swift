@@ -102,6 +102,8 @@ final class AppSettings: ObservableObject {
         self.fridayReminder = defaults.object(forKey: Keys.fridayReminder) as? Bool ?? true
         self.specialDayGreetings = defaults.object(forKey: Keys.specialDayGreetings) as? Bool ?? true
         self.dailyVerse = defaults.object(forKey: Keys.dailyVerse) as? Bool ?? true
+        self.ramadanReminders = defaults.object(forKey: Keys.ramadanReminders) as? Bool ?? true
+        self.sahurLeadMinutes = defaults.object(forKey: Keys.sahurLead) as? Int ?? 45
         self.iftarLiveActivity = defaults.object(forKey: Keys.iftarLiveActivity) as? Bool ?? true
         self.dailyVerseHour = defaults.object(forKey: Keys.dailyVerseHour) as? Int ?? 8
         self.fridayReminderHour = defaults.object(forKey: Keys.fridayReminderHour) as? Int ?? 9
@@ -240,6 +242,14 @@ final class AppSettings: ObservableObject {
     @Published var dailyVerse: Bool {
         didSet { defaults.set(dailyVerse, forKey: Keys.dailyVerse) }
     }
+    /// Ramazan'da sahur hatırlatması + iftar metinleri (yalnızca Diyanet'in kesin hicri verisiyle).
+    @Published var ramadanReminders: Bool {
+        didSet { defaults.set(ramadanReminders, forKey: Keys.ramadanReminders) }
+    }
+    /// Sahur hatırlatması imsaktan kaç dakika önce (0 = kapalı).
+    @Published var sahurLeadMinutes: Int {
+        didSet { defaults.set(sahurLeadMinutes, forKey: Keys.sahurLead) }
+    }
     /// Ramazan'da oruç sürerken kilit ekranı/Dynamic Island iftar sayacı (Live Activity).
     @Published var iftarLiveActivity: Bool {
         didSet { defaults.set(iftarLiveActivity, forKey: Keys.iftarLiveActivity) }
@@ -274,6 +284,7 @@ final class AppSettings: ObservableObject {
         if fridayReminder { fridayReminder = false }
         if specialDayGreetings { specialDayGreetings = false }
         if dailyVerse { dailyVerse = false }
+        if ramadanReminders { ramadanReminders = false }
     }
 
     func setNotification(_ enabled: Bool, for prayer: Prayer) {
@@ -323,6 +334,8 @@ final class AppSettings: ObservableObject {
         static let fridayReminder = "settings.fridayReminder"
         static let specialDayGreetings = "settings.specialDayGreetings"
         static let dailyVerse = "settings.dailyVerse"
+        static let ramadanReminders = "settings.ramadanReminders"
+        static let sahurLead = "settings.sahurLeadMinutes"
         static let iftarLiveActivity = "settings.iftarLiveActivity"
         static let dailyVerseHour = "settings.dailyVerseHour"
         static let fridayReminderHour = "settings.fridayReminderHour"

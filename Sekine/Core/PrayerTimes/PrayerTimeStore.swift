@@ -80,7 +80,9 @@ final class PrayerTimeStore: ObservableObject {
             fridayReminderHour: settings.fridayReminderHour,
             specialDayGreetings: settings.specialDayGreetings,
             dailyVerse: settings.dailyVerse,
-            dailyVerseHour: settings.dailyVerseHour)
+            dailyVerseHour: settings.dailyVerseHour,
+            ramadanReminders: settings.ramadanReminders,
+            sahurLeadMinutes: settings.sahurLeadMinutes)
         let result = await scheduler.reschedule(from: schedule, config: config)
         if !result.isFullSuccess {
             print("PrayerTimeStore: reschedule kısmen başarısız — istenen \(result.requested), " +

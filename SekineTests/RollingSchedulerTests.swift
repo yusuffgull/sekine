@@ -686,3 +686,127 @@ private final class SweepingExpiryNotificationCenter: NotificationScheduling, @u
         }
     }
 }
+
+// MARK: - Ramazan: sahur hatırlatması + iftar metni
+
+final class RamadanNotificationTests: XCTestCase {
+    private let tz = TimeZone(identifier: "Europe/Istanbul")!
+    private var cal: Calendar { var c = Calendar(identifier: .gregorian); c.timeZone = tz; return c }
+
+    /// `count` ardışık gün (yarından başlar). `hicriMonth` verilirse Diyanet-kesin sayılır.
+    private func schedule(days count: Int, hicriMonth: Int?) -> PrayerSchedule {
+        let cal = self.cal
+        let today = cal.startOfDay(for: Date())
+        let days: [PrayerDay] = (1...count).map { i in
+            let start = cal.date(byAdding: .day, value: i, to: today)!
+            func at(_ h: Int, _ m: Int = 0) -> Date {
+                cal.date(byAdding: .minute, value: h * 60 + m, to: start)!
+            }
+            let times = [
+                PrayerTime(prayer: .fajr, date: at(5, 30)),
+                PrayerTime(prayer: .dhuhr, date: at(13)),
+                PrayerTime(prayer: .asr, date: at(16)),
+                PrayerTime(prayer: .maghrib, date: at(19)),
+                PrayerTime(prayer: .isha, date: at(21))
+            ]
+            return PrayerDay(dayStart: start, times: times,
+                             hicriDate: hicriMonth == nil ? nil : "\(i) Ramazan",
+                             hicriMonth: hicriMonth, hicriDay: hicriMonth == nil ? nil : i)
+        }
+        return PrayerSchedule(placeName: "Test", latitude: nil, longitude: nil,
+                              timeZoneIdentifier: tz.identifier, source: "diyanet",
+                              fetchedAt: Date(), days: days)
+    }
+
+    private func config(ramadan: Bool = true, lead: Int = 45, pre: Int = 0) -> SchedulerConfig {
+        SchedulerConfig(
+            enabledPrayers: Set(Prayer.ordered.filter(\.isNotifiable)),
+            sound: .default, silent: false, preReminderMinutes: pre,
+            breakThroughFocus: false, fridayReminder: false, fridayReminderHour: 9,
+            specialDayGreetings: false, dailyVerse: false, dailyVerseHour: 8,
+            ramadanReminders: ramadan, sahurLeadMinutes: lead)
+    }
+
+    private func run(_ s: PrayerSchedule, _ c: SchedulerConfig) async -> (MockNotificationCenter, RescheduleResult) {
+        let mock = MockNotificationCenter()
+        let result = await RollingScheduler(center: mock).reschedule(from: s, config: c)
+        return (mock, result)
+    }
+
+    func testRamadanDayGetsSahurAtFajrMinusLeadKeyedByFastingDay() async throws {
+        let s = schedule(days: 3, hicriMonth: 9)
+        let (mock, _) = await run(s, config())
+        let day = s.days[0]
+        let id = "\(RollingScheduler.v2Prefix)sahur.\(ExtraNotifications.dateKey(day.dayStart, cal))"
+        let req = try XCTUnwrap(mock.pending[id])
+        let trigger = try XCTUnwrap(req.trigger as? UNCalendarNotificationTrigger)
+        let comps = trigger.dateComponents
+        XCTAssertEqual(comps.hour, 4)
+        XCTAssertEqual(comps.minute, 45) // 05:30 - 45 dk
+        XCTAssertEqual(mock.pending.keys.filter { $0.contains(".sahur.") }.count, 3)
+    }
+
+    func testMaghribOnRamadanDayBecomesIftarWithoutExtraSlot() async throws {
+        let s = schedule(days: 2, hicriMonth: 9)
+        let (mock, _) = await run(s, config())
+        let id = "\(RollingScheduler.v2Prefix)main.maghrib.\(ExtraNotifications.dateKey(s.days[0].dayStart, cal))"
+        XCTAssertEqual(mock.pending[id]?.content.title, "İftar Vakti")
+        // Her gün: 5 ana vakit + 1 sahur (iftar yeni slot değil).
+        XCTAssertEqual(mock.pending.count, 2 * 6)
+    }
+
+    func testSwitchedOffRestoresPlainPrayerNotifications() async throws {
+        let s = schedule(days: 2, hicriMonth: 9)
+        let (mock, _) = await run(s, config(ramadan: false))
+        XCTAssertTrue(mock.pending.keys.allSatisfy { !$0.contains(".sahur.") })
+        let id = "\(RollingScheduler.v2Prefix)main.maghrib.\(ExtraNotifications.dateKey(s.days[0].dayStart, cal))"
+        XCTAssertEqual(mock.pending[id]?.content.title, "\(Prayer.maghrib.displayName) Vakti")
+    }
+
+    func testNoRamadanBehaviourWithoutDiyanetHijriData() async throws {
+        let s = schedule(days: 3, hicriMonth: nil)
+        let (mock, _) = await run(s, config())
+        XCTAssertTrue(mock.pending.keys.allSatisfy { !$0.contains(".sahur.") })
+        XCTAssertEqual(mock.pending.count, 3 * 5)
+    }
+
+    func testNonRamadanHijriMonthGetsNoSahur() async throws {
+        let (mock, _) = await run(schedule(days: 3, hicriMonth: 8), config())
+        XCTAssertTrue(mock.pending.keys.allSatisfy { !$0.contains(".sahur.") })
+    }
+
+    func testChangingLeadKeepsIdentifierAndReplacesViaFingerprint() async throws {
+        let s = schedule(days: 1, hicriMonth: 9)
+        let mock = MockNotificationCenter()
+        let scheduler = RollingScheduler(center: mock)
+        await scheduler.reschedule(from: s, config: config(lead: 45))
+        let idsBefore = Set(mock.pending.keys)
+        let removedBefore = mock.removedIdentifiers.count
+        await scheduler.reschedule(from: s, config: config(lead: 60))
+        XCTAssertEqual(Set(mock.pending.keys), idsBefore, "kimlikler aynı kalmalı")
+        XCTAssertEqual(mock.removedIdentifiers.count, removedBefore, "silme olmamalı, replace olmalı")
+        let id = "\(RollingScheduler.v2Prefix)sahur.\(ExtraNotifications.dateKey(s.days[0].dayStart, cal))"
+        let comps = (mock.pending[id]?.trigger as? UNCalendarNotificationTrigger)?.dateComponents
+        XCTAssertEqual(comps?.hour, 4)
+        XCTAssertEqual(comps?.minute, 30) // 05:30 - 60 dk
+    }
+
+    func testBudgetNeverExceedsHardLimitAndKeepsEarliestDaysComplete() async throws {
+        let s = schedule(days: 30, hicriMonth: 9)
+        let (mock, result) = await run(s, config(pre: 15))
+        XCTAssertLessThanOrEqual(mock.pending.count, RollingScheduler.hardLimit)
+        XCTAssertEqual(result.failed, 0)
+        // İlk günün tüm çekirdek bildirimleri (sahur + 5 vakit) bulunmalı.
+        let key = ExtraNotifications.dateKey(s.days[0].dayStart, cal)
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)sahur.\(key)"])
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)main.fajr.\(key)"])
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)main.isha.\(key)"])
+    }
+
+    func testPreReminderBeforeMaghribOnRamadanSaysIftar() async throws {
+        let s = schedule(days: 1, hicriMonth: 9)
+        let (mock, _) = await run(s, config(pre: 15))
+        let id = "\(RollingScheduler.v2Prefix)pre.maghrib.\(ExtraNotifications.dateKey(s.days[0].dayStart, cal))"
+        XCTAssertEqual(mock.pending[id]?.content.body, "İftara 15 dakika kaldı.")
+    }
+}
