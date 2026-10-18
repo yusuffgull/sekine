@@ -19,6 +19,11 @@ yükseltildi. İçeriği:
 - Watch onboarding'e ülke seçici; tek `DiyanetDirectory` örneği.
 - ASO: yeni keywords/promo text/ekran görüntüsü sırası (Faz 0).
 
+## Ramazan 2027 (18 Eki 2026) — ayrıntı: `docs/ramadan-2027-plan.md`
+- [x] R0 HijriEstimate · [x] R2 sahur/iftar bildirimi · [x] R3 imsakiye + paylaşım kartı · [x] R5a Ramazan widget
+- [ ] Diyanet-dışı kaynakta Ramazan bildirimi · [ ] bildirim bütçe tahsisçisi + DST testleri
+- [ ] Watch komplikasyonu · [ ] cihaz doğrulaması · [ ] mağaza (ASO, In-App Event, 1.9 build)
+
 ## Gönderim öncesi kalan (kullanıcı)
 - [ ] Gerçek cihazda sandbox satın alma + restore (yıllık ve ömürlük)
 - [x] ASC'de yıllık abonelik oluşturuldu (29 Eyl 2026, Claude/Chrome): grup `Sekine Premium`, `com.sekineapp.sekine.premium.yearly`, ₺149.99 (US $2.99, EUR €2.99 otomatik), 7 gün ücretsiz deneme, Aile Paylaşımı AÇIK (geri alınamaz), 175 ülke. **Kalan:** inceleme ekran görüntüsü (paywall, ürün yüklüyken gerçek cihazdan) + 1.7 sürümüne bağlama; ürün sandbox'ta görünmesi birkaç saat sürebilir
