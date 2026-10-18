@@ -207,6 +207,7 @@ struct SekineWidget: Widget {
 struct SekineWidgetBundle: WidgetBundle {
     var body: some Widget {
         SekineWidget()
+        RamadanWidget()
         IftarLiveActivity()
     }
 }
