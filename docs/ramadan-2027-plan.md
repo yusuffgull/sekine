@@ -46,3 +46,16 @@ Her adım ayrı branch; T3'ler NATASHA + VISION. Sıra bağımlılıktan gelir.
 - Umm al-Qura ↔ Diyanet 1 gün sapabilir → tahmin ayrı modelde, etiketli, sınır günü bildirimi yok.
 - İftar güvenlik payı (`ApproxSafetyMargin`) yalnızca yaklaşık kaynaklarda ve tek kez uygulanır.
 - VISION'ın 60/74 sayımı bağımsız doğrulanmadı → R1'de testle doğrulanacak.
+
+## Durum (18 Eki 2026)
+- **R0:** `HijriEstimate` modeli yazıldı; HENÜZ hiçbir tüketicisi yok (kaynak/güven alanı, "Ramazan
+  başladı mı?" düzeltmesi, yaklaşık-etiketli bildirim → sıradaki iş). Şu an Diyanet-dışı kaynakta
+  Ramazan bildirimi YOK (bilinçli, güvenli taraf).
+- **R2 (sahur/iftar) uygulandı** (`feat/ramadan-sahur-iftar`). VISION diff RET'i sonrası düzeltilenler:
+  Akşam kapalıyken `iftar.<fastingDate>` ayrı istek; sahur+imsak ön-hatırlatması aynı dakikada tek
+  bildirim; Watch'ta ek sahur kapalı, metin dönüşümü telefonla tutarlı; `sahurLeadMinutes` tek noktadan
+  doğrulanır. NATASHA: bulgu kapandı.
+- **Bilinen sınır (R1 tam yapılmadı):** `buildDesiredItems` bütçe aşımında hâlâ sessiz keser ve düşenler
+  `deferred` sayılmaz (bu davranış Ramazan'dan ÖNCE de vardı; günlük app/BG yenilemesi pencereyi
+  kaydırarak telafi eder). Tam bütçe tahsisçisi (nihai ≤60 küme + deferred sayımı) ayrı iş olarak R3
+  sonrasına bırakıldı. Eksik testler: DST, saat dilimi değişimi, önceki Gregoryen güne taşan ilk sahur.

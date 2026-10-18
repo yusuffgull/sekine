@@ -820,3 +820,60 @@ final class SahurLeadSanitizingTests: XCTestCase {
         XCTAssertEqual(SchedulerConfig.sanitizedSahurLead(0), 0)
     }
 }
+
+extension RamadanNotificationTests {
+    func testIftarStillArrivesWhenEveningNotificationIsDisabled() async throws {
+        let s = schedule(days: 2, hicriMonth: 9)
+        var c = config()
+        c.enabledPrayers.remove(.maghrib)
+        let (mock, _) = await run(s, c)
+        let key = ExtraNotifications.dateKey(s.days[0].dayStart, cal)
+        XCTAssertEqual(mock.pending["\(RollingScheduler.v2Prefix)iftar.\(key)"]?.content.title, "İftar Vakti")
+        XCTAssertNil(mock.pending["\(RollingScheduler.v2Prefix)main.maghrib.\(key)"])
+    }
+
+    func testNoDuplicateIftarWhenEveningEnabled() async throws {
+        let (mock, _) = await run(schedule(days: 2, hicriMonth: 9), config())
+        XCTAssertTrue(mock.pending.keys.allSatisfy { !$0.contains(".iftar.") })
+    }
+
+    func testSahurAndFajrPreReminderAtSameMinuteProduceOneNotification() async throws {
+        let s = schedule(days: 1, hicriMonth: 9)
+        let (mock, _) = await run(s, config(lead: 30, pre: 30))
+        let key = ExtraNotifications.dateKey(s.days[0].dayStart, cal)
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)sahur.\(key)"])
+        XCTAssertNil(mock.pending["\(RollingScheduler.v2Prefix)pre.fajr.\(key)"])
+    }
+
+    func testDifferentSahurAndPreMinutesKeepBoth() async throws {
+        let s = schedule(days: 1, hicriMonth: 9)
+        let (mock, _) = await run(s, config(lead: 45, pre: 15))
+        let key = ExtraNotifications.dateKey(s.days[0].dayStart, cal)
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)sahur.\(key)"])
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)pre.fajr.\(key)"])
+    }
+
+    func testFullyLoadedConfigStaysWithinSoftBudget() async throws {
+        let s = schedule(days: 30, hicriMonth: 9)
+        var c = config(pre: 15)
+        c.fridayReminder = true
+        c.specialDayGreetings = true
+        c.dailyVerse = true
+        let (mock, result) = await run(s, c)
+        XCTAssertLessThanOrEqual(mock.pending.count, RollingScheduler.softBudget)
+        XCTAssertEqual(result.failed, 0)
+        let key = ExtraNotifications.dateKey(s.days[0].dayStart, cal)
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)sahur.\(key)"])
+        XCTAssertNotNil(mock.pending["\(RollingScheduler.v2Prefix)main.maghrib.\(key)"])
+    }
+
+    func testDisablingRamadanRemovesSahurViaStaleCleanup() async throws {
+        let s = schedule(days: 2, hicriMonth: 9)
+        let mock = MockNotificationCenter()
+        let scheduler = RollingScheduler(center: mock)
+        await scheduler.reschedule(from: s, config: config())
+        XCTAssertTrue(mock.pending.keys.contains { $0.contains(".sahur.") })
+        await scheduler.reschedule(from: s, config: config(ramadan: false))
+        XCTAssertFalse(mock.pending.keys.contains { $0.contains(".sahur.") })
+    }
+}

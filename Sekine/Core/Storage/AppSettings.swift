@@ -284,7 +284,9 @@ final class AppSettings: ObservableObject {
         if fridayReminder { fridayReminder = false }
         if specialDayGreetings { specialDayGreetings = false }
         if dailyVerse { dailyVerse = false }
-        if ramadanReminders { ramadanReminders = false }
+        // Ramazan metin dönüşümü telefonla tutarlı kalsın diye açık bırakılır; yalnızca ayara
+        // bağlı EK sahur bildirimi (telefonla süre uyuşmayabilir) watch'ta kapatılır.
+        if sahurLeadMinutes != 0 { sahurLeadMinutes = 0 }
     }
 
     func setNotification(_ enabled: Bool, for prayer: Prayer) {
