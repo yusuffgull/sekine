@@ -16,6 +16,21 @@ struct SchedulerConfig: Sendable {
     var specialDayGreetings: Bool
     var dailyVerse: Bool
     var dailyVerseHour: Int
+    /// Ramazan günlerinde sahur hatırlatması + iftar metinleri. YALNIZCA Diyanet'in kesin
+    /// hicri verisiyle (`PrayerDay.hicriMonth == 9`) çalışır; tahmini hicri veriyle asla
+    /// tetiklenmez (bkz. `HijriEstimate`, docs/ramadan-2027-plan.md R0).
+    var ramadanReminders: Bool = true
+    /// Sahur hatırlatmasının imsaktan kaç dakika önce geleceği (0 = sahur bildirimi yok).
+    var sahurLeadMinutes: Int = SchedulerConfig.defaultSahurLead
+
+    static let defaultSahurLead = 45
+    static let allowedSahurLeads: Set<Int> = [0, 30, 45, 60, 90]
+    /// Bozuk/eski/elle değiştirilmiş bir değer asla zamanlayıcıya ulaşmaz: izinli küme
+    /// dışı → varsayılan.
+    static func sanitizedSahurLead(_ value: Int?) -> Int {
+        guard let value, allowedSahurLeads.contains(value) else { return defaultSahurLead }
+        return value
+    }
 }
 
 /// `RollingScheduler`'ın kullandığı `UNUserNotificationCenter` yüzeyi. Testlerde gerçek
@@ -387,10 +402,50 @@ actor RollingScheduler {
             }
         }
 
-        // Ana vakit adayları (kronolojik).
-        let mains = schedule.days.flatMap(\.times)
+        // Ramazan günleri (yalnızca Diyanet'in KESİN hicri ayı == 9). Anahtar: takvim günü.
+        let ramadanKeys: Set<String> = config.ramadanReminders
+            ? Set(schedule.days.filter { $0.hicriMonth == RamadanInfo.ramadanHicriMonth }
+                .map { ExtraNotifications.dateKey($0.dayStart, cal) })
+            : []
+
+        // Ana vakit adayları (kronolojik) + Ramazan sahur adayları, tek çekirdek akışta.
+        // Sahur ana vakitlerle AYNI öncelikte, kronolojik girer (vakit > sahur sıralaması
+        // yok: ikisi de çekirdek; ön-hatırlatma ve ayet kalan bütçeyi alır).
+        let sahurLead = SchedulerConfig.sanitizedSahurLead(config.sahurLeadMinutes)
+        struct Core {
+            let date: Date
+            let item: DesiredItem
+            let prayerTime: PrayerTime?
+        }
+        var cores: [Core] = schedule.days.flatMap(\.times)
             .filter { $0.date > now && config.enabledPrayers.contains($0.prayer) }
-            .sorted { $0.date < $1.date }
+            .map { t in
+                Core(date: t.date,
+                     item: mainItem(for: t, calendar: cal, config: config, isPreReminder: false,
+                                    ramadanDayKeys: ramadanKeys),
+                     prayerTime: t)
+            }
+        if config.ramadanReminders, sahurLead > 0 {
+            for day in schedule.days where day.hicriMonth == RamadanInfo.ramadanHicriMonth {
+                guard let fajr = day.time(for: .fajr),
+                      let fire = cal.date(byAdding: .minute, value: -sahurLead, to: fajr),
+                      fire > now else { continue }
+                cores.append(Core(date: fire, item: sahurItem(fireDate: fire, fastingDay: day.dayStart,
+                                                               calendar: cal, config: config),
+                                  prayerTime: nil))
+            }
+        }
+        // Akşam bildirimi kapalı olsa bile Ramazan anahtarı iftar bildirimini vaat eder:
+        // eşleşecek ana bildirim yoksa ayrı `iftar.<fastingDate>` isteği üretilir.
+        if config.ramadanReminders, !config.enabledPrayers.contains(.maghrib) {
+            for day in schedule.days where day.hicriMonth == RamadanInfo.ramadanHicriMonth {
+                guard let maghrib = day.time(for: .maghrib), maghrib > now else { continue }
+                cores.append(Core(date: maghrib, item: iftarItem(fireDate: maghrib, fastingDay: day.dayStart,
+                                                                  calendar: cal, config: config),
+                                  prayerTime: nil))
+            }
+        }
+        cores.sort { $0.date < $1.date }
 
         // Günlük ayet/dua adayları (sınırlı ufuk).
         let verseCandidates = config.dailyVerse
@@ -401,10 +456,12 @@ actor RollingScheduler {
         let preReserve = config.preReminderMinutes > 0 ? 10 : 0
         let mainsBudget = max(0, budget - items.count - verseCandidates.count - preReserve)
         var scheduledMains: [PrayerTime] = []
-        for t in mains {
-            if scheduledMains.count >= mainsBudget || items.count >= budget { break }
-            items.append(mainItem(for: t, calendar: cal, config: config, isPreReminder: false))
-            scheduledMains.append(t)
+        var coreCount = 0
+        for core in cores {
+            if coreCount >= mainsBudget || items.count >= budget { break }
+            items.append(core.item)
+            coreCount += 1
+            if let t = core.prayerTime { scheduledMains.append(t) }
         }
 
         // 4) Günlük ayet/dua.
@@ -417,11 +474,17 @@ actor RollingScheduler {
         if config.preReminderMinutes > 0 {
             for t in scheduledMains {
                 if items.count >= budget { break }
+                // Sahur hatırlatması aynı dakikaya denk geliyorsa (aynı "İmsağa X dk" mesajı)
+                // ayrı bir imsak ön-hatırlatması üretilmez: çift bildirim olmasın.
+                if t.prayer == .fajr, config.ramadanReminders, sahurLead > 0,
+                   config.preReminderMinutes == sahurLead,
+                   ramadanKeys.contains(ExtraNotifications.dateKey(t.date, cal)) { continue }
                 if let preDate = cal.date(byAdding: .minute, value: -config.preReminderMinutes, to: t.date),
                    preDate > now {
                     items.append(mainItem(
                         for: PrayerTime(prayer: t.prayer, date: preDate),
-                        calendar: cal, config: config, isPreReminder: true))
+                        calendar: cal, config: config, isPreReminder: true,
+                        ramadanDayKeys: ramadanKeys, dayKeyDate: t.date))
                 }
             }
         }
@@ -432,12 +495,32 @@ actor RollingScheduler {
     // MARK: - Ana vakit / ön-hatırlatma bildirimi
 
     private func mainItem(
-        for time: PrayerTime, calendar cal: Calendar, config: SchedulerConfig, isPreReminder: Bool
+        for time: PrayerTime, calendar cal: Calendar, config: SchedulerConfig, isPreReminder: Bool,
+        ramadanDayKeys: Set<String> = [], dayKeyDate: Date? = nil
     ) -> DesiredItem {
         let content = UNMutableNotificationContent()
         let title: String
         let body: String
-        if isPreReminder {
+        // Ramazan günü mü? Ön-hatırlatma, vaktin kendi gününe göre değerlendirilir
+        // (`dayKeyDate` = asıl vakit; ön-hatırlatma gece yarısını aşarsa gün kayması olmaz).
+        let isRamadanDay = ramadanDayKeys.contains(ExtraNotifications.dateKey(dayKeyDate ?? time.date, cal))
+        if isRamadanDay, time.prayer == .maghrib {
+            if isPreReminder {
+                title = "İftara yaklaşıyor"
+                body = "İftara \(config.preReminderMinutes) dakika kaldı."
+            } else {
+                title = "İftar Vakti"
+                body = "Akşam vakti girdi, iftar vakti. Allah kabul etsin."
+            }
+        } else if isRamadanDay, time.prayer == .fajr {
+            if isPreReminder {
+                title = "İmsağa yaklaşıyor"
+                body = "İmsağa \(config.preReminderMinutes) dakika kaldı."
+            } else {
+                title = "İmsak Vakti"
+                body = "İmsak vakti girdi, sahur sona erdi."
+            }
+        } else if isPreReminder {
             title = "\(time.prayer.displayName) yaklaşıyor"
             body = "\(time.prayer.displayName) vaktine \(config.preReminderMinutes) dakika kaldı."
         } else {
@@ -469,6 +552,63 @@ actor RollingScheduler {
             interruptionLevel: interruptionLevel)
         content.userInfo = ["fingerprint": fingerprint]
 
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        return DesiredItem(identifier: identifier, fingerprint: fingerprint, request: request)
+    }
+
+    /// Ramazan sahur hatırlatması: imsaktan `sahurLeadMinutes` önce. Kimlik ORUÇ GÜNÜNE
+    /// bağlı (`sahur.<fastingDate>`), tetiklenme gününe değil; ayar değişince kimlik aynı
+    /// kalır, fingerprint değişir → otomatik replace.
+    private func sahurItem(
+        fireDate: Date, fastingDay: Date, calendar cal: Calendar, config: SchedulerConfig
+    ) -> DesiredItem {
+        let content = UNMutableNotificationContent()
+        let lead = SchedulerConfig.sanitizedSahurLead(config.sahurLeadMinutes)
+        let title = "Sahur Vakti"
+        let body = "İmsağa \(lead) dakika kaldı. Sahura kalkın."
+        content.title = title
+        content.body = body
+        let sound = config.perPrayerSounds[.fajr] ?? config.sound
+        let soundDescriptor = config.silent ? "silent" : sound.rawValue
+        if let s = sound.unSound(silent: config.silent) { content.sound = s }
+        let level: UNNotificationInterruptionLevel = config.breakThroughFocus ? .timeSensitive : .active
+        content.interruptionLevel = level
+
+        var components = cal.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        components.timeZone = cal.timeZone
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        let identifier = "\(Self.v2Prefix)sahur.\(ExtraNotifications.dateKey(fastingDay, cal))"
+        let fingerprint = Self.fingerprint(
+            components: components, timeZoneIdentifier: cal.timeZone.identifier,
+            title: title, body: body, soundDescriptor: soundDescriptor, interruptionLevel: level)
+        content.userInfo = ["fingerprint": fingerprint]
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        return DesiredItem(identifier: identifier, fingerprint: fingerprint, request: request)
+    }
+
+    /// Akşam bildirimi kapalıyken Ramazan iftar bildirimi (kimlik oruç gününe bağlı).
+    private func iftarItem(
+        fireDate: Date, fastingDay: Date, calendar cal: Calendar, config: SchedulerConfig
+    ) -> DesiredItem {
+        let content = UNMutableNotificationContent()
+        let title = "İftar Vakti"
+        let body = "Akşam vakti girdi, iftar vakti. Allah kabul etsin."
+        content.title = title
+        content.body = body
+        let sound = config.perPrayerSounds[.maghrib] ?? config.sound
+        let soundDescriptor = config.silent ? "silent" : sound.rawValue
+        if let s = sound.unSound(silent: config.silent) { content.sound = s }
+        let level: UNNotificationInterruptionLevel = config.breakThroughFocus ? .timeSensitive : .active
+        content.interruptionLevel = level
+        var components = cal.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        components.timeZone = cal.timeZone
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let identifier = "\(Self.v2Prefix)iftar.\(ExtraNotifications.dateKey(fastingDay, cal))"
+        let fingerprint = Self.fingerprint(
+            components: components, timeZoneIdentifier: cal.timeZone.identifier,
+            title: title, body: body, soundDescriptor: soundDescriptor, interruptionLevel: level)
+        content.userInfo = ["fingerprint": fingerprint]
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         return DesiredItem(identifier: identifier, fingerprint: fingerprint, request: request)
     }

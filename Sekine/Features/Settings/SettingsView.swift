@@ -295,6 +295,21 @@ struct SettingsView: View {
                 get: { settings.iftarLiveActivity },
                 set: { settings.iftarLiveActivity = $0; NotificationCenter.default.post(name: .iftarLiveActivityPreferenceChanged, object: nil) }
             ))
+            Toggle("Ramazan: sahur hatırlatması ve iftar bildirimi", isOn: Binding(
+                get: { settings.ramadanReminders },
+                set: { settings.ramadanReminders = $0; reschedule() }
+            ))
+            if settings.ramadanReminders {
+                Picker("Sahur hatırlatması", selection: Binding(
+                    get: { settings.sahurLeadMinutes },
+                    set: { settings.sahurLeadMinutes = $0; reschedule() }
+                )) {
+                    Text("Kapalı").tag(0)
+                    ForEach([30, 45, 60, 90], id: \.self) { Text("İmsaktan \($0) dk önce").tag($0) }
+                }
+                Text("Ramazan günlerinde sahur için hatırlatma ve Akşam vaktinde iftar bildirimi gönderilir. Ramazan ayı Diyanet takvimine göre otomatik algılanır.")
+                    .font(.caption).foregroundStyle(Palette.textSecondary)
+            }
             Toggle("Cuma hatırlatması", isOn: Binding(
                 get: { settings.fridayReminder },
                 set: { settings.fridayReminder = $0; reschedule() }
