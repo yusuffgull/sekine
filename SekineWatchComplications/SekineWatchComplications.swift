@@ -146,5 +146,6 @@ struct SekineComplication: Widget {
 struct SekineWatchComplicationsBundle: WidgetBundle {
     var body: some Widget {
         SekineComplication()
+        RamadanComplication()
     }
 }
