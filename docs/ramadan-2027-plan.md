@@ -59,3 +59,7 @@ Her adım ayrı branch; T3'ler NATASHA + VISION. Sıra bağımlılıktan gelir.
   `deferred` sayılmaz (bu davranış Ramazan'dan ÖNCE de vardı; günlük app/BG yenilemesi pencereyi
   kaydırarak telafi eder). Tam bütçe tahsisçisi (nihai ≤60 küme + deferred sayımı) ayrı iş olarak R3
   sonrasına bırakıldı. Eksik testler: DST, saat dilimi değişimi, önceki Gregoryen güne taşan ilk sahur.
+- **R3 (imsakiye) uygulandı** (`feat/ramadan-imsakiye`): Aylık ekranda 🌙 → `RamadanImsakiyeView`
+  (kesin satırlar Diyanet hicri günü; Diyanet penceresi dışı `HijriEstimate` ile `≈` + soluk, numaralama
+  kesin satırlardan devam eder), paylaşılabilir 1080×1920 kart (≈ açıklamalı, uygulama adı daima görünür).
+  Ramazan 29 gün ise 29 satır. HijriEstimate'in ilk tüketicisi bu; bildirim tüketicisi hâlâ yok.
