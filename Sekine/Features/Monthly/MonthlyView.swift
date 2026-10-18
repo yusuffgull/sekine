@@ -44,6 +44,15 @@ struct MonthlyView: View {
                     Button { monthOffset -= 1 } label: { Image(systemName: "chevron.left") }
                         .disabled(!canGoPrev)
                 }
+                if !ramadanImsakiye.rows.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink {
+                            RamadanImsakiyeView(imsakiye: ramadanImsakiye,
+                                                placeName: settings.location?.name ?? store.schedule?.placeName ?? "")
+                        } label: { Image(systemName: "moon.stars") }
+                        .accessibilityLabel("Ramazan imsakiyesi")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { monthOffset += 1 } label: { Image(systemName: "chevron.right") }
                         .disabled(!canGoNext)
@@ -59,6 +68,8 @@ struct MonthlyView: View {
             }
         }
     }
+
+    private var ramadanImsakiye: RamadanImsakiye { RamadanImsakiye.build(from: entries) }
 
     @ViewBuilder private var emptyState: some View {
         if store.isLoading {
