@@ -131,3 +131,19 @@ promo text bunu öne çıkarıyor.
 - **ASC 1.7 taslağı durumu (2026-09-26):** 6 görsel yüklü (6.5"); ASC'deki fiili sıra: 1-home,
   2-qibla, 3-onboarding, 4-monthly, 5-settings, 6-kaza (çoklu yüklemede sıra dosya sırasıyla
   gelmez; istenirse ASC'de sürükleyerek değiştir). Ramazan görseli yüklenmedi (yukarıya bak).
+
+
+## 1.9 metin taslağı (Ramazan 2027 — build + cihaz doğrulamasından SONRA girilir)
+
+**What's New (TR):**
+> • Ramazan: sahur hatırlatması ve iftar bildirimi (Ayarlar → Ek Hatırlatmalar'dan açılıp kapatılır).
+> • Ramazan imsakiyesi: 30 günlük sahur/iftar tablosu, aile gruplarına paylaşılabilir kart.
+> • Sahur ve iftar geri sayımı için widget ve Apple Watch komplikasyonu.
+> • Konum gizliliği: vakit servisine yalnızca yaklaşık (~1 km) konum gönderilir.
+
+**Açıklamaya eklenecek madde (Ramazan modu satırının yerine):**
+> • Ramazan — sahur hatırlatması, iftar bildirimi ve sayacı, 30 günlük imsakiye, oruç takibi.
+
+**Not:** Sahur/iftar bildirimleri yalnızca Diyanet'in kesin hicri verisinin bulunduğu konumlarda çalışır
+(Diyanet yurtdışı şehirleri dahil); metinde "her konumda" iddiası YOK. Tahmini (Diyanet-dışı) kaynak için
+Ramazan bildirimi park edildi (docs/ramadan-2027-plan.md).
