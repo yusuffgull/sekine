@@ -72,3 +72,12 @@ kullanıcı onay kapısı yok (en az: tahmini bildirim OPT-IN, varsayılan KAPAL
 yurtdışı şehirleri de kapsıyor → Aladhan yalnızca yedek yol, değer düşük/risk yüksek. Dalda yeniden
 kullanılabilir iyileştirmeler var (enjekte edilebilir `clock`, tembel çekirdek üretimi, DST/geceyarısı
 sahur testleri, `HijriEstimate.isSafeInterior`) — main'e ayrı küçük commit'lerle taşınabilir.
+
+## KARAR: R1 "tam bütçe tahsisçisi" yapılmayacak (19 Eki 2026)
+`buildDesiredItems`'ın bütçe aşımında kesilen adayları kaybolmaz: pencere döngüseldir, ileri günler uygulama
+açılışı/arka plan yenilemesiyle gün ilerledikçe eklenir (60 yumuşak bütçe, 64 sert sınır, adım 4–5'te GERÇEK
+pending sayısına göre kapasite). "deferred" yalnızca kapasite yetmezliğini sayar; kesilen ileri günler hata
+değildir. Tahsisçi yalnızca sayaç/telemetri kozmetiği olurdu ve canlı çekirdeğe gereksiz risk getirirdi.
+Gerçek risk "uygulama ~6 gün hiç açılmaz ve BG yenileme çalışmaz" ve bu, rakiplerden kalan tasarımla aynı
+sınır; sahur +1/gün pencereyi ~%14 kısaltır (Ramazan'da ≈ 6 gün). Ramazan öncesi cihaz testinde BG
+yenilemenin çalıştığı doğrulanacak (docs/handoff.md, cihaz listesi).
