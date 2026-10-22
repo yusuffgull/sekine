@@ -1,0 +1,1544 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00AF2A3A1C3A83C30F92F6A1 /* IftarActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */; };
+		012C13BBFF14225997F69614 /* AppUpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F822B879E47B6B5013A25F /* AppUpdateChecker.swift */; };
+		03014F4F29AB920BCE345CE3 /* SekineWatchComplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D0A232CBD343B2FFF00C4C /* SekineWatchComplications.swift */; };
+		0480CAC5DF816D18D3BAA261 /* HolyDays.json in Resources */ = {isa = PBXBuildFile; fileRef = D3079B95280D6C390C362F40 /* HolyDays.json */; };
+		083829695E8A22C1918DE5A0 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ABF82F3A9A610BD17BF557 /* AppSettings.swift */; };
+		088C15BD09004F364CF88F6B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50C8C900291306B4653DEBB /* Theme.swift */; };
+		0961C7061719E0B08D4C765E /* KazaTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D56E56C849F8A6F03E8DA5 /* KazaTracker.swift */; };
+		0B6DEE9B210124DA3A2D8557 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E6A2496395498083972B1 /* PaywallView.swift */; };
+		0C52F39A0A3549799EFEFD6D /* ExtraNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391D3ECA57EC7C530A39C98 /* ExtraNotifications.swift */; };
+		0CFAF9E9865F080139EBFC3F /* PremiumGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113F3FE59585391AAF98F8E /* PremiumGate.swift */; };
+		0F9E28BDCEBF5D84F8D2098C /* StoreEntitlementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A444A2F144CCA1FC3436BC2 /* StoreEntitlementTests.swift */; };
+		1000D99466F1BBA6F9A126C4 /* SekineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF798C5634A43BF4F7E2AF9 /* SekineApp.swift */; };
+		1231B011F9ED1AEA77ADA23B /* HijriEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */; };
+		166FF8F8B2A52C9DAC739919 /* ShareCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64AED714E1DA83DDD232EC82 /* ShareCardTests.swift */; };
+		17151DD11DCE07DA5D7F6A50 /* RollingSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EDFE9E43DFC40A2057B0CC2 /* RollingSchedulerTests.swift */; };
+		17E5B251E934EDE5967D8489 /* EsmaulHusna.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B5612FB78398787E509DDE5 /* EsmaulHusna.json */; };
+		1A096993CD5A55732F69EAA4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8018D43AE4CF59A3FA43DA50 /* SettingsView.swift */; };
+		1B1B6AAAC894C7A6ACCCF894 /* DiyanetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CEC5ACBAEE35B7C2093EE0 /* DiyanetProvider.swift */; };
+		1BB26AAFC529BDBFB6B09DBA /* RamadanImsakiyeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02A8EFD9E691361FD409584 /* RamadanImsakiyeTests.swift */; };
+		1C7D331863623007774A59D5 /* NotificationSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170DCEC0DE115499DA1D0C9E /* NotificationSound.swift */; };
+		1EA86644452B0B86373D2963 /* RamadanInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */; };
+		1ED1DCEC3AB6502F52A09D22 /* IftarActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */; };
+		2395F90187105CCE26907C58 /* PrayerDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */; };
+		2400B1638B0FB0DAD9C915D4 /* LocationOverrides.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A522DC3A5FBE85E45D9894A /* LocationOverrides.json */; };
+		256F71F771CFE16ED19D2688 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */; };
+		2574099B5A32FD8846B92558 /* DailyVerses.json in Resources */ = {isa = PBXBuildFile; fileRef = 544B1A1E31B5885B96928C14 /* DailyVerses.json */; };
+		2A860D359713CC012FA714E6 /* RamadanInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */; };
+		2E4C0F96DD6C213B176F5564 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98ECE192FD0910D01B8AFC3 /* AppDelegate.swift */; };
+		339C59B5A2F6F0E4C0CEAD6A /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */; };
+		3AECF106556817E82CCA5801 /* DiyanetDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF112C5197C0DD577829A6D /* DiyanetDirectory.swift */; };
+		3CD7C926D93D38AE89D17C32 /* IftarActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */; };
+		3D02FFB1BE4B28D0F5E9CF7F /* HijriEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */; };
+		3D461A0FA168D083D6DC1018 /* Duas.json in Resources */ = {isa = PBXBuildFile; fileRef = 15406D694B139854F9BF40B8 /* Duas.json */; };
+		3D9025118B9278B65481EAD1 /* BackgroundRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73E577A36182835EF5A153E /* BackgroundRefresh.swift */; };
+		4014EE026D5FFBCDA7AC8AFA /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */; };
+		418874AD1DD24922C6CA462D /* AppUpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F822B879E47B6B5013A25F /* AppUpdateChecker.swift */; };
+		433624AA18CC96D8E3AAEC66 /* BackgroundRefreshTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1655D3ECC520995D0D3D5837 /* BackgroundRefreshTests.swift */; };
+		4427655CA66E5DBFDE8DB602 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA04B3274D70E1248C8F6E2 /* RootView.swift */; };
+		4469B4CE8EB37A65A1215045 /* ShareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5274AEF4E7BD3F7B7A2AF5 /* ShareCard.swift */; };
+		45ED483AFAF43FD57D5D7131 /* QiblaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DE1C3DA6F435F21DA2D711 /* QiblaManager.swift */; };
+		46A374192520B0140E36053C /* KazaTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886FFBB9968B6F6708E1CCFE /* KazaTrackerTests.swift */; };
+		48E9EB9FCBAF291491E644FC /* ApproxCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A446FCE51FF09442B022E88 /* ApproxCalendarTests.swift */; };
+		4960CF8B28D9F14043C8BDFE /* PrayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F6C095043847FFFA74EAD /* PrayerCache.swift */; };
+		4F0F0724AF2D34CBCA2DF622 /* PrayerDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */; };
+		503BAD779968766ABCB70A23 /* RamadanImsakiye.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8835ACCB339A3DD66D2EB332 /* RamadanImsakiye.swift */; };
+		52DFB9B6C8E4E19B675A2E61 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */; };
+		54A2BE3F98E8C674646038FC /* RollingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C8C287E1829D916DD263 /* RollingScheduler.swift */; };
+		58C56F290E6F1250ACDD50EC /* PrayerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949B9B20701AD1D1550F5886 /* PrayerTimeProvider.swift */; };
+		59EC8A98A7E312FD89D9F29A /* IftarLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5AAD823DFC68594C79C16E /* IftarLiveActivity.swift */; };
+		5BBFD4D2B73DB84AA7B86EC4 /* SpiritualContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A962298CCF11E127C0169D92 /* SpiritualContent.swift */; };
+		5BE2A9E3CB39C0EBFBE7590B /* WatchOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53171707E3C9B000846989E5 /* WatchOnboardingView.swift */; };
+		5BF6C12AD7D69A1E12B52A47 /* DiyanetDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF112C5197C0DD577829A6D /* DiyanetDirectory.swift */; };
+		5D68623958BDDEB54CB09E2F /* SekineWatchComplications.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7664A679D4558B7295D8FA26 /* SekineWatchComplications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5F7478DEB156E4055E53E641 /* WatchQiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7773F1542FAA7E9268BD8884 /* WatchQiblaView.swift */; };
+		60AE42C920EB63C057D9754E /* TesbihView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049837ACA4A4D81BF6412780 /* TesbihView.swift */; };
+		6320075DF46B55B5850E7D08 /* chime.caf in Resources */ = {isa = PBXBuildFile; fileRef = 928B6FC8514BA808CCB91012 /* chime.caf */; };
+		633A47F8C2306BAA481E99C6 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = 616837BDF07F57DFD7A12C87 /* Adhan */; };
+		679D66A6505B45A825C7B946 /* LocalCalculationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB2B87FCC6464537259129C /* LocalCalculationProvider.swift */; };
+		6833B9BAF971D6ED74B40206 /* HijriEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */; };
+		6864F79047484DC5E181E05F /* AladhanProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43F5CB4E48F1B7BE2A5F861 /* AladhanProvider.swift */; };
+		694557DA7B8C3F4C529EFA0D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE9176E8C67465A90335976 /* Store.swift */; };
+		6B9828AD17D3CB0CCEF93B32 /* PrayerTimeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB9C46A35810757DB62D4B9 /* PrayerTimeStore.swift */; };
+		6D134E5D6563982ED3C3128C /* ApproxCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36CA609C9711550FD38B4D06 /* ApproxCalendar.swift */; };
+		704353DAD1D298D461C38616 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */; };
+		70D04B11A0731C61AAA640E3 /* RamadanComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4D0E46AA15A5AC557F0ECD /* RamadanComplication.swift */; };
+		74D83C57FF6ABB9E38CA595D /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF3C1436922D82A33C0FDBB /* NotificationManager.swift */; };
+		752B71FD8AF0F15A4F09A980 /* PrayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F6C095043847FFFA74EAD /* PrayerCache.swift */; };
+		7A2A6F718DE7A80D2B720E90 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CE14358BB19329E1D08D38 /* WatchSessionManager.swift */; };
+		7A54377047E30D6F384426BC /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */; };
+		7D4E28112DDEAEDED61BFDB9 /* RamadanCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461C31A83B9212841EBAC7F1 /* RamadanCard.swift */; };
+		7EF6D33EF23E466CED459FDD /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */; };
+		80B23A58A38F8E6A4E1C3FFD /* SekineWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0DD35716B28AB5C217EA9690 /* SekineWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		80ED47BD598847D65FFF1EDB /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */; };
+		813B76EC816C7FAA6A90CBFD /* AppUpdateCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F1F117A1CDC25F8E144DA /* AppUpdateCheckerTests.swift */; };
+		814ABC1256BA995C87938B39 /* RamadanInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */; };
+		828694063FA92AA58C041CD8 /* NotificationSoundTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0863F441851CE3DB65DCA61 /* NotificationSoundTests.swift */; };
+		84511E8871B6E563BC2A1794 /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CB3C9A54D0C716081D3258 /* MonthlyView.swift */; };
+		849A70FDD3CECC60F5286D87 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = 0F88AF035E8691A992F23912 /* Adhan */; };
+		85AC4805CFE669FB8B6B701F /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4C0C20D83A4DD9FBFF695F /* WatchRootView.swift */; };
+		8641598B879FD72EE773EAC2 /* IftarLiveActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D5B65B085BB11D1A4DACD4 /* IftarLiveActivityTests.swift */; };
+		8AE4ABC2F04A51BE2B753701 /* WatchBackgroundRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6D110F2F49CEBF7E5518CF /* WatchBackgroundRefresh.swift */; };
+		8D177D7365B977D90D44EBD9 /* PrayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F6C095043847FFFA74EAD /* PrayerCache.swift */; };
+		8D2DC6FF7EA4099B04474000 /* AladhanPrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B749CB9A16DEC8E535A172 /* AladhanPrivacyTests.swift */; };
+		8D44CD5D0AEA6E81D8CB5A9B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E56C16368283E841FB308E /* LocationManager.swift */; };
+		8F243F68574C4F27C7CD3E6D /* WatchTesbihView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DC3073B058B9B7B33AF350 /* WatchTesbihView.swift */; };
+		91C6650FD01849DDC57B38CE /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ABF82F3A9A610BD17BF557 /* AppSettings.swift */; };
+		92F9303AFE883A95A45DDC1E /* SekineWatch.app in Embed Dependencies */ = {isa = PBXBuildFile; fileRef = E5FC71A1D8EE92A95062CDC8 /* SekineWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9378601EA16B20603C30486D /* ReviewPromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EE178D57E556F218D87A05 /* ReviewPromptTests.swift */; };
+		9558A380E371E4CADBB1C03A /* RollingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C8C287E1829D916DD263 /* RollingScheduler.swift */; };
+		9584F960B39F03A6E3544E5A /* KazaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF2444541EB8EAA0AB23CD /* KazaView.swift */; };
+		95D4CC16BA24C5C354BF9C06 /* ReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613F479206BB399B389B5DB /* ReviewPrompt.swift */; };
+		97DEAC06C9D5A7794F397676 /* SpiritualView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9535197D4AFBCC2E05902236 /* SpiritualView.swift */; };
+		98B395D75DFE825013313713 /* HijriEstimateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D561EF2C97C368360B0ACC /* HijriEstimateTests.swift */; };
+		9CDF18023F37F5E0D89E9B2D /* FastingTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9C7E59D2655AB7C3A8B3E8 /* FastingTrackerTests.swift */; };
+		9DD3CD163EEFFA587F82E68E /* RamadanInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDC7CEE799F5AEF332A01A8 /* RamadanInfoTests.swift */; };
+		A601464DA80F77680CCA016D /* SekineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FDDE370E7D234BAA15E9E /* SekineWidget.swift */; };
+		A6A9C960D22DA9F3ADEE6DE7 /* PrayerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949B9B20701AD1D1550F5886 /* PrayerTimeProvider.swift */; };
+		AB9FC8C0149E4F0034522A9C /* QiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC185D734675DB6AC3D56697 /* QiblaView.swift */; };
+		AF2FDF330B14683326ACEB50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B627AA0F7F430BF55D41698D /* Assets.xcassets */; };
+		B2BF390BD69F8B7D61F543C0 /* AladhanProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43F5CB4E48F1B7BE2A5F861 /* AladhanProvider.swift */; };
+		B3D057CCD3728BA67DB709E0 /* AdhanPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3DF9BAE4332004080C943E /* AdhanPlayer.swift */; };
+		BB5CA24370C0C926815E8569 /* LocalCalculationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB2B87FCC6464537259129C /* LocalCalculationProvider.swift */; };
+		BC744FEF9D9E7798478495EE /* LocationSearchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20E444AFF487D466B381C30 /* LocationSearchSheet.swift */; };
+		BE8AA4E3693CFD0785172987 /* HijriEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */; };
+		BE8FB78035CDCA14670ECAC1 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE9176E8C67465A90335976 /* Store.swift */; };
+		BEEB388252EB1C75D84194FD /* SekineWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D69E1D61EA736D620FF2BE1 /* SekineWatchApp.swift */; };
+		C0CD64E408BE30195ACC947F /* ExtraNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391D3ECA57EC7C530A39C98 /* ExtraNotifications.swift */; };
+		C31E11D1C0AFA1509986BB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B05137A9466563354CDAB739 /* Assets.xcassets */; };
+		C3D71CDF3415848F16345351 /* RamadanInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */; };
+		C5DA3851702B8F7E449AC58C /* EsmaulHusnaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C324E960CCB0DD0DDA9C5B /* EsmaulHusnaView.swift */; };
+		C5E1BFC929BB8E1EACAE6F69 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */; };
+		C8F37FD53CF181C8E2D484AB /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A4815D8BE4D66AAEDEFE7B /* OnboardingView.swift */; };
+		C9C800649968FDF9807722F6 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */; };
+		CB6CB876C232022C12B24B11 /* DiyanetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CEC5ACBAEE35B7C2093EE0 /* DiyanetProvider.swift */; };
+		D0571EA06D0232BD164CB7EC /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC934F2BFCFD86B1D244FF /* AppIconOption.swift */; };
+		D0F7AF8750AAA76F10001677 /* DuaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7270F9EC059F27C61B6890AE /* DuaView.swift */; };
+		D2BB7F45A291CB6D872ECB8D /* PrayerDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */; };
+		D3563EB951E188B3883D72CF /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */; };
+		D9A0A7A10C67A78EC0191062 /* PrayerTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E4C35501333F34D2781D7 /* PrayerTimeTests.swift */; };
+		DA06221363A0A4BB9C19408B /* Sekine.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 3D8721B3E582FDAB267A2876 /* Sekine.storekit */; };
+		DA25FBE09D64D0A83DF5C21B /* PrayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F6C095043847FFFA74EAD /* PrayerCache.swift */; };
+		DC6FA181EBCE85388690CFBA /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */; };
+		DD4F88F1EDC0F5593F028188 /* ApproxCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36CA609C9711550FD38B4D06 /* ApproxCalendar.swift */; };
+		DF583A4934F051DE2A2D74FC /* NotificationSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170DCEC0DE115499DA1D0C9E /* NotificationSound.swift */; };
+		E4B2134A1B2317AE7DD5984B /* LocationOverrides.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A522DC3A5FBE85E45D9894A /* LocationOverrides.json */; };
+		E54AC7A5F5D50F6C6468D5EA /* WatchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF33DB9D6D9BA1E46BDC739 /* WatchHomeView.swift */; };
+		E90319032F13E66C2089DD92 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF3C1436922D82A33C0FDBB /* NotificationManager.swift */; };
+		E90505FD891B46C28B1E62D4 /* IftarLiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB963EFBEBA351D18DBA839C /* IftarLiveActivityManager.swift */; };
+		E91DCD9C62110B6D1DD0A9E6 /* PremiumGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113F3FE59585391AAF98F8E /* PremiumGate.swift */; };
+		EB5A130E11F5726E3C387378 /* FastingTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9915EB393A401778AEC88EB3 /* FastingTracker.swift */; };
+		EDAF5360855A2AE1A7488210 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E56C16368283E841FB308E /* LocationManager.swift */; };
+		EFDAEBC48E15CE51B8DB0119 /* RamadanImsakiyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B61B831156C171AA1B954B /* RamadanImsakiyeView.swift */; };
+		F1A2BA63127F674B9744F399 /* PrayerDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */; };
+		F31DBC6D62582F09361B01FE /* IftarActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */; };
+		F3A1AB0C0D6F67B78D7CE5E8 /* WatchPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFF3EAE579D15E13EA500F /* WatchPaywallView.swift */; };
+		F7D055C0FD231D924164652C /* RamadanWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C56B345E2CC3D4D53A5DA2 /* RamadanWidget.swift */; };
+		F92BEB0047723E7F99D15FD1 /* RamadanImsakiye.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8835ACCB339A3DD66D2EB332 /* RamadanImsakiye.swift */; };
+		F964D8214EF8BC59F18FA36A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5378C7C9A58C57714136C6 /* HomeView.swift */; };
+		FB1C4ED40663342AF29AD1FA /* QiblaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DE1C3DA6F435F21DA2D711 /* QiblaManager.swift */; };
+		FDEE3A2EB88856AFD87264BA /* PrayerTimeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB9C46A35810757DB62D4B9 /* PrayerTimeStore.swift */; };
+		FF2E0B1E8697AA38AB303B2B /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC729B3324D42FA6765B58B /* WatchSessionManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		092E3DFCBD39D4F7F846DB5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0ABB4216CC74F4F31599FA7D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 815A3D4F3133C820859C97E8;
+			remoteInfo = SekineWidget;
+		};
+		12F426B94818825F0675FFDC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0ABB4216CC74F4F31599FA7D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EF442DA363CA6743741322E;
+			remoteInfo = SekineWatchComplications;
+		};
+		1C3F4035E63A49249453CC50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0ABB4216CC74F4F31599FA7D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F092E97B82D4D1820890B2F7;
+			remoteInfo = SekineWatch;
+		};
+		282F5385C02A02AC889CDAE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0ABB4216CC74F4F31599FA7D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EFA3B0734BD7A7A5665A6347;
+			remoteInfo = Sekine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		22C76DFCE6BE9680E59263B3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5D68623958BDDEB54CB09E2F /* SekineWatchComplications.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		346CC8968060F08EF3299A8C /* Embed Dependencies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				92F9303AFE883A95A45DDC1E /* SekineWatch.app in Embed Dependencies */,
+			);
+			name = "Embed Dependencies";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5E162F7D48A2EC8193808F8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				80B23A58A38F8E6A4E1C3FFD /* SekineWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		038E4C35501333F34D2781D7 /* PrayerTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeTests.swift; sourceTree = "<group>"; };
+		049837ACA4A4D81BF6412780 /* TesbihView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TesbihView.swift; sourceTree = "<group>"; };
+		0BBC934F2BFCFD86B1D244FF /* AppIconOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconOption.swift; sourceTree = "<group>"; };
+		0DD35716B28AB5C217EA9690 /* SekineWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SekineWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		13D5B65B085BB11D1A4DACD4 /* IftarLiveActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IftarLiveActivityTests.swift; sourceTree = "<group>"; };
+		15406D694B139854F9BF40B8 /* Duas.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Duas.json; sourceTree = "<group>"; };
+		1655D3ECC520995D0D3D5837 /* BackgroundRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshTests.swift; sourceTree = "<group>"; };
+		170DCEC0DE115499DA1D0C9E /* NotificationSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSound.swift; sourceTree = "<group>"; };
+		1CDC7CEE799F5AEF332A01A8 /* RamadanInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanInfoTests.swift; sourceTree = "<group>"; };
+		1DF3C1436922D82A33C0FDBB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		2391D3ECA57EC7C530A39C98 /* ExtraNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraNotifications.swift; sourceTree = "<group>"; };
+		2A9C7E59D2655AB7C3A8B3E8 /* FastingTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingTrackerTests.swift; sourceTree = "<group>"; };
+		2FC729B3324D42FA6765B58B /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		36CA609C9711550FD38B4D06 /* ApproxCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApproxCalendar.swift; sourceTree = "<group>"; };
+		37B749CB9A16DEC8E535A172 /* AladhanPrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AladhanPrivacyTests.swift; sourceTree = "<group>"; };
+		382C40B6CB288DDDA06DF0BB /* SekineWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SekineWidget.entitlements; sourceTree = "<group>"; };
+		3A522DC3A5FBE85E45D9894A /* LocationOverrides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LocationOverrides.json; sourceTree = "<group>"; };
+		3BB9C46A35810757DB62D4B9 /* PrayerTimeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeStore.swift; sourceTree = "<group>"; };
+		3D8721B3E582FDAB267A2876 /* Sekine.storekit */ = {isa = PBXFileReference; path = Sekine.storekit; sourceTree = "<group>"; };
+		45A181DD51F96F4422A6EBA4 /* Sekine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sekine.entitlements; sourceTree = "<group>"; };
+		461C31A83B9212841EBAC7F1 /* RamadanCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanCard.swift; sourceTree = "<group>"; };
+		4CF798C5634A43BF4F7E2AF9 /* SekineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SekineApp.swift; sourceTree = "<group>"; };
+		4D68BEB1FEF1B67C81D53139 /* SekineTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SekineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		53171707E3C9B000846989E5 /* WatchOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchOnboardingView.swift; sourceTree = "<group>"; };
+		531F6C095043847FFFA74EAD /* PrayerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCache.swift; sourceTree = "<group>"; };
+		544B1A1E31B5885B96928C14 /* DailyVerses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DailyVerses.json; sourceTree = "<group>"; };
+		55EA93E0B277AFCBBC618249 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		56C324E960CCB0DD0DDA9C5B /* EsmaulHusnaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EsmaulHusnaView.swift; sourceTree = "<group>"; };
+		5A444A2F144CCA1FC3436BC2 /* StoreEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreEntitlementTests.swift; sourceTree = "<group>"; };
+		5A446FCE51FF09442B022E88 /* ApproxCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApproxCalendarTests.swift; sourceTree = "<group>"; };
+		5E701E7642ADE5DAE20A5087 /* SekineWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SekineWatch.entitlements; sourceTree = "<group>"; };
+		5EDFE9E43DFC40A2057B0CC2 /* RollingSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingSchedulerTests.swift; sourceTree = "<group>"; };
+		64AED714E1DA83DDD232EC82 /* ShareCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardTests.swift; sourceTree = "<group>"; };
+		69CEC5ACBAEE35B7C2093EE0 /* DiyanetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiyanetProvider.swift; sourceTree = "<group>"; };
+		6B5612FB78398787E509DDE5 /* EsmaulHusna.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EsmaulHusna.json; sourceTree = "<group>"; };
+		6D7FDDE370E7D234BAA15E9E /* SekineWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SekineWidget.swift; sourceTree = "<group>"; };
+		7270F9EC059F27C61B6890AE /* DuaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaView.swift; sourceTree = "<group>"; };
+		7664A679D4558B7295D8FA26 /* SekineWatchComplications.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SekineWatchComplications.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7773F1542FAA7E9268BD8884 /* WatchQiblaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQiblaView.swift; sourceTree = "<group>"; };
+		78C56B345E2CC3D4D53A5DA2 /* RamadanWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanWidget.swift; sourceTree = "<group>"; };
+		7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		7B4D0E46AA15A5AC557F0ECD /* RamadanComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanComplication.swift; sourceTree = "<group>"; };
+		7CE9176E8C67465A90335976 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		7DA04B3274D70E1248C8F6E2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HijriEstimate.swift; sourceTree = "<group>"; };
+		8018D43AE4CF59A3FA43DA50 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		80D0A232CBD343B2FFF00C4C /* SekineWatchComplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SekineWatchComplications.swift; sourceTree = "<group>"; };
+		82D56E56C849F8A6F03E8DA5 /* KazaTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KazaTracker.swift; sourceTree = "<group>"; };
+		84CE14358BB19329E1D08D38 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		8613F479206BB399B389B5DB /* ReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompt.swift; sourceTree = "<group>"; };
+		8835ACCB339A3DD66D2EB332 /* RamadanImsakiye.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanImsakiye.swift; sourceTree = "<group>"; };
+		886FFBB9968B6F6708E1CCFE /* KazaTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KazaTrackerTests.swift; sourceTree = "<group>"; };
+		8D69E1D61EA736D620FF2BE1 /* SekineWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SekineWatchApp.swift; sourceTree = "<group>"; };
+		90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerDay.swift; sourceTree = "<group>"; };
+		928B6FC8514BA808CCB91012 /* chime.caf */ = {isa = PBXFileReference; path = chime.caf; sourceTree = "<group>"; };
+		949B9B20701AD1D1550F5886 /* PrayerTimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeProvider.swift; sourceTree = "<group>"; };
+		9535197D4AFBCC2E05902236 /* SpiritualView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiritualView.swift; sourceTree = "<group>"; };
+		9915EB393A401778AEC88EB3 /* FastingTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingTracker.swift; sourceTree = "<group>"; };
+		99D561EF2C97C368360B0ACC /* HijriEstimateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HijriEstimateTests.swift; sourceTree = "<group>"; };
+		A2ABF82F3A9A610BD17BF557 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IftarActivityAttributes.swift; sourceTree = "<group>"; };
+		A962298CCF11E127C0169D92 /* SpiritualContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiritualContent.swift; sourceTree = "<group>"; };
+		AA3DF9BAE4332004080C943E /* AdhanPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanPlayer.swift; sourceTree = "<group>"; };
+		AC185D734675DB6AC3D56697 /* QiblaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaView.swift; sourceTree = "<group>"; };
+		ACAD77036F9D171B640A709F /* SekineWatchComplications.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SekineWatchComplications.entitlements; sourceTree = "<group>"; };
+		AD4C0C20D83A4DD9FBFF695F /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
+		AFF33DB9D6D9BA1E46BDC739 /* WatchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHomeView.swift; sourceTree = "<group>"; };
+		B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanInfo.swift; sourceTree = "<group>"; };
+		B05137A9466563354CDAB739 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B0CB3C9A54D0C716081D3258 /* MonthlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyView.swift; sourceTree = "<group>"; };
+		B50C8C900291306B4653DEBB /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B627AA0F7F430BF55D41698D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B6EE178D57E556F218D87A05 /* ReviewPromptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPromptTests.swift; sourceTree = "<group>"; };
+		BB963EFBEBA351D18DBA839C /* IftarLiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IftarLiveActivityManager.swift; sourceTree = "<group>"; };
+		BD5378C7C9A58C57714136C6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C3DE1C3DA6F435F21DA2D711 /* QiblaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaManager.swift; sourceTree = "<group>"; };
+		C4AFF3EAE579D15E13EA500F /* WatchPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchPaywallView.swift; sourceTree = "<group>"; };
+		C8E56C16368283E841FB308E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		CB5AAD823DFC68594C79C16E /* IftarLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IftarLiveActivity.swift; sourceTree = "<group>"; };
+		D02A8EFD9E691361FD409584 /* RamadanImsakiyeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanImsakiyeTests.swift; sourceTree = "<group>"; };
+		D3079B95280D6C390C362F40 /* HolyDays.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = HolyDays.json; sourceTree = "<group>"; };
+		D43F5CB4E48F1B7BE2A5F861 /* AladhanProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AladhanProvider.swift; sourceTree = "<group>"; };
+		D98ECE192FD0910D01B8AFC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D9FE8A3D1C45250054AFA0C8 /* Sekine.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Sekine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		DBEA97CC8B2EC64E8D02BDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DBF112C5197C0DD577829A6D /* DiyanetDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiyanetDirectory.swift; sourceTree = "<group>"; };
+		E20E444AFF487D466B381C30 /* LocationSearchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchSheet.swift; sourceTree = "<group>"; };
+		E2D5C8C287E1829D916DD263 /* RollingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingScheduler.swift; sourceTree = "<group>"; };
+		E4B61B831156C171AA1B954B /* RamadanImsakiyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamadanImsakiyeView.swift; sourceTree = "<group>"; };
+		E5FC71A1D8EE92A95062CDC8 /* SekineWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SekineWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69B19E42B21B91FB364634B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E73E577A36182835EF5A153E /* BackgroundRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefresh.swift; sourceTree = "<group>"; };
+		ECB2B87FCC6464537259129C /* LocalCalculationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCalculationProvider.swift; sourceTree = "<group>"; };
+		ED5274AEF4E7BD3F7B7A2AF5 /* ShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCard.swift; sourceTree = "<group>"; };
+		EF143A3E8375089221778E44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EF6D110F2F49CEBF7E5518CF /* WatchBackgroundRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchBackgroundRefresh.swift; sourceTree = "<group>"; };
+		F0863F441851CE3DB65DCA61 /* NotificationSoundTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSoundTests.swift; sourceTree = "<group>"; };
+		F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
+		F113F3FE59585391AAF98F8E /* PremiumGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumGate.swift; sourceTree = "<group>"; };
+		F20F1F117A1CDC25F8E144DA /* AppUpdateCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateCheckerTests.swift; sourceTree = "<group>"; };
+		F3DC3073B058B9B7B33AF350 /* WatchTesbihView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTesbihView.swift; sourceTree = "<group>"; };
+		F7A4815D8BE4D66AAEDEFE7B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		F8F822B879E47B6B5013A25F /* AppUpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateChecker.swift; sourceTree = "<group>"; };
+		FADF2444541EB8EAA0AB23CD /* KazaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KazaView.swift; sourceTree = "<group>"; };
+		FC0E6A2496395498083972B1 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		308FECE461A16F6DE9F6838F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				633A47F8C2306BAA481E99C6 /* Adhan in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9CAB207232CF9843759ECB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				849A70FDD3CECC60F5286D87 /* Adhan in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E8CE48BA3648D4F73C765E4 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				616579EED1A5302ACD6DA191 /* Home */,
+				4CCCAECE758EEAD15AA6A75A /* Monthly */,
+				3B1201C1B2CDA27B55D3352B /* Onboarding */,
+				55EB47D6868A7BA9F2351AE3 /* Premium */,
+				BAC52B65C346F0A708609C86 /* Qibla */,
+				43A780D8475528B224557867 /* Settings */,
+				702775C1949FAB72841CAFBA /* Spiritual */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		17B72EEA8D3F963B7E6DEBD8 /* Qibla */ = {
+			isa = PBXGroup;
+			children = (
+				7773F1542FAA7E9268BD8884 /* WatchQiblaView.swift */,
+			);
+			path = Qibla;
+			sourceTree = "<group>";
+		};
+		35B6CAB8D8638C03361581E3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D98ECE192FD0910D01B8AFC3 /* AppDelegate.swift */,
+				E73E577A36182835EF5A153E /* BackgroundRefresh.swift */,
+				7DA04B3274D70E1248C8F6E2 /* RootView.swift */,
+				4CF798C5634A43BF4F7E2AF9 /* SekineApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		39668F825F25061B9F88CE0A /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				F113F3FE59585391AAF98F8E /* PremiumGate.swift */,
+				7CE9176E8C67465A90335976 /* Store.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
+		3A056365281B7859E4E8B915 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DA7D447F75A1C7A9FB1E2F53 /* AppGroup.swift */,
+				7B1269CA5E2E3AD5FBED9F8B /* ColorTheme.swift */,
+				7F8F8F2B9B08CD6EED0E5AEE /* HijriEstimate.swift */,
+				A5C4256CC31CA66569CF07D5 /* IftarActivityAttributes.swift */,
+				F0F7796B5C138BDC9C0C5EE8 /* Prayer.swift */,
+				531F6C095043847FFFA74EAD /* PrayerCache.swift */,
+				90A4BA1B9D71D694475BAAEE /* PrayerDay.swift */,
+				B037EFD5E7F09F373179DBEB /* RamadanInfo.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		3B1201C1B2CDA27B55D3352B /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				F7A4815D8BE4D66AAEDEFE7B /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		3BA5D07FA7C2B9DBA6D48B3F /* Zikir */ = {
+			isa = PBXGroup;
+			children = (
+				F3DC3073B058B9B7B33AF350 /* WatchTesbihView.swift */,
+			);
+			path = Zikir;
+			sourceTree = "<group>";
+		};
+		41B265F953F4A9F08F7FB20E /* WatchConnectivity */ = {
+			isa = PBXGroup;
+			children = (
+				2FC729B3324D42FA6765B58B /* WatchSessionManager.swift */,
+			);
+			path = WatchConnectivity;
+			sourceTree = "<group>";
+		};
+		43A780D8475528B224557867 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0BBC934F2BFCFD86B1D244FF /* AppIconOption.swift */,
+				E20E444AFF487D466B381C30 /* LocationSearchSheet.swift */,
+				8018D43AE4CF59A3FA43DA50 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4A5EAE5AD89BD3336BE5ED02 /* Kaza */ = {
+			isa = PBXGroup;
+			children = (
+				82D56E56C849F8A6F03E8DA5 /* KazaTracker.swift */,
+			);
+			path = Kaza;
+			sourceTree = "<group>";
+		};
+		4CCCAECE758EEAD15AA6A75A /* Monthly */ = {
+			isa = PBXGroup;
+			children = (
+				B0CB3C9A54D0C716081D3258 /* MonthlyView.swift */,
+				E4B61B831156C171AA1B954B /* RamadanImsakiyeView.swift */,
+			);
+			path = Monthly;
+			sourceTree = "<group>";
+		};
+		5427FAFAAE585A6A88D8CA9C /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				928B6FC8514BA808CCB91012 /* chime.caf */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		5488FFED27BA063C2749EC5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9FE8A3D1C45250054AFA0C8 /* Sekine.app */,
+				4D68BEB1FEF1B67C81D53139 /* SekineTests.xctest */,
+				E5FC71A1D8EE92A95062CDC8 /* SekineWatch.app */,
+				7664A679D4558B7295D8FA26 /* SekineWatchComplications.appex */,
+				0DD35716B28AB5C217EA9690 /* SekineWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		55EB47D6868A7BA9F2351AE3 /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				FC0E6A2496395498083972B1 /* PaywallView.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
+		616579EED1A5302ACD6DA191 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				BD5378C7C9A58C57714136C6 /* HomeView.swift */,
+				461C31A83B9212841EBAC7F1 /* RamadanCard.swift */,
+				ED5274AEF4E7BD3F7B7A2AF5 /* ShareCard.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		6A7E83BA50DF14280D6D3F9B /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				A2ABF82F3A9A610BD17BF557 /* AppSettings.swift */,
+				F8F822B879E47B6B5013A25F /* AppUpdateChecker.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		6E842E8A3CC32A24035CD836 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AFF33DB9D6D9BA1E46BDC739 /* WatchHomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		702775C1949FAB72841CAFBA /* Spiritual */ = {
+			isa = PBXGroup;
+			children = (
+				7270F9EC059F27C61B6890AE /* DuaView.swift */,
+				56C324E960CCB0DD0DDA9C5B /* EsmaulHusnaView.swift */,
+				FADF2444541EB8EAA0AB23CD /* KazaView.swift */,
+				A962298CCF11E127C0169D92 /* SpiritualContent.swift */,
+				9535197D4AFBCC2E05902236 /* SpiritualView.swift */,
+				049837ACA4A4D81BF6412780 /* TesbihView.swift */,
+			);
+			path = Spiritual;
+			sourceTree = "<group>";
+		};
+		7920402274FAB5EB8184D17B /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				C4AFF3EAE579D15E13EA500F /* WatchPaywallView.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
+		8917C6C614BBB82B7D550F89 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				84CE14358BB19329E1D08D38 /* WatchSessionManager.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8CA4B5B0652133153E34B2E3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A64A8839BAF05C94183BD6AC /* Audio */,
+				C7A0C37A0F2D290C71B9371E /* Fasting */,
+				C33C330385E5368CB387C152 /* Growth */,
+				4A5EAE5AD89BD3336BE5ED02 /* Kaza */,
+				C76E6EB7E090AD496EF068DF /* LiveActivity */,
+				B35352E418512ACB86E6F668 /* Location */,
+				B781AAA56E76987F8F06C4B9 /* Notifications */,
+				F62A83FF3EFC53BA86B448F1 /* PrayerTimes */,
+				39668F825F25061B9F88CE0A /* Premium */,
+				6A7E83BA50DF14280D6D3F9B /* Storage */,
+				41B265F953F4A9F08F7FB20E /* WatchConnectivity */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		9E5210337CF17072DA901240 /* SekineWatch */ = {
+			isa = PBXGroup;
+			children = (
+				F36CF354E1AEF2AD62A73E92 /* App */,
+				8917C6C614BBB82B7D550F89 /* Core */,
+				DBBF300CF70C7AF3A518447D /* Features */,
+				B05137A9466563354CDAB739 /* Assets.xcassets */,
+				DBEA97CC8B2EC64E8D02BDA0 /* Info.plist */,
+				5E701E7642ADE5DAE20A5087 /* SekineWatch.entitlements */,
+			);
+			path = SekineWatch;
+			sourceTree = "<group>";
+		};
+		9FEBE2A0E469CA0AD51847AE /* Sekine */ = {
+			isa = PBXGroup;
+			children = (
+				35B6CAB8D8638C03361581E3 /* App */,
+				8CA4B5B0652133153E34B2E3 /* Core */,
+				E30199EABE732CC28CFE52AD /* DesignSystem */,
+				0E8CE48BA3648D4F73C765E4 /* Features */,
+				B2CC20C2E867E0E6C5C862DA /* Resources */,
+				3A056365281B7859E4E8B915 /* Shared */,
+				E69B19E42B21B91FB364634B /* Info.plist */,
+				45A181DD51F96F4422A6EBA4 /* Sekine.entitlements */,
+				3D8721B3E582FDAB267A2876 /* Sekine.storekit */,
+			);
+			path = Sekine;
+			sourceTree = "<group>";
+		};
+		A64A8839BAF05C94183BD6AC /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				AA3DF9BAE4332004080C943E /* AdhanPlayer.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		B2CC20C2E867E0E6C5C862DA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5427FAFAAE585A6A88D8CA9C /* Sounds */,
+				B627AA0F7F430BF55D41698D /* Assets.xcassets */,
+				544B1A1E31B5885B96928C14 /* DailyVerses.json */,
+				15406D694B139854F9BF40B8 /* Duas.json */,
+				6B5612FB78398787E509DDE5 /* EsmaulHusna.json */,
+				D3079B95280D6C390C362F40 /* HolyDays.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B35352E418512ACB86E6F668 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				DBF112C5197C0DD577829A6D /* DiyanetDirectory.swift */,
+				C8E56C16368283E841FB308E /* LocationManager.swift */,
+				3A522DC3A5FBE85E45D9894A /* LocationOverrides.json */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		B781AAA56E76987F8F06C4B9 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				2391D3ECA57EC7C530A39C98 /* ExtraNotifications.swift */,
+				1DF3C1436922D82A33C0FDBB /* NotificationManager.swift */,
+				170DCEC0DE115499DA1D0C9E /* NotificationSound.swift */,
+				E2D5C8C287E1829D916DD263 /* RollingScheduler.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		BAC52B65C346F0A708609C86 /* Qibla */ = {
+			isa = PBXGroup;
+			children = (
+				C3DE1C3DA6F435F21DA2D711 /* QiblaManager.swift */,
+				AC185D734675DB6AC3D56697 /* QiblaView.swift */,
+			);
+			path = Qibla;
+			sourceTree = "<group>";
+		};
+		C0F823228388BD8CBB600DA4 /* SekineWatchComplications */ = {
+			isa = PBXGroup;
+			children = (
+				55EA93E0B277AFCBBC618249 /* Info.plist */,
+				7B4D0E46AA15A5AC557F0ECD /* RamadanComplication.swift */,
+				ACAD77036F9D171B640A709F /* SekineWatchComplications.entitlements */,
+				80D0A232CBD343B2FFF00C4C /* SekineWatchComplications.swift */,
+			);
+			path = SekineWatchComplications;
+			sourceTree = "<group>";
+		};
+		C33C330385E5368CB387C152 /* Growth */ = {
+			isa = PBXGroup;
+			children = (
+				8613F479206BB399B389B5DB /* ReviewPrompt.swift */,
+			);
+			path = Growth;
+			sourceTree = "<group>";
+		};
+		C76E6EB7E090AD496EF068DF /* LiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				BB963EFBEBA351D18DBA839C /* IftarLiveActivityManager.swift */,
+			);
+			path = LiveActivity;
+			sourceTree = "<group>";
+		};
+		C7A0C37A0F2D290C71B9371E /* Fasting */ = {
+			isa = PBXGroup;
+			children = (
+				9915EB393A401778AEC88EB3 /* FastingTracker.swift */,
+			);
+			path = Fasting;
+			sourceTree = "<group>";
+		};
+		D09E0DE35ECB79653C0145AD /* SekineWidget */ = {
+			isa = PBXGroup;
+			children = (
+				CB5AAD823DFC68594C79C16E /* IftarLiveActivity.swift */,
+				EF143A3E8375089221778E44 /* Info.plist */,
+				78C56B345E2CC3D4D53A5DA2 /* RamadanWidget.swift */,
+				382C40B6CB288DDDA06DF0BB /* SekineWidget.entitlements */,
+				6D7FDDE370E7D234BAA15E9E /* SekineWidget.swift */,
+			);
+			path = SekineWidget;
+			sourceTree = "<group>";
+		};
+		D918C3A565211749A9974B6B /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				53171707E3C9B000846989E5 /* WatchOnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		DBBF300CF70C7AF3A518447D /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				6E842E8A3CC32A24035CD836 /* Home */,
+				D918C3A565211749A9974B6B /* Onboarding */,
+				7920402274FAB5EB8184D17B /* Premium */,
+				17B72EEA8D3F963B7E6DEBD8 /* Qibla */,
+				3BA5D07FA7C2B9DBA6D48B3F /* Zikir */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E30199EABE732CC28CFE52AD /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				B50C8C900291306B4653DEBB /* Theme.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		ED8E2D4047C94E07D5F4B263 = {
+			isa = PBXGroup;
+			children = (
+				9FEBE2A0E469CA0AD51847AE /* Sekine */,
+				F85A0564038FE7DBCC2842F0 /* SekineTests */,
+				9E5210337CF17072DA901240 /* SekineWatch */,
+				C0F823228388BD8CBB600DA4 /* SekineWatchComplications */,
+				D09E0DE35ECB79653C0145AD /* SekineWidget */,
+				5488FFED27BA063C2749EC5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F36CF354E1AEF2AD62A73E92 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8D69E1D61EA736D620FF2BE1 /* SekineWatchApp.swift */,
+				EF6D110F2F49CEBF7E5518CF /* WatchBackgroundRefresh.swift */,
+				AD4C0C20D83A4DD9FBFF695F /* WatchRootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F62A83FF3EFC53BA86B448F1 /* PrayerTimes */ = {
+			isa = PBXGroup;
+			children = (
+				D43F5CB4E48F1B7BE2A5F861 /* AladhanProvider.swift */,
+				36CA609C9711550FD38B4D06 /* ApproxCalendar.swift */,
+				69CEC5ACBAEE35B7C2093EE0 /* DiyanetProvider.swift */,
+				ECB2B87FCC6464537259129C /* LocalCalculationProvider.swift */,
+				949B9B20701AD1D1550F5886 /* PrayerTimeProvider.swift */,
+				3BB9C46A35810757DB62D4B9 /* PrayerTimeStore.swift */,
+				8835ACCB339A3DD66D2EB332 /* RamadanImsakiye.swift */,
+			);
+			path = PrayerTimes;
+			sourceTree = "<group>";
+		};
+		F85A0564038FE7DBCC2842F0 /* SekineTests */ = {
+			isa = PBXGroup;
+			children = (
+				37B749CB9A16DEC8E535A172 /* AladhanPrivacyTests.swift */,
+				5A446FCE51FF09442B022E88 /* ApproxCalendarTests.swift */,
+				F20F1F117A1CDC25F8E144DA /* AppUpdateCheckerTests.swift */,
+				1655D3ECC520995D0D3D5837 /* BackgroundRefreshTests.swift */,
+				2A9C7E59D2655AB7C3A8B3E8 /* FastingTrackerTests.swift */,
+				99D561EF2C97C368360B0ACC /* HijriEstimateTests.swift */,
+				13D5B65B085BB11D1A4DACD4 /* IftarLiveActivityTests.swift */,
+				886FFBB9968B6F6708E1CCFE /* KazaTrackerTests.swift */,
+				F0863F441851CE3DB65DCA61 /* NotificationSoundTests.swift */,
+				038E4C35501333F34D2781D7 /* PrayerTimeTests.swift */,
+				D02A8EFD9E691361FD409584 /* RamadanImsakiyeTests.swift */,
+				1CDC7CEE799F5AEF332A01A8 /* RamadanInfoTests.swift */,
+				B6EE178D57E556F218D87A05 /* ReviewPromptTests.swift */,
+				5EDFE9E43DFC40A2057B0CC2 /* RollingSchedulerTests.swift */,
+				64AED714E1DA83DDD232EC82 /* ShareCardTests.swift */,
+				5A444A2F144CCA1FC3436BC2 /* StoreEntitlementTests.swift */,
+			);
+			path = SekineTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5EF442DA363CA6743741322E /* SekineWatchComplications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 798CDC6967074504D50B38B8 /* Build configuration list for PBXNativeTarget "SekineWatchComplications" */;
+			buildPhases = (
+				6E604C53FF64825E64E6D25A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SekineWatchComplications;
+			packageProductDependencies = (
+			);
+			productName = SekineWatchComplications;
+			productReference = 7664A679D4558B7295D8FA26 /* SekineWatchComplications.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6A4E4582702B1825A31B75E4 /* SekineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53169A85FC5FF1D9B385C080 /* Build configuration list for PBXNativeTarget "SekineTests" */;
+			buildPhases = (
+				54A68748BFB13CAC654A3DFF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D95C14E2FEEF2F92EF318D65 /* PBXTargetDependency */,
+			);
+			name = SekineTests;
+			packageProductDependencies = (
+			);
+			productName = SekineTests;
+			productReference = 4D68BEB1FEF1B67C81D53139 /* SekineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		815A3D4F3133C820859C97E8 /* SekineWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7045BF145A561472AE854A4C /* Build configuration list for PBXNativeTarget "SekineWidget" */;
+			buildPhases = (
+				3F73BA64AB6E548B8D923EDE /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SekineWidget;
+			packageProductDependencies = (
+			);
+			productName = SekineWidget;
+			productReference = 0DD35716B28AB5C217EA9690 /* SekineWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		EFA3B0734BD7A7A5665A6347 /* Sekine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E5E5EE61698FF3CDE6F68E7 /* Build configuration list for PBXNativeTarget "Sekine" */;
+			buildPhases = (
+				E9D2FF803E01F6699A8116A6 /* Sources */,
+				6B7B22DC7AD00CF2F048775A /* Resources */,
+				F9CAB207232CF9843759ECB4 /* Frameworks */,
+				C5E162F7D48A2EC8193808F8 /* Embed Foundation Extensions */,
+				346CC8968060F08EF3299A8C /* Embed Dependencies */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ADDD12BEB0E88758C2E616E8 /* PBXTargetDependency */,
+				684EBA31E964F1A3861027A7 /* PBXTargetDependency */,
+			);
+			name = Sekine;
+			packageProductDependencies = (
+				0F88AF035E8691A992F23912 /* Adhan */,
+			);
+			productName = Sekine;
+			productReference = D9FE8A3D1C45250054AFA0C8 /* Sekine.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F092E97B82D4D1820890B2F7 /* SekineWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B20B65ED1910A5716BAB42DF /* Build configuration list for PBXNativeTarget "SekineWatch" */;
+			buildPhases = (
+				87C4D8796F2CE939A6DA63E8 /* Sources */,
+				06606058432D2B7F99C05C72 /* Resources */,
+				308FECE461A16F6DE9F6838F /* Frameworks */,
+				22C76DFCE6BE9680E59263B3 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				967A6D741346C1998B6451E9 /* PBXTargetDependency */,
+			);
+			name = SekineWatch;
+			packageProductDependencies = (
+				616837BDF07F57DFD7A12C87 /* Adhan */,
+			);
+			productName = SekineWatch;
+			productReference = E5FC71A1D8EE92A95062CDC8 /* SekineWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0ABB4216CC74F4F31599FA7D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					5EF442DA363CA6743741322E = {
+						DevelopmentTeam = 33L468BTR2;
+						ProvisioningStyle = Automatic;
+					};
+					6A4E4582702B1825A31B75E4 = {
+						DevelopmentTeam = 33L468BTR2;
+						ProvisioningStyle = Automatic;
+					};
+					815A3D4F3133C820859C97E8 = {
+						DevelopmentTeam = 33L468BTR2;
+						ProvisioningStyle = Automatic;
+					};
+					EFA3B0734BD7A7A5665A6347 = {
+						DevelopmentTeam = 33L468BTR2;
+						ProvisioningStyle = Automatic;
+					};
+					F092E97B82D4D1820890B2F7 = {
+						DevelopmentTeam = 33L468BTR2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F5A656E37BA3418AEF976480 /* Build configuration list for PBXProject "Sekine" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = ED8E2D4047C94E07D5F4B263;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				70F1BFB9311477106EC5FDB8 /* XCRemoteSwiftPackageReference "adhan-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5488FFED27BA063C2749EC5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EFA3B0734BD7A7A5665A6347 /* Sekine */,
+				815A3D4F3133C820859C97E8 /* SekineWidget */,
+				F092E97B82D4D1820890B2F7 /* SekineWatch */,
+				5EF442DA363CA6743741322E /* SekineWatchComplications */,
+				6A4E4582702B1825A31B75E4 /* SekineTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		06606058432D2B7F99C05C72 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31E11D1C0AFA1509986BB97 /* Assets.xcassets in Resources */,
+				E4B2134A1B2317AE7DD5984B /* LocationOverrides.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B7B22DC7AD00CF2F048775A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF2FDF330B14683326ACEB50 /* Assets.xcassets in Resources */,
+				2574099B5A32FD8846B92558 /* DailyVerses.json in Resources */,
+				3D461A0FA168D083D6DC1018 /* Duas.json in Resources */,
+				17E5B251E934EDE5967D8489 /* EsmaulHusna.json in Resources */,
+				0480CAC5DF816D18D3BAA261 /* HolyDays.json in Resources */,
+				2400B1638B0FB0DAD9C915D4 /* LocationOverrides.json in Resources */,
+				DA06221363A0A4BB9C19408B /* Sekine.storekit in Resources */,
+				6320075DF46B55B5850E7D08 /* chime.caf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3F73BA64AB6E548B8D923EDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				339C59B5A2F6F0E4C0CEAD6A /* AppGroup.swift in Sources */,
+				C9C800649968FDF9807722F6 /* ColorTheme.swift in Sources */,
+				BE8AA4E3693CFD0785172987 /* HijriEstimate.swift in Sources */,
+				1ED1DCEC3AB6502F52A09D22 /* IftarActivityAttributes.swift in Sources */,
+				59EC8A98A7E312FD89D9F29A /* IftarLiveActivity.swift in Sources */,
+				256F71F771CFE16ED19D2688 /* Prayer.swift in Sources */,
+				8D177D7365B977D90D44EBD9 /* PrayerCache.swift in Sources */,
+				4F0F0724AF2D34CBCA2DF622 /* PrayerDay.swift in Sources */,
+				1EA86644452B0B86373D2963 /* RamadanInfo.swift in Sources */,
+				F7D055C0FD231D924164652C /* RamadanWidget.swift in Sources */,
+				A601464DA80F77680CCA016D /* SekineWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54A68748BFB13CAC654A3DFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D2DC6FF7EA4099B04474000 /* AladhanPrivacyTests.swift in Sources */,
+				813B76EC816C7FAA6A90CBFD /* AppUpdateCheckerTests.swift in Sources */,
+				48E9EB9FCBAF291491E644FC /* ApproxCalendarTests.swift in Sources */,
+				433624AA18CC96D8E3AAEC66 /* BackgroundRefreshTests.swift in Sources */,
+				9CDF18023F37F5E0D89E9B2D /* FastingTrackerTests.swift in Sources */,
+				98B395D75DFE825013313713 /* HijriEstimateTests.swift in Sources */,
+				8641598B879FD72EE773EAC2 /* IftarLiveActivityTests.swift in Sources */,
+				46A374192520B0140E36053C /* KazaTrackerTests.swift in Sources */,
+				828694063FA92AA58C041CD8 /* NotificationSoundTests.swift in Sources */,
+				D9A0A7A10C67A78EC0191062 /* PrayerTimeTests.swift in Sources */,
+				1BB26AAFC529BDBFB6B09DBA /* RamadanImsakiyeTests.swift in Sources */,
+				9DD3CD163EEFFA587F82E68E /* RamadanInfoTests.swift in Sources */,
+				9378601EA16B20603C30486D /* ReviewPromptTests.swift in Sources */,
+				17151DD11DCE07DA5D7F6A50 /* RollingSchedulerTests.swift in Sources */,
+				166FF8F8B2A52C9DAC739919 /* ShareCardTests.swift in Sources */,
+				0F9E28BDCEBF5D84F8D2098C /* StoreEntitlementTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E604C53FF64825E64E6D25A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				704353DAD1D298D461C38616 /* AppGroup.swift in Sources */,
+				4014EE026D5FFBCDA7AC8AFA /* ColorTheme.swift in Sources */,
+				3D02FFB1BE4B28D0F5E9CF7F /* HijriEstimate.swift in Sources */,
+				00AF2A3A1C3A83C30F92F6A1 /* IftarActivityAttributes.swift in Sources */,
+				52DFB9B6C8E4E19B675A2E61 /* Prayer.swift in Sources */,
+				DA25FBE09D64D0A83DF5C21B /* PrayerCache.swift in Sources */,
+				D2BB7F45A291CB6D872ECB8D /* PrayerDay.swift in Sources */,
+				70D04B11A0731C61AAA640E3 /* RamadanComplication.swift in Sources */,
+				2A860D359713CC012FA714E6 /* RamadanInfo.swift in Sources */,
+				03014F4F29AB920BCE345CE3 /* SekineWatchComplications.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87C4D8796F2CE939A6DA63E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2BF390BD69F8B7D61F543C0 /* AladhanProvider.swift in Sources */,
+				80ED47BD598847D65FFF1EDB /* AppGroup.swift in Sources */,
+				083829695E8A22C1918DE5A0 /* AppSettings.swift in Sources */,
+				418874AD1DD24922C6CA462D /* AppUpdateChecker.swift in Sources */,
+				DD4F88F1EDC0F5593F028188 /* ApproxCalendar.swift in Sources */,
+				7A54377047E30D6F384426BC /* ColorTheme.swift in Sources */,
+				3AECF106556817E82CCA5801 /* DiyanetDirectory.swift in Sources */,
+				CB6CB876C232022C12B24B11 /* DiyanetProvider.swift in Sources */,
+				C0CD64E408BE30195ACC947F /* ExtraNotifications.swift in Sources */,
+				6833B9BAF971D6ED74B40206 /* HijriEstimate.swift in Sources */,
+				F31DBC6D62582F09361B01FE /* IftarActivityAttributes.swift in Sources */,
+				BB5CA24370C0C926815E8569 /* LocalCalculationProvider.swift in Sources */,
+				8D44CD5D0AEA6E81D8CB5A9B /* LocationManager.swift in Sources */,
+				74D83C57FF6ABB9E38CA595D /* NotificationManager.swift in Sources */,
+				1C7D331863623007774A59D5 /* NotificationSound.swift in Sources */,
+				C5E1BFC929BB8E1EACAE6F69 /* Prayer.swift in Sources */,
+				752B71FD8AF0F15A4F09A980 /* PrayerCache.swift in Sources */,
+				F1A2BA63127F674B9744F399 /* PrayerDay.swift in Sources */,
+				58C56F290E6F1250ACDD50EC /* PrayerTimeProvider.swift in Sources */,
+				FDEE3A2EB88856AFD87264BA /* PrayerTimeStore.swift in Sources */,
+				E91DCD9C62110B6D1DD0A9E6 /* PremiumGate.swift in Sources */,
+				45ED483AFAF43FD57D5D7131 /* QiblaManager.swift in Sources */,
+				F92BEB0047723E7F99D15FD1 /* RamadanImsakiye.swift in Sources */,
+				C3D71CDF3415848F16345351 /* RamadanInfo.swift in Sources */,
+				54A2BE3F98E8C674646038FC /* RollingScheduler.swift in Sources */,
+				BEEB388252EB1C75D84194FD /* SekineWatchApp.swift in Sources */,
+				BE8FB78035CDCA14670ECAC1 /* Store.swift in Sources */,
+				8AE4ABC2F04A51BE2B753701 /* WatchBackgroundRefresh.swift in Sources */,
+				E54AC7A5F5D50F6C6468D5EA /* WatchHomeView.swift in Sources */,
+				5BE2A9E3CB39C0EBFBE7590B /* WatchOnboardingView.swift in Sources */,
+				F3A1AB0C0D6F67B78D7CE5E8 /* WatchPaywallView.swift in Sources */,
+				5F7478DEB156E4055E53E641 /* WatchQiblaView.swift in Sources */,
+				85AC4805CFE669FB8B6B701F /* WatchRootView.swift in Sources */,
+				7A2A6F718DE7A80D2B720E90 /* WatchSessionManager.swift in Sources */,
+				8F243F68574C4F27C7CD3E6D /* WatchTesbihView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9D2FF803E01F6699A8116A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3D057CCD3728BA67DB709E0 /* AdhanPlayer.swift in Sources */,
+				6864F79047484DC5E181E05F /* AladhanProvider.swift in Sources */,
+				2E4C0F96DD6C213B176F5564 /* AppDelegate.swift in Sources */,
+				D3563EB951E188B3883D72CF /* AppGroup.swift in Sources */,
+				D0571EA06D0232BD164CB7EC /* AppIconOption.swift in Sources */,
+				91C6650FD01849DDC57B38CE /* AppSettings.swift in Sources */,
+				012C13BBFF14225997F69614 /* AppUpdateChecker.swift in Sources */,
+				6D134E5D6563982ED3C3128C /* ApproxCalendar.swift in Sources */,
+				3D9025118B9278B65481EAD1 /* BackgroundRefresh.swift in Sources */,
+				7EF6D33EF23E466CED459FDD /* ColorTheme.swift in Sources */,
+				5BF6C12AD7D69A1E12B52A47 /* DiyanetDirectory.swift in Sources */,
+				1B1B6AAAC894C7A6ACCCF894 /* DiyanetProvider.swift in Sources */,
+				D0F7AF8750AAA76F10001677 /* DuaView.swift in Sources */,
+				C5DA3851702B8F7E449AC58C /* EsmaulHusnaView.swift in Sources */,
+				0C52F39A0A3549799EFEFD6D /* ExtraNotifications.swift in Sources */,
+				EB5A130E11F5726E3C387378 /* FastingTracker.swift in Sources */,
+				1231B011F9ED1AEA77ADA23B /* HijriEstimate.swift in Sources */,
+				F964D8214EF8BC59F18FA36A /* HomeView.swift in Sources */,
+				3CD7C926D93D38AE89D17C32 /* IftarActivityAttributes.swift in Sources */,
+				E90505FD891B46C28B1E62D4 /* IftarLiveActivityManager.swift in Sources */,
+				0961C7061719E0B08D4C765E /* KazaTracker.swift in Sources */,
+				9584F960B39F03A6E3544E5A /* KazaView.swift in Sources */,
+				679D66A6505B45A825C7B946 /* LocalCalculationProvider.swift in Sources */,
+				EDAF5360855A2AE1A7488210 /* LocationManager.swift in Sources */,
+				BC744FEF9D9E7798478495EE /* LocationSearchSheet.swift in Sources */,
+				84511E8871B6E563BC2A1794 /* MonthlyView.swift in Sources */,
+				E90319032F13E66C2089DD92 /* NotificationManager.swift in Sources */,
+				DF583A4934F051DE2A2D74FC /* NotificationSound.swift in Sources */,
+				C8F37FD53CF181C8E2D484AB /* OnboardingView.swift in Sources */,
+				0B6DEE9B210124DA3A2D8557 /* PaywallView.swift in Sources */,
+				DC6FA181EBCE85388690CFBA /* Prayer.swift in Sources */,
+				4960CF8B28D9F14043C8BDFE /* PrayerCache.swift in Sources */,
+				2395F90187105CCE26907C58 /* PrayerDay.swift in Sources */,
+				A6A9C960D22DA9F3ADEE6DE7 /* PrayerTimeProvider.swift in Sources */,
+				6B9828AD17D3CB0CCEF93B32 /* PrayerTimeStore.swift in Sources */,
+				0CFAF9E9865F080139EBFC3F /* PremiumGate.swift in Sources */,
+				FB1C4ED40663342AF29AD1FA /* QiblaManager.swift in Sources */,
+				AB9FC8C0149E4F0034522A9C /* QiblaView.swift in Sources */,
+				7D4E28112DDEAEDED61BFDB9 /* RamadanCard.swift in Sources */,
+				503BAD779968766ABCB70A23 /* RamadanImsakiye.swift in Sources */,
+				EFDAEBC48E15CE51B8DB0119 /* RamadanImsakiyeView.swift in Sources */,
+				814ABC1256BA995C87938B39 /* RamadanInfo.swift in Sources */,
+				95D4CC16BA24C5C354BF9C06 /* ReviewPrompt.swift in Sources */,
+				9558A380E371E4CADBB1C03A /* RollingScheduler.swift in Sources */,
+				4427655CA66E5DBFDE8DB602 /* RootView.swift in Sources */,
+				1000D99466F1BBA6F9A126C4 /* SekineApp.swift in Sources */,
+				1A096993CD5A55732F69EAA4 /* SettingsView.swift in Sources */,
+				4469B4CE8EB37A65A1215045 /* ShareCard.swift in Sources */,
+				5BBFD4D2B73DB84AA7B86EC4 /* SpiritualContent.swift in Sources */,
+				97DEAC06C9D5A7794F397676 /* SpiritualView.swift in Sources */,
+				694557DA7B8C3F4C529EFA0D /* Store.swift in Sources */,
+				60AE42C920EB63C057D9754E /* TesbihView.swift in Sources */,
+				088C15BD09004F364CF88F6B /* Theme.swift in Sources */,
+				FF2E0B1E8697AA38AB303B2B /* WatchSessionManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		684EBA31E964F1A3861027A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = F092E97B82D4D1820890B2F7 /* SekineWatch */;
+			targetProxy = 1C3F4035E63A49249453CC50 /* PBXContainerItemProxy */;
+		};
+		967A6D741346C1998B6451E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EF442DA363CA6743741322E /* SekineWatchComplications */;
+			targetProxy = 12F426B94818825F0675FFDC /* PBXContainerItemProxy */;
+		};
+		ADDD12BEB0E88758C2E616E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 815A3D4F3133C820859C97E8 /* SekineWidget */;
+			targetProxy = 092E3DFCBD39D4F7F846DB5B /* PBXContainerItemProxy */;
+		};
+		D95C14E2FEEF2F92EF318D65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EFA3B0734BD7A7A5665A6347 /* Sekine */;
+			targetProxy = 282F5385C02A02AC889CDAE7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2C8D00E518600EA913145929 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Cinar";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Sekine/Sekine.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sekine/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sekine;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Namaz vakitlerini konumunuza göre hesaplamak için konum izni kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz iletilir.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Namaz vakitlerini bulunduğunuz konuma göre Diyanet'e uygun hesaplamak için konumunuz kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz (il/ilçe veya yaklaşık koordinat) iletilir.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		43747ECF9EEF5DC4D44B22BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SekineWatch/SekineWatch.entitlements;
+				INFOPLIST_FILE = SekineWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		52ABBB69601048A2988F7B63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sekine.app/Sekine";
+			};
+			name = Release;
+		};
+		69FF4B001EAFC4662681E1C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SekineWatchComplications/SekineWatchComplications.entitlements;
+				INFOPLIST_FILE = SekineWatchComplications/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.watchkitapp.complications;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		6D00B7D760A0BB878700705D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SekineWidget/SekineWidget.entitlements;
+				INFOPLIST_FILE = SekineWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		88824A2284784386C3044545 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SekineWidget/SekineWidget.entitlements;
+				INFOPLIST_FILE = SekineWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		894EA4539B77F7D444BF9DED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SekineWatch/SekineWatch.entitlements;
+				INFOPLIST_FILE = SekineWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		9ACE71759D179C809A7FC96B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 12;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 33L468BTR2;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.9;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = 1;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		AD244AF7C1D9C88EC6FC78BD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sekine.app/Sekine";
+			};
+			name = Debug;
+		};
+		B051C4D029D9B007B549C386 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Cinar";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Sekine/Sekine.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sekine/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sekine;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Namaz vakitlerini konumunuza göre hesaplamak için konum izni kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz iletilir.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Namaz vakitlerini bulunduğunuz konuma göre Diyanet'e uygun hesaplamak için konumunuz kullanılır. Konum cihazınızda işlenir; vakit servislerine yalnızca yeriniz (il/ilçe veya yaklaşık koordinat) iletilir.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		BD5F3AFB896E4E1F9D84D3AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SekineWatchComplications/SekineWatchComplications.entitlements;
+				INFOPLIST_FILE = SekineWatchComplications/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sekineapp.sekine.watchkitapp.complications;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		DFB4DDD7086A0C5306FB9662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 12;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 33L468BTR2;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = 1;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3E5E5EE61698FF3CDE6F68E7 /* Build configuration list for PBXNativeTarget "Sekine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C8D00E518600EA913145929 /* Debug */,
+				B051C4D029D9B007B549C386 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		53169A85FC5FF1D9B385C080 /* Build configuration list for PBXNativeTarget "SekineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD244AF7C1D9C88EC6FC78BD /* Debug */,
+				52ABBB69601048A2988F7B63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7045BF145A561472AE854A4C /* Build configuration list for PBXNativeTarget "SekineWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88824A2284784386C3044545 /* Debug */,
+				6D00B7D760A0BB878700705D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		798CDC6967074504D50B38B8 /* Build configuration list for PBXNativeTarget "SekineWatchComplications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69FF4B001EAFC4662681E1C5 /* Debug */,
+				BD5F3AFB896E4E1F9D84D3AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B20B65ED1910A5716BAB42DF /* Build configuration list for PBXNativeTarget "SekineWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				894EA4539B77F7D444BF9DED /* Debug */,
+				43747ECF9EEF5DC4D44B22BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F5A656E37BA3418AEF976480 /* Build configuration list for PBXProject "Sekine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9ACE71759D179C809A7FC96B /* Debug */,
+				DFB4DDD7086A0C5306FB9662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		70F1BFB9311477106EC5FDB8 /* XCRemoteSwiftPackageReference "adhan-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/batoulapps/adhan-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0F88AF035E8691A992F23912 /* Adhan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 70F1BFB9311477106EC5FDB8 /* XCRemoteSwiftPackageReference "adhan-swift" */;
+			productName = Adhan;
+		};
+		616837BDF07F57DFD7A12C87 /* Adhan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 70F1BFB9311477106EC5FDB8 /* XCRemoteSwiftPackageReference "adhan-swift" */;
+			productName = Adhan;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0ABB4216CC74F4F31599FA7D /* Project object */;
+}
