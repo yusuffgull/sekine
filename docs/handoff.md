@@ -117,3 +117,6 @@ ve İstanbul'da ~20 ilçe eksik (merkez 9541 altında veriliyor). Çözüm:
 (aynı IlceID → aynı vakit, güvenli). Bilinçli karar: diğer illerde toptan ilçe eklenmedi
 (Antalya/Muğla gibi coğrafi geniş illerde merkeze bağlamak yanlış vakit riski taşır) — talep
 gelirse il-bazlı doğrulanarak eklenmeli.
+
+## 29 Eki 2026 — cihaz testi bayrağı
+`-uiTestRamadan` artık DEBUG'da bildirim zamanlayıcıyı da besliyor (`PrayerTimeStore.rescheduleNotifications`): Xcode DEBUG build'iyle cihaza kurulup bayrakla açılırsa sahur/iftar bildirimleri Ramazan dışında test edilebilir. TestFlight/Release build'inde etkisiz. Not: `Sekine 2.xcodeproj` yinelenen klasörü varken xcodebuild `-project Sekine.xcodeproj` ister.

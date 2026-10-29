@@ -67,7 +67,13 @@ final class PrayerTimeStore: ObservableObject {
     }
 
     func rescheduleNotifications(settings: AppSettings) async {
-        guard let schedule else { return }
+        guard var schedule else { return }
+        #if DEBUG
+        // Cihaz testi: Ramazan dışında sahur/iftar bildirimlerini görmek için (yalnızca DEBUG).
+        if ProcessInfo.processInfo.arguments.contains("-uiTestRamadan") {
+            schedule = schedule.forcingRamadanForUITest()
+        }
+        #endif
         let enabled = Set(Prayer.ordered.filter { settings.isNotificationEnabled(for: $0) })
         let config = SchedulerConfig(
             enabledPrayers: enabled,
